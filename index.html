@@ -420,7 +420,7 @@ h2{font-size:clamp(34px,5.6vw,68px);max-width:16ch}
 
 
 /* photo slot */
-.photo-slot{border:2px dashed var(--line);background:repeating-linear-gradient(45deg,rgba(7,23,43,.03) 0 12px,transparent 12px 24px);
+.photo-slot{border:0;background:repeating-linear-gradient(45deg,rgba(7,23,43,.03) 0 12px,transparent 12px 24px);
   min-height:230px;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted);font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase}
 
 /* partners + faq */
@@ -616,7 +616,7 @@ footer a{color:var(--gold)}
 <!-- BUILD BAND: set MEDIA.build in the script block. Falls back to the photo slot. -->
 <div class="band" id="band-build">
   <div class="band-media" id="build-media">
-    <div class="photo-slot" style="height:100%">Media slot — set MEDIA.build</div>
+    <div class="photo-slot" style="height:100%">&nbsp;</div>
   </div>
   <p class="band-cap">One region, every industry — students from across Los Angeles County</p>
 </div>
@@ -775,7 +775,7 @@ footer a{color:var(--gold)}
      then holds on the arrival frame. Set MEDIA.journey in the script block. -->
 <div class="band band-journey" id="band-journey">
   <div class="band-media" id="journey-media">
-    <div class="photo-slot" style="height:100%">Media slot — Seattle to Long Beach flyover</div>
+    <div class="photo-slot" style="height:100%">&nbsp;</div>
   </div>
   <div class="journey-caps">
     <span><b>iUrban Teen</b>Seattle</span>
@@ -1049,12 +1049,19 @@ function mountMedia(container, clip, altText, opts){
     Array.prototype.slice.call(container.querySelectorAll('video, img, .photo-slot'))
       .forEach(function(n){ n.remove(); });
   }
+  function collapseBand(){
+    // Nothing loaded at all — hide the whole band rather than leave a blank
+    // strip on the page. Keeps a missing file from looking like a broken site.
+    const band = container.closest ? container.closest('.band') : null;
+    if (band) band.style.display = 'none';
+  }
   function showPoster(){
-    if (!clip.poster) return;
+    if (!clip.poster){ collapseBand(); return; }
     if (container.querySelector('img')) return;
     const img = document.createElement('img');
     img.src = clip.poster;
     img.alt = altText || '';
+    img.addEventListener('error', collapseBand);
     clearMedia();
     container.appendChild(img);
   }
