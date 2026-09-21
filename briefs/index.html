@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Challenge briefs — iUrban Teen's 2026 AI Hackathon, Long Beach</title>
+<meta name="description" content="The six challenge briefs, the day's clock, how squads are scored, and the AI toolkit for iUrban Teen's 2026 AI Hackathon at Long Beach City College.">
+<meta property="og:title" content="Challenge briefs — AI Hackathon Long Beach"><meta property="og:description" content="Six real problems. Pick your track, find your room, start building."><meta property="og:image" content="https://longbeachaihackathon.org/media/hero.jpg">
+<link rel="canonical" href="https://longbeachaihackathon.org/briefs/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
+:root{--ink:#07172B;--ink-2:#0E2540;--paper:#EDEFF2;--paper-2:#fff;--gold:#FFB81C;--volt:#E8348B;--aqua:#00BFC7;--muted:#4A6076;--line:rgba(7,23,43,.14);--display:"Archivo",Impact,sans-serif;--body:"Space Grotesk","Helvetica Neue",Arial,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;--wrap:960px;--pad:clamp(18px,4vw,36px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:900;font-stretch:118%;line-height:.94;letter-spacing:-.025em;text-transform:uppercase}
+h1{font-size:clamp(34px,7vw,64px)}h2{font-size:clamp(26px,4.6vw,40px)}h3{font-size:clamp(19px,2.6vw,24px);text-transform:none;font-stretch:100%;letter-spacing:-.01em;line-height:1.15}
+p{margin:0 0 .8em}a{color:inherit}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.skip{position:absolute;left:-9999px;background:var(--gold);color:var(--ink);padding:12px 18px;font-weight:700;z-index:300}.skip:focus{left:12px;top:12px}
+:focus-visible{outline:3px solid var(--volt);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+.nav{position:sticky;top:0;z-index:100;background:var(--ink);color:#fff;border-bottom:1px solid rgba(255,255,255,.16)}
+.nav-in{max-width:var(--wrap);margin:0 auto;padding:12px var(--pad);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--display);font-weight:900;font-stretch:118%;letter-spacing:.02em;text-decoration:none;font-size:15px;white-space:nowrap}.logo i{font-style:normal;color:var(--gold)}
+.nav-links{display:flex;gap:16px;overflow-x:auto;scrollbar-width:none}.nav-links a{color:#fff;text-decoration:none;font-size:14px;font-weight:600;white-space:nowrap}.nav-links a.here{color:var(--gold)}
+.hero{background:var(--ink);color:#fff;padding:clamp(28px,6vw,60px) 0 clamp(24px,4vw,40px)}
+.hero .mono{color:var(--gold)}.hero p{max-width:56ch;font-size:clamp(16px,2vw,19px);opacity:.9}
+.tracks{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:22px}
+.tracks a{display:block;background:var(--ink-2);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:12px 8px;text-decoration:none;color:#fff;text-align:center}
+.tracks a b{display:block;font-family:var(--display);font-size:28px;font-weight:900;color:var(--gold);line-height:1}.tracks a span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;margin-top:6px}
+.tracks a small{display:block;font-size:12px;opacity:.8;margin-top:4px;line-height:1.2}
+@media(max-width:640px){.tracks{grid-template-columns:repeat(3,1fr)}}
+section{padding:clamp(28px,5vw,56px) 0;border-bottom:1px solid var(--line)}
+.kicker{display:flex;align-items:center;gap:14px;margin-bottom:14px}.kicker .rule{flex:1;height:1px;background:var(--line)}
+.brief{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3.5vw,34px);margin:18px 0}
+.brief .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.brief .num{font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:.06em;color:var(--volt)}
+.brief .room{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--gold);padding:5px 10px;border-radius:6px}
+.brief h3{font-size:clamp(24px,4vw,34px);margin:4px 0 12px;font-stretch:112%;text-transform:uppercase;letter-spacing:-.02em;line-height:.98;font-weight:900}
+.hmw{background:#FFF6DD;border-left:5px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0 18px;font-size:18px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}@media(max-width:700px){.two{grid-template-columns:1fr}}
+.two h4,.side h4{margin:14px 0 6px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--volt);font-weight:600}.two h4:first-child{margin-top:0}
+.two ul{margin:0;padding-left:20px}.two li{margin:0 0 6px}
+.think{background:var(--paper);border-radius:10px;padding:12px 14px;margin-top:10px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 16px;background:var(--ink);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:15px}.dl:hover{background:var(--ink-2)}
+.btn{display:inline-block;background:var(--gold);color:var(--ink);text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px}
+table{width:100%;border-collapse:collapse;margin:10px 0}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.t{font-family:var(--mono);font-weight:600;white-space:nowrap;width:1%}td.w{font-family:var(--display);font-size:26px;font-weight:900;color:var(--volt);width:1%;line-height:1}
+.sentence{background:var(--paper-2);border:2px solid var(--ink);border-radius:12px;padding:18px 20px;font-size:18px;line-height:1.9}
+.sentence u{text-decoration:none;border-bottom:2px solid var(--ink);padding:0 30px}
+.tool{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.tool b{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:3px}
+@media(max-width:560px){.tool{grid-template-columns:1fr;gap:2px}}
+footer{background:var(--ink);color:#fff;padding:36px 0 28px}footer a{color:var(--gold)}footer .fine{font-size:13px;opacity:.7;margin-top:16px}
+.note{background:#FFF6DD;border:1px solid rgba(255,184,28,.5);border-radius:10px;padding:12px 16px;margin:12px 0}
+@media print{.nav,.dl,.btn,footer{display:none}.brief{break-inside:avoid;border:1px solid #999}body{background:#fff}}
+</style></head><body>
+<a class="skip" href="#main">Skip to main content</a>
+<nav class="nav"><div class="nav-in"><a class="logo" href="../">iURBAN TEEN <i>×</i> LBCC</a><div class="nav-links"><a href="../">Home</a><a href="../briefs/" class=here>Challenges</a><a href="../#schedule">The day</a><a href="../#judging">Judging</a></div></div></nav>
+<main id="main">
+<header class="hero"><div class="wrap">
+<span class="mono">Saturday, September 26, 2026 · Released on the day</span>
+<h1 style="margin:10px 0 14px">The challenge briefs</h1>
+<p>Find your track number on your badge. Tap it to jump to your brief and room. Every squad pitches at 1:30; one squad per track goes to the finals in Dyer Hall at 2:15.</p>
+<div class="tracks"><a href="#track-1"><b>1</b><span>AA 201B</span><small>Health &amp; Wellness</small></a><a href="#track-2"><b>2</b><span>AA 201C</span><small>Logistics &amp; Supply Chain</small></a><a href="#track-3"><b>3</b><span>AA 204</span><small>Small Business</small></a><a href="#track-4"><b>4</b><span>AA 205</span><small>Education</small></a><a href="#track-5"><b>5</b><span>MM 145</span><small>Climate &amp; Energy</small></a><a href="#track-6"><b>6</b><span>MM 122</span><small>Creative Media</small></a></div>
+</div></header>
+
+<section id="toolkit"><div class="wrap">
+<div class="kicker"><span class="mono">Your AI toolkit</span><span class="rule"></span></div>
+<h2>Free tools. No sign-up wall.</h2>
+<p style="max-width:60ch;margin-top:12px">Everything below is free and works in a browser. Ask a roaming mentor if a tool will not load. Never type real private information about a real person into any of them.</p>
+<!-- ============================================================
+     TOOLKIT — Gemini + Canva. Both free, both 13+.
+     If Lovable comes through with an education agreement, add a
+     fourth .tool row here and mention it in the LBCC students line.
+     ============================================================ -->
+<div class="tool"><b>Think and draft</b><span><a href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini</a> — talk through the problem, draft messages and pitch lines, and check your own thinking. Use <strong>Gems</strong> to set up a custom assistant with its own instructions and test conversations; that counts as a build.</span></div>
+<div class="tool"><b>Prototype and mock up</b><span><a href="https://www.canva.com/" target="_blank" rel="noopener">Canva</a> — describe an app or a page in plain words with <strong>Canva Code</strong> to get a clickable prototype, or lay out screens as a mockup. Free account, no card.</span></div>
+<div class="tool"><b>Pitch</b><span><a href="https://www.canva.com/" target="_blank" rel="noopener">Canva</a> again — three slides, one page, or a flyer. <a href="https://slides.google.com/" target="_blank" rel="noopener">Google Slides</a> works too.</span></div>
+<p class="note" style="margin-top:16px"><strong>Accounts:</strong> use a personal Google account, not a school one — many districts switch Gemini off. Both tools allow ages 13 and up. If your squad has no account that works, tell your coach; every coach holds one for exactly this. <strong>LBCC students:</strong> you're welcome to use any other free tool you already have an account for.</p>
+</div></section>
+
+<section id="briefs"><div class="wrap">
+<div class="kicker"><span class="mono">Six tracks</span><span class="rule"></span></div>
+<h2>Pick one person. Fix their Tuesday.</h2>
+<p style="max-width:60ch;margin-top:12px">Each brief is a whole industry. Your job is to shrink it to one real person and one real moment, then build something they could actually use.</p>
+<article class="brief" id="track-1">
+<div class="top"><span class="num">TRACK 1 · HEALTH &AMP; WELLNESS</span><span class="room">Room AA 201B</span></div>
+<h3>The appointment nobody keeps</h3>
+<p>People miss doctor and clinic visits they already booked. Usually they did not forget. The bus takes too long, the work shift changed, the forms are in the wrong language, or nobody can watch the kids.</p>
+<p class="hmw"><strong>How might we</strong> help one person actually make it to the care they already scheduled?</p>
+<div class="two"><div>
+<h4>Start here</h4><p>Who do you know who has missed an appointment? What really stopped them? What would they have needed to hear, and when?</p>
+<h4>Where AI can work</h4><ul><li>Understanding a messy text reply in any language</li><li>Matching a barrier to a fix: a ride, a new time, a video visit</li><li>Pointing someone to the right service on the first try</li></ul>
+</div><div>
+<h4>You could build</h4><ul><li>A reminder assistant that asks “anything in the way?” and offers options</li><li>A navigator: “here is what I need” becomes where to go and what to bring</li><li>A mockup of a clinic screen showing who needs a call today</li></ul>
+<h4>Think about (this is scored)</h4><p class="think">Health information is private; who sees it? Your tool is not a doctor and must never give medical advice. What about someone with no smartphone?</p>
+</div></div>
+<a class="dl" href="../media/handouts/Track-1-Health-Wellness.pdf" download>↓ Track 1 handout (PDF)</a>
+</article><article class="brief" id="track-2">
+<div class="top"><span class="num">TRACK 2 · LOGISTICS &AMP; SUPPLY CHAIN</span><span class="room">Room AA 201C</span></div>
+<h3>The last mile is the hard mile</h3>
+<p>Things cross an ocean on time and then get stuck in the last few miles to a store or a doorstep. Giant carriers have software for this. The florist, the food bank, and the two-van delivery company have a whiteboard and a group chat.</p>
+<p class="hmw"><strong>How might we</strong> help one small operator plan like a big one?</p>
+<div class="two"><div>
+<h4>Start here</h4><p>When did a late or missing delivery cost you or your family something? Who was making the plan that day? What did they not know in time?</p>
+<h4>Where AI can work</h4><ul><li>Putting stops in a sensible order and explaining why</li><li>Guessing next week’s demand from last month’s numbers</li><li>Turning tracking jargon into one clear sentence and a next step</li></ul>
+</div><div>
+<h4>You could build</h4><ul><li>A delivery planner: paste today’s stops, get a plan and the customer texts</li><li>An order suggester for a small shop or food pantry</li><li>A “where is it stuck?” tracker mockup</li></ul>
+<h4>Think about (this is scored)</h4><p class="think">Faster routes can mean more pressure on drivers; where are the breaks? If the AI is wrong, a truck goes to the wrong place, so how does someone check it? Location data is sensitive.</p>
+</div></div>
+<a class="dl" href="../media/handouts/Track-2-Logistics-Supply-Chain.pdf" download>↓ Track 2 handout (PDF)</a>
+</article><article class="brief" id="track-3">
+<div class="top"><span class="num">TRACK 3 · SMALL BUSINESS</span><span class="room">Room AA 204</span></div>
+<h3>Competing without a marketing department</h3>
+<p>The owner of a small shop is expected to post on social media, answer reviews, run ads, and still do the actual job. Big chains have whole teams for that. The owner has ten minutes after closing.</p>
+<p class="hmw"><strong>How might we</strong> give one local business owner an hour of their day back?</p>
+<div class="two"><div>
+<h4>Start here</h4><p>Pick a real business you know: a taqueria, a barber, a nail salon, a market. What is the owner doing at 9 PM that is not their real job?</p>
+<h4>Where AI can work</h4><ul><li>Drafting posts, captions, and flyers in the owner’s own voice</li><li>Replying to customers and reviews in English and Spanish</li><li>Spotting what sells and suggesting a special</li></ul>
+</div><div>
+<h4>You could build</h4><ul><li>A one-week content kit for your chosen business</li><li>A reply assistant the owner approves with one tap</li><li>A simple advisor that reads a sales sheet and says what to promote</li></ul>
+<h4>Think about (this is scored)</h4><p class="think">No fake reviews and no made-up claims. The owner approves everything before it goes out. Does it still sound like them?</p>
+</div></div>
+<a class="dl" href="../media/handouts/Track-3-Small-Business.pdf" download>↓ Track 3 handout (PDF)</a>
+</article><article class="brief" id="track-4">
+<div class="top"><span class="num">TRACK 4 · EDUCATION</span><span class="room">Room AA 205</span></div>
+<h3>The students who quietly disappear</h3>
+<p>A student stops showing up, and weeks pass before anyone who could help notices. They usually had a problem that could be fixed. They did not know who to ask.</p>
+<p class="hmw"><strong>How might we</strong> reach one student before they disappear, in a way they would actually answer?</p>
+<div class="two"><div>
+<h4>Start here</h4><p>Think of someone who faded out of a class or school. What was the first sign? How would they have wanted someone to reach out?</p>
+<h4>Where AI can work</h4><ul><li>Reading a short reply and picking the right help: tutoring, aid, food, counseling</li><li>Writing a message that sounds human</li><li>Turning “where do I go for this?” into a real office and real hours</li></ul>
+</div><div>
+<h4>You could build</h4><ul><li>A check-in assistant that hands the student to the right person</li><li>A campus navigator for new students</li><li>A weekly summary for a counselor, with a drafted message for each student who went quiet</li></ul>
+<h4>Think about (this is scored)</h4><p class="think">Being labeled “at risk” can follow a student. Who sees that label? Can the student? Does your outreach feel like care or like being watched?</p>
+</div></div>
+<a class="dl" href="../media/handouts/Track-4-Education.pdf" download>↓ Track 4 handout (PDF)</a>
+</article><article class="brief" id="track-5">
+<div class="top"><span class="num">TRACK 5 · CLIMATE &AMP; ENERGY</span><span class="room">Room MM 145</span></div>
+<h3>Heat lands unevenly</h3>
+<p>On the same afternoon, one neighborhood can be far hotter than another a few miles away. Shade, pavement, and housing decide it. The people with the least cooling often hear about help last.</p>
+<p class="hmw"><strong>How might we</strong> get relief to one person on the hottest day of the year?</p>
+<div class="two"><div>
+<h4>Start here</h4><p>Where is the hottest place you regularly spend time, and why is it hot there? On the worst day last summer, who near you was most at risk?</p>
+<h4>Where AI can work</h4><ul><li>Matching a resident’s situation to nearby relief, in their language</li><li>Describing and scoring photos of a block for shade</li><li>Organizing evidence into a case someone with a budget will read</li></ul>
+</div><div>
+<h4>You could build</h4><ul><li>A heat-day helper that gives a plan for the day</li><li>A shade audit of blocks you know, ranked by need</li><li>A one-page ask to a city office for one specific fix</li></ul>
+<h4>Think about (this is scored)</h4><p class="think">The people most at risk may have no smartphone, no car, and limited English. A map of “risky blocks” can stigmatize a neighborhood. Never point to a vulnerable person’s home.</p>
+</div></div>
+<a class="dl" href="../media/handouts/Track-5-Climate-Energy.pdf" download>↓ Track 5 handout (PDF)</a>
+</article><article class="brief" id="track-6">
+<div class="top"><span class="num">TRACK 6 · CREATIVE MEDIA</span><span class="room">Room MM 122</span></div>
+<h3>Getting heard in an infinite feed</h3>
+<p>Anyone can post. Almost nobody gets seen, especially people telling stories from their own community with no budget and no team.</p>
+<p class="hmw"><strong>How might we</strong> help one creator or one community story reach the people who need to see it?</p>
+<div class="two"><div>
+<h4>Start here</h4><p>What story from your community deserves a bigger audience? Who needs to see it, and where do they scroll? Which part of making it takes the longest?</p>
+<h4>Where AI can work</h4><ul><li>Speeding up the slow parts: scripts, shot lists, captions, alt text</li><li>Turning one story into several formats</li><li>Researching who the audience is and what they already watch</li></ul>
+</div><div>
+<h4>You could build</h4><ul><li>One real story in three formats with a posting plan</li><li>A creator’s assistant: rough idea in, shot list and hook options out</li><li>An audience brief recommending an angle nobody else is taking</li></ul>
+<h4>Think about (this is scored)</h4><p class="think">Did the people in the story say yes? No cloning real people’s voices or faces. Say when AI helped. Keep the voice that made the story worth telling.</p>
+</div></div>
+<a class="dl" href="../media/handouts/Track-6-Creative-Media.pdf" download>↓ Track 6 handout (PDF)</a>
+</article>
+<!-- RESERVE TRACKS: only if a seventh room opens. Copy a brief block above,
+     use media/handouts/Hackathon-Reserve-Handouts-Tracks-7-8.pdf for the download. -->
+</div></section>
+
+<section id="sentence"><div class="wrap">
+<div class="kicker"><span class="mono">Before you build anything</span><span class="rule"></span></div>
+<h2>Your problem sentence</h2>
+<p style="margin-top:12px">Read it to your coach at 10:30. If you cannot fill it in, you are not ready to build yet, and that is normal.</p>
+<p class="sentence"><u>a real person</u> struggles with <u>the problem</u> because <u>the cause</u>. We will build <u>the thing</u> so they can <u>the outcome</u>.</p>
+</div></section>
+
+<section id="day"><div class="wrap"><div class="two">
+<div><div class="kicker"><span class="mono">Your day</span><span class="rule"></span></div><h2>The clock</h2>
+<table><tbody><tr><td class="t">9:45</td><td>Meet your squad of six. Read your challenge.</td></tr><tr><td class="t">10:00</td><td>Pick one real person who has this problem.</td></tr><tr><td class="t">10:30</td><td>Write your problem sentence and read it to your coach.</td></tr><tr><td class="t">10:30</td><td>Build version one.</td></tr><tr><td class="t">11:45</td><td>Lunch</td></tr><tr><td class="t">12:30</td><td>Finish the build. Make your risks slide.</td></tr><tr><td class="t">1:10</td><td>Stop building. Practise your pitch.</td></tr><tr><td class="t">1:30</td><td>Pitch to your track: 3 minutes. One squad per track goes to the finals.</td></tr><tr><td class="t">2:15</td><td>Finals and awards in Dyer Hall</td></tr></tbody></table></div>
+<div><div class="kicker"><span class="mono">Scoring</span><span class="rule"></span></div><h2>100 points</h2>
+<table><tbody><tr><td class="w">25</td><td><strong>Problem clarity</strong></td><td>Your problem is real, specific, and belongs to a person</td></tr><tr><td class="w">25</td><td><strong>Use of AI</strong></td><td>The AI does real work. It is not a sticker on a slide.</td></tr><tr><td class="w">20</td><td><strong>Feasibility</strong></td><td>Someone could use this, and it would matter</td></tr><tr><td class="w">15</td><td><strong>Responsible design</strong></td><td>You name the risks: bias, privacy, who could be harmed</td></tr><tr><td class="w">15</td><td><strong>The pitch</strong></td><td>Clear, honest, and everyone in the squad speaks</td></tr></tbody></table>
+<p style="font-size:15px;color:var(--muted)">Polish is not on the list. A rough prototype with sharp thinking beats a slick deck.</p></div>
+</div></div></section>
+
+<section id="pitch"><div class="wrap"><div class="two">
+<div><div class="kicker"><span class="mono">Three minutes</span><span class="rule"></span></div><h2>Your pitch</h2>
+<table><tbody>
+<tr><td class="t">0:00</td><td>Meet the person. Their name, their Tuesday.</td></tr>
+<tr><td class="t">0:30</td><td>Their problem today, without your idea.</td></tr>
+<tr><td class="t">1:00</td><td>What you built and what the AI does. Show it live if you can.</td></tr>
+<tr><td class="t">2:15</td><td>What could go wrong, and your safeguard.</td></tr>
+<tr><td class="t">2:45</td><td>What you would do next.</td></tr></tbody></table></div>
+<div><div class="kicker"><span class="mono">Rules</span><span class="rule"></span></div><h2>Four of them</h2>
+<ul style="padding-left:20px;margin-top:12px"><li>Coaches and mentors help. They never build or present for you.</li><li>Never type real private information about anyone into an AI tool.</li><li>Check what the AI tells you. It can be confidently wrong.</li><li>Everyone in the squad speaks in the pitch.</li></ul>
+<p style="margin-top:14px"><a class="btn" href="../media/handouts/Hackathon-Participant-Handouts-All-Tracks.pdf" download>Download all six handouts (PDF)</a></p></div>
+</div></div></section>
+</main><footer><div class="wrap"><h3 style="color:#fff">Saturday, September 26, 2026</h3><p>Long Beach City College, Trades &amp; Technology Campus. Dyer Hall, QQ Building. Finals at 2:15.</p><p>Questions on the day: find anyone in an event shirt. LBCC Adult Education: <a href="mailto:aep@lbcc.edu">aep@lbcc.edu</a></p><p class="fine">iUrban Teen’s 2026 AI Hackathon, Long Beach. Host and organizer: iUrban Teen. Presenting sponsor: Autodesk. In partnership with Long Beach City College.</p></div></footer></body></html>

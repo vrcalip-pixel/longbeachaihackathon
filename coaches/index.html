@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Coach guide — AI Hackathon Long Beach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
+:root{--ink:#07172B;--ink-2:#0E2540;--paper:#EDEFF2;--paper-2:#fff;--gold:#FFB81C;--volt:#E8348B;--aqua:#00BFC7;--muted:#4A6076;--line:rgba(7,23,43,.14);--display:"Archivo",Impact,sans-serif;--body:"Space Grotesk","Helvetica Neue",Arial,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;--wrap:960px;--pad:clamp(18px,4vw,36px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:900;font-stretch:118%;line-height:.94;letter-spacing:-.025em;text-transform:uppercase}
+h1{font-size:clamp(34px,7vw,64px)}h2{font-size:clamp(26px,4.6vw,40px)}h3{font-size:clamp(19px,2.6vw,24px);text-transform:none;font-stretch:100%;letter-spacing:-.01em;line-height:1.15}
+p{margin:0 0 .8em}a{color:inherit}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.skip{position:absolute;left:-9999px;background:var(--gold);color:var(--ink);padding:12px 18px;font-weight:700;z-index:300}.skip:focus{left:12px;top:12px}
+:focus-visible{outline:3px solid var(--volt);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+.nav{position:sticky;top:0;z-index:100;background:var(--ink);color:#fff;border-bottom:1px solid rgba(255,255,255,.16)}
+.nav-in{max-width:var(--wrap);margin:0 auto;padding:12px var(--pad);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--display);font-weight:900;font-stretch:118%;letter-spacing:.02em;text-decoration:none;font-size:15px;white-space:nowrap}.logo i{font-style:normal;color:var(--gold)}
+.nav-links{display:flex;gap:16px;overflow-x:auto;scrollbar-width:none}.nav-links a{color:#fff;text-decoration:none;font-size:14px;font-weight:600;white-space:nowrap}.nav-links a.here{color:var(--gold)}
+.hero{background:var(--ink);color:#fff;padding:clamp(28px,6vw,60px) 0 clamp(24px,4vw,40px)}
+.hero .mono{color:var(--gold)}.hero p{max-width:56ch;font-size:clamp(16px,2vw,19px);opacity:.9}
+.tracks{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:22px}
+.tracks a{display:block;background:var(--ink-2);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:12px 8px;text-decoration:none;color:#fff;text-align:center}
+.tracks a b{display:block;font-family:var(--display);font-size:28px;font-weight:900;color:var(--gold);line-height:1}.tracks a span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;margin-top:6px}
+.tracks a small{display:block;font-size:12px;opacity:.8;margin-top:4px;line-height:1.2}
+@media(max-width:640px){.tracks{grid-template-columns:repeat(3,1fr)}}
+section{padding:clamp(28px,5vw,56px) 0;border-bottom:1px solid var(--line)}
+.kicker{display:flex;align-items:center;gap:14px;margin-bottom:14px}.kicker .rule{flex:1;height:1px;background:var(--line)}
+.brief{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3.5vw,34px);margin:18px 0}
+.brief .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.brief .num{font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:.06em;color:var(--volt)}
+.brief .room{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--gold);padding:5px 10px;border-radius:6px}
+.brief h3{font-size:clamp(24px,4vw,34px);margin:4px 0 12px;font-stretch:112%;text-transform:uppercase;letter-spacing:-.02em;line-height:.98;font-weight:900}
+.hmw{background:#FFF6DD;border-left:5px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0 18px;font-size:18px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}@media(max-width:700px){.two{grid-template-columns:1fr}}
+.two h4,.side h4{margin:14px 0 6px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--volt);font-weight:600}.two h4:first-child{margin-top:0}
+.two ul{margin:0;padding-left:20px}.two li{margin:0 0 6px}
+.think{background:var(--paper);border-radius:10px;padding:12px 14px;margin-top:10px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 16px;background:var(--ink);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:15px}.dl:hover{background:var(--ink-2)}
+.btn{display:inline-block;background:var(--gold);color:var(--ink);text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px}
+table{width:100%;border-collapse:collapse;margin:10px 0}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.t{font-family:var(--mono);font-weight:600;white-space:nowrap;width:1%}td.w{font-family:var(--display);font-size:26px;font-weight:900;color:var(--volt);width:1%;line-height:1}
+.sentence{background:var(--paper-2);border:2px solid var(--ink);border-radius:12px;padding:18px 20px;font-size:18px;line-height:1.9}
+.sentence u{text-decoration:none;border-bottom:2px solid var(--ink);padding:0 30px}
+.tool{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.tool b{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:3px}
+@media(max-width:560px){.tool{grid-template-columns:1fr;gap:2px}}
+footer{background:var(--ink);color:#fff;padding:36px 0 28px}footer a{color:var(--gold)}footer .fine{font-size:13px;opacity:.7;margin-top:16px}
+.note{background:#FFF6DD;border:1px solid rgba(255,184,28,.5);border-radius:10px;padding:12px 16px;margin:12px 0}
+@media print{.nav,.dl,.btn,footer{display:none}.brief{break-inside:avoid;border:1px solid #999}body{background:#fff}}
+@media(max-width:640px){#clock th{display:none}#clock tr{display:block;padding:8px 0;border-bottom:1px solid var(--line)}#clock td{display:block;border:0;padding:2px 0}#clock td.t{color:var(--volt)}}
+</style></head><body>
+<a class="skip" href="#main">Skip to main content</a>
+<nav class="nav"><div class="nav-in"><a class="logo" href="../">iURBAN TEEN <i>×</i> LBCC</a><div class="nav-links"><a href="../">Home</a><a href="../briefs/">Challenges</a><a href="../#schedule">The day</a><a href="../#judging">Judging</a><a href="../coaches/" class=here>Coaches</a></div></div></nav>
+<main id="main">
+<header class="hero"><div class="wrap">
+<span class="mono">For track coaches and mentors · Not linked from the public site</span>
+<h1 style="margin:10px 0 14px">Coach guide</h1>
+<p>You run the room and hold the clock. You do not need to know AI; the roaming mentors handle tools. Success is every squad pitching at 1:30 with something on a screen and every student saying at least one sentence.</p>
+<p><a class="btn" href="../media/handouts/Coach-Guide.pdf" download>Download the coach pack (PDF)</a> &nbsp; <a class="btn" style="background:#fff" href="../media/handouts/Scoresheet.pdf" download>Scoresheets (PDF)</a></p>
+</div></header>
+
+<section id="job"><div class="wrap"><div class="two">
+<div><div class="kicker"><span class="mono">Your job</span><span class="rule"></span></div>
+<h2>Do and don’t</h2>
+<ul style="padding-left:20px;margin-top:12px"><li><strong>You do:</strong> keep time, ask questions, make sure quiet students get a say, run the pitch-off.</li><li><strong>You do not:</strong> fix tools (wave down a mentor), choose the idea, touch a keyboard, or present.</li><li><strong>If something is wrong</strong> (a student unwell, upset, or missing): find any staff member in an event shirt. Do not leave the room unattended with minors in it.</li></ul></div>
+<div><div class="kicker"><span class="mono">Rooms</span><span class="rule"></span></div>
+<h2>Two clusters</h2>
+<p style="margin-top:12px">Tracks 1 to 4 are upstairs in the AA Building, about five minutes from Dyer Hall (QQ 109). Tracks 5 and 6 are in MM, next door to QQ. Every room is a computer lab.</p>
+<p class="note">AA coaches: end your pitch-off at 1:55 so your group is seated for finals by 2:15.</p></div>
+</div></div></section>
+
+<section id="clock"><div class="wrap">
+<div class="kicker"><span class="mono">Your clock</span><span class="rule"></span></div>
+<h2>The day, from the front of the room</h2>
+<table><thead><tr><th>Time</th><th>What you do</th><th>Say this</th></tr></thead><tbody><tr><td class="t">9:30</td><td>Hold your track sign in Dyer Hall and walk your group over.</td><td style="color:var(--muted)">“Track __, with me.”</td></tr><tr><td class="t">9:45</td><td>Squads of six. Mix schools and ages. One student reads the brief aloud. Each squad names a timekeeper.</td><td style="color:var(--muted)">“Nobody works with only people they came with.”</td></tr><tr><td class="t">10:00</td><td>Each squad picks one real person who has this problem.</td><td style="color:var(--muted)">“Give them a name and tell me about their Tuesday.”</td></tr><tr><td class="t">10:30</td><td>Checkpoint. Hear every squad’s problem sentence.</td><td style="color:var(--muted)">“[Person] struggles with [problem] because [cause]. We will build [thing] so they can [outcome].”</td></tr><tr><td class="t">10:30</td><td>Build. Circulate. Visit the quietest squad first.</td><td style="color:var(--muted)">“Show me what is on the screen.”</td></tr><tr><td class="t">11:30</td><td>Fifteen-minute warning before lunch.</td><td style="color:var(--muted)">“What will exist by 11:45?”</td></tr><tr><td class="t">11:45</td><td>Lunch. Walk with your group.</td><td style="color:var(--muted)"></td></tr><tr><td class="t">12:30</td><td>Finish the build. Rotate who is typing. Start the responsible-design slide.</td><td style="color:var(--muted)">“Who could this hurt, and what did you do about it?”</td></tr><tr><td class="t">1:10</td><td>Hands off keyboards. One timed 3-minute rehearsal per squad.</td><td style="color:var(--muted)">“Everyone speaks. I am timing.”</td></tr><tr><td class="t">1:30</td><td>Pitch-off. Tracks 1 to 4 (AA) finish by 1:55.</td><td style="color:var(--muted)"></td></tr><tr><td class="t">2:00</td><td>Walk back to Dyer Hall. Text your finalist’s squad name to Dr. Calip.</td><td style="color:var(--muted)"></td></tr></tbody></table>
+</div></section>
+
+<section id="cards"><div class="wrap">
+<div class="kicker"><span class="mono">Track cards</span><span class="rule"></span></div>
+<h2>Read only your row</h2>
+<p style="margin-top:12px">Students have a one-page version of the same brief on <a href="../briefs/">the challenge page</a>.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Track</th><th>Opener for the room</th><th>Question that unlocks it</th><th>The trap</th><th>Ethics prompt (15 points)</th></tr></thead><tbody><tr><td class="w" style="color:var(--ink)">1</td><td><strong>Health &amp; Wellness</strong><br><span style="font-family:var(--mono);font-size:12px">AA 201B</span></td><td>“Who here has missed or nearly missed an appointment? What got in the way?”</td><td>“What would they have needed to hear, and when?”</td><td>A plain reminder app. Reminders exist; the barrier is the problem.</td><td>“Your tool is not a doctor. Where is that line, and who sees the health details?”</td></tr><tr><td class="w" style="color:var(--ink)">2</td><td><strong>Logistics &amp; Supply Chain</strong><br><span style="font-family:var(--mono);font-size:12px">AA 201C</span></td><td>“When did a late delivery last cost your family something?”</td><td>“Who made the plan that day, and what did they not know?”</td><td>Rebuilding a giant carrier’s system. Think two vans, not two thousand.</td><td>“Does your plan give the driver a break? How are wrong answers caught?”</td></tr><tr><td class="w" style="color:var(--ink)">3</td><td><strong>Small Business</strong><br><span style="font-family:var(--mono);font-size:12px">AA 204</span></td><td>“Name a local business you love that deserves more customers.”</td><td>“What is the owner doing at 9 PM that is not their real job?”</td><td>Generic posts that could be for any business.</td><td>“Is every claim true? Does the owner approve before it posts?”</td></tr><tr><td class="w" style="color:var(--ink)">4</td><td><strong>Education</strong><br><span style="font-family:var(--mono);font-size:12px">AA 205</span></td><td>“Think of someone who faded out of a class. What was the first sign?”</td><td>“How would that student have wanted to be reached?”</td><td>A dashboard that watches students without helping them.</td><td>“Who sees the ‘at risk’ flag? Can the student see it?”</td></tr><tr><td class="w" style="color:var(--ink)">5</td><td><strong>Climate &amp; Energy</strong><br><span style="font-family:var(--mono);font-size:12px">MM 145</span></td><td>“Where is the hottest place you regularly spend time? Why there?”</td><td>“On the worst day last summer, who near you was most at risk?”</td><td>A weather chatbot. The problem is who gets relief, not the forecast.</td><td>“How does this reach someone with no smartphone or no English?”</td></tr><tr><td class="w" style="color:var(--ink)">6</td><td><strong>Creative Media</strong><br><span style="font-family:var(--mono);font-size:12px">MM 122</span></td><td>“What story from your community should more people see?”</td><td>“Where does that audience scroll, and what stops them?”</td><td>Letting AI write the story so it sounds like nobody.</td><td>“Did the people in it say yes? Will you say AI helped?”</td></tr></tbody></table></div>
+</div></section>
+
+<section id="questions"><div class="wrap"><div class="two">
+<div><div class="kicker"><span class="mono">Any track</span><span class="rule"></span></div><h2>Questions that work</h2>
+<ul style="padding-left:20px;margin-top:12px"><li>Who exactly is this for? What is their name?</li><li>What happens today, without your idea?</li><li>What does the AI read, and what does it produce?</li><li>How would you know if the AI got it wrong?</li><li>Who could this hurt or leave out?</li><li>If you only had 30 more minutes, what would you cut?</li></ul></div>
+<div><div class="kicker"><span class="mono">Stuck</span><span class="rule"></span></div><h2>When a squad stalls</h2>
+<table><tbody><tr><td><strong>The idea is the whole sector (“fix healthcare”)</strong></td><td>Ask for one person and one bad day.</td></tr><tr><td><strong>Arguing over two ideas</strong></td><td>Two-minute pitch each, squad votes, move on.</td></tr><tr><td><strong>One student doing everything</strong></td><td>Give roles: builder, researcher, designer, ethics lead, pitch lead, timekeeper.</td></tr><tr><td><strong>A tool will not work</strong></td><td>Flag a mentor; meanwhile the squad writes the pitch.</td></tr><tr><td><strong>Nothing built by 12:45</strong></td><td>Switch to a plan with one worked example. That is a valid entry.</td></tr><tr><td><strong>A student has gone silent</strong></td><td>Ask them a direct, easy question about the person the squad chose.</td></tr></tbody></table></div>
+</div></div></section>
+
+<section id="pitchoff"><div class="wrap">
+<div class="kicker"><span class="mono">1:30</span><span class="rule"></span></div>
+<h2>Running the pitch-off</h2>
+<ol style="padding-left:22px;margin-top:12px;max-width:70ch">
+<li>Draw the order from a hat at 1:25.</li>
+<li>Each squad gets 3 minutes. Hold up a hand at 2:30. Stop them at 3:00, mid-sentence if needed.</li>
+<li>Ask one question, the same for every squad: <em>“What is the biggest risk in your idea, and what did you do about it?”</em></li>
+<li>You and one mentor each fill in a scoresheet without conferring. Add the two totals.</li>
+<li>Highest total advances. A tie goes to the higher responsible-design score.</li>
+<li>Announce the finalist, then ask every other squad to name one thing they are proud of. Nobody leaves having only lost.</li>
+<li>Remind the finalist: 3 minutes again in Dyer Hall at 2:15, same pitch, all six on stage.</li>
+</ol>
+<div class="kicker" style="margin-top:28px"><span class="mono">Scoresheet</span><span class="rule"></span></div>
+<p>Score 1 to 4 (1 missing, 2 partly there, 3 solid, 4 standout), multiply, total out of 400.</p>
+<table><thead><tr><th>Criterion</th><th>What you are looking for</th><th>1–4</th><th>×</th><th>Points</th></tr></thead><tbody>
+<tr><td><strong>Problem clarity</strong></td><td>Real, specific, belongs to a person you could name</td><td></td><td class="t">25</td><td></td></tr>
+<tr><td><strong>Use of AI</strong></td><td>AI does real work, not decoration</td><td></td><td class="t">25</td><td></td></tr>
+<tr><td><strong>Feasibility</strong></td><td>Someone could use it, and it would matter</td><td></td><td class="t">20</td><td></td></tr>
+<tr><td><strong>Responsible design</strong></td><td>Risks named: bias, privacy, who could be harmed</td><td></td><td class="t">15</td><td></td></tr>
+<tr><td><strong>The pitch</strong></td><td>Clear, honest, whole squad speaks</td><td></td><td class="t">15</td><td></td></tr>
+<tr><td colspan="4"><strong>Total</strong></td><td class="t">/ 400</td></tr></tbody></table>
+<p style="font-size:15px;color:var(--muted)">Polish is not a criterion. A rough prototype with sharp thinking beats a slick slide deck.</p>
+<p><a class="btn" href="../media/handouts/Scoresheet.pdf" download>Print scoresheets (PDF, 2 per page)</a></p>
+</div></section>
+</main><footer><div class="wrap"><h3 style="color:#fff">Saturday, September 26, 2026</h3><p>Long Beach City College, Trades &amp; Technology Campus. Dyer Hall, QQ Building. Finals at 2:15.</p><p>Questions on the day: find anyone in an event shirt. LBCC Adult Education: <a href="mailto:aep@lbcc.edu">aep@lbcc.edu</a></p><p class="fine">iUrban Teen’s 2026 AI Hackathon, Long Beach. Host and organizer: iUrban Teen. Presenting sponsor: Autodesk. In partnership with Long Beach City College.</p></div></footer></body></html>
