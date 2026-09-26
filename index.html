@@ -316,7 +316,7 @@ h2{font-size:clamp(34px,5.6vw,68px);max-width:16ch}
 .board-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
 .deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:44px}
 .brief{background:transparent;border:0;padding:0;perspective:1200px;cursor:pointer;font:inherit;text-align:left;color:inherit}
-.brief-in{position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);min-height:236px}
+.brief-in{position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);min-height:300px}
 .brief.flipped .brief-in{transform:rotateY(180deg)}
 .face{position:absolute;inset:0;backface-visibility:hidden;padding:22px;border:1px solid var(--line-lt);background:#0A2038;display:flex;flex-direction:column}
 .face-b{transform:rotateY(180deg);background:var(--aqua);color:var(--ink);border-color:var(--ink)}
@@ -329,6 +329,16 @@ h2{font-size:clamp(34px,5.6vw,68px);max-width:16ch}
 .flip-hint{margin-top:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--volt);padding-top:16px}
 .face-b .flip-hint{color:var(--ink);opacity:.6}
 .brief:hover .face{border-color:var(--aqua)}
+.brief .num{position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--gold);border:1px solid var(--gold);border-radius:999px;min-width:26px;height:26px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;text-transform:uppercase}
+.face-b .num{color:var(--ink);border-color:var(--ink)}
+.room{margin-top:14px;padding:10px 12px;border:1px solid var(--ink);background:rgba(255,255,255,.35);display:flex;flex-direction:column;gap:2px}
+.room-k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(7,23,43,.7)}
+.room b{font-size:22px;line-height:1.1;color:var(--ink);font-stretch:110%}
+.room-w{font-size:12.5px;color:rgba(7,23,43,.8)}
+.brief-backup{opacity:.38;cursor:default;pointer-events:none;filter:saturate(.4)}
+.brief-backup .num{color:#AFC8DC;border-color:#AFC8DC;font-size:10px}
+.brief-backup .flip-hint{color:#AFC8DC}
+.brief-backup:hover .face{border-color:var(--line-lt)}
 
 /* ---------- field manual ---------- */
 .manual{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:48px;border:1px solid var(--line)}
@@ -464,7 +474,7 @@ footer a{color:var(--gold)}
   "@context": "https://schema.org",
   "@type": "Event",
   "name": "iUrban Teen's 2026 AI Hackathon — Long Beach",
-  "startDate": "2026-09-26T08:30:00-07:00",
+  "startDate": "2026-09-26T08:00:00-07:00",
   "doorTime": "2026-09-26T08:00:00-07:00",
   "endDate": "2026-09-26T15:00:00-07:00",
   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
@@ -584,9 +594,8 @@ footer a{color:var(--gold)}
       <div class="kicker"><span class="mono">The challenge board</span><span class="rule"></span></div>
       <div class="board-top">
         <h2>Pick your fight.</h2>
-        <button class="btn btn-alt" id="shuffle" type="button">Shuffle the board ⟳</button>
       </div>
-      <p class="lede">Every track opens with a real brief written with industry partners. Tap any card to see where AI actually goes to work. The briefs are out. Find your track number on your badge, then open your brief, your room, and the toolkit.</p>
+      <p class="lede">Every track opens with a real brief written with industry partners. The briefs are out. Find your track number on your badge, tap the card to see the AI angle and your room, then open your brief and the toolkit. The two faded cards are backup briefs and are not in play today.</p>
       <p><a class="btn" href="briefs/">Open today's briefs →</a></p>
     </div>
     <div class="deck" id="deck"></div>
@@ -904,29 +913,35 @@ const MEDIA = {
 
 /* 3 · CHALLENGE BRIEFS — edit freely, add as many as you like */
 const BRIEFS = [
-  { sector:"Health & Wellness", title:"The appointment nobody keeps",
+  { num:1, sector:"Health & Wellness", title:"The appointment nobody keeps", room:"AA 201B", where:"AA Building, 2nd floor lab",
     front:"People miss care they've already scheduled — transportation, work shifts, language, childcare.",
     back:"Where AI works: reminder systems that adapt to a person's real constraints, or triage that routes someone to the right service on the first try." },
-  { sector:"Logistics & Supply Chain", title:"The last mile is the hard mile",
+  { num:2, sector:"Logistics & Supply Chain", title:"The last mile is the hard mile", room:"AA 201C", where:"AA Building, 2nd floor lab",
     front:"Goods move fast across oceans and then stall in the final few miles into neighborhoods and storefronts.",
     back:"Where AI works: routing, demand forecasting, or plain-language tools that let a small operator plan like a large one." },
-  { sector:"Small Business", title:"Competing without a marketing department",
+  { num:3, sector:"Small Business", title:"Competing without a marketing department", room:"AA 204", where:"AA Building, 2nd floor lab",
     front:"An owner with no staff is expected to produce content, run ads, answer reviews, and still do the actual job.",
     back:"Where AI works: drafting, scheduling, customer response, and pricing analysis that used to take an agency." },
-  { sector:"Education", title:"The students who quietly disappear",
+  { num:4, sector:"Education", title:"The students who quietly disappear", room:"AA 205", where:"AA Building, 2nd floor lab",
     front:"A student stops showing up weeks before anyone with the power to help notices.",
     back:"Where AI works: early-warning signals, navigation tools, and outreach that reaches a student in the way they actually communicate." },
-  { sector:"Climate & Energy", title:"Heat lands unevenly",
+  { num:5, sector:"Climate & Energy", title:"Heat lands unevenly", room:"LL 102", where:"LL Building, ideation room",
     front:"Two neighborhoods in the same city can differ by fifteen degrees on the same afternoon.",
     back:"Where AI works: mapping risk block by block, matching residents to relief, and making the case to people who fund infrastructure." },
-  { sector:"Creative Media", title:"Getting heard in an infinite feed",
+  { num:6, sector:"Creative Media", title:"Getting heard in an infinite feed", room:"MM 122", where:"MM Building lab",
     front:"Anyone can publish. Almost nobody gets seen — especially telling stories from their own community.",
-    back:"Where AI works: production speed, format adaptation, and audience research, without flattening the voice that made it worth telling." }
+    back:"Where AI works: production speed, format adaptation, and audience research, without flattening the voice that made it worth telling." },
+  { backup:true, sector:"Public Safety", title:"Help that arrives too late",
+    front:"The gap between a call and a response is where most harm happens.",
+    back:"Where AI works: dispatch prioritization, community reporting tools, and translating emergency information across languages." },
+  { backup:true, sector:"Workforce", title:"The job you were qualified for",
+    front:"People apply into a void, unaware they already have most of what the posting asks for.",
+    back:"Where AI works: skills translation, résumé and interview practice, and mapping a real path from where someone is to where they want to be." }
 ];
 
 /* ---------- countdown ----------
    Event start/end, Pacific. Update these if the date or times move. */
-const EVENT_START = new Date('2026-09-26T08:30:00-07:00');
+const EVENT_START = new Date('2026-09-26T08:00:00-07:00');
 const EVENT_END   = new Date('2026-09-26T15:00:00-07:00');
 (function(){
   const bar   = document.getElementById('countdown');
@@ -1134,28 +1149,32 @@ function renderDeck(list){
   deck.innerHTML = "";
   list.forEach(function(b){
     const card = document.createElement('button');
-    card.className = 'brief';
     card.type = 'button';
-    card.setAttribute('aria-label', b.title + ' — ' + b.sector + '. Activate to see how AI applies.');
+    if (b.backup){
+      card.className = 'brief brief-backup';
+      card.disabled = true;
+      card.setAttribute('aria-label', b.title + ' — ' + b.sector + '. Backup brief, not in play today.');
+      card.innerHTML =
+        '<div class="brief-in">' +
+          '<div class="face"><span class="num">Backup</span><span class="sector">' + b.sector + '</span><h3>' + b.title + '</h3><p>' + b.front + '</p><span class="flip-hint">Not in play today</span></div>' +
+        '</div>';
+      deck.appendChild(card);
+      return;
+    }
+    card.className = 'brief';
+    card.setAttribute('aria-label', 'Track ' + b.num + ': ' + b.title + ' — ' + b.sector + '. Activate to see the AI angle and your room.');
     card.innerHTML =
       '<div class="brief-in">' +
-        '<div class="face"><span class="sector">' + b.sector + '</span><h3>' + b.title + '</h3><p>' + b.front + '</p><span class="flip-hint">Tap for the AI angle →</span></div>' +
-        '<div class="face face-b"><span class="sector">' + b.sector + '</span><h3>The AI angle</h3><p>' + b.back + '</p><span class="flip-hint">← Back</span></div>' +
+        '<div class="face"><span class="num">' + b.num + '</span><span class="sector">' + b.sector + '</span><h3>' + b.title + '</h3><p>' + b.front + '</p><span class="flip-hint">Tap for the AI angle →</span></div>' +
+        '<div class="face face-b"><span class="num">' + b.num + '</span><span class="sector">' + b.sector + '</span><h3>The AI angle</h3><p>' + b.back + '</p>' +
+          '<div class="room"><span class="room-k">Your room</span><b>' + b.room + '</b><span class="room-w">' + b.where + '</span></div>' +
+          '<span class="flip-hint">← Back</span></div>' +
       '</div>';
     card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
     deck.appendChild(card);
   });
 }
 renderDeck(BRIEFS);
-
-document.getElementById('shuffle').addEventListener('click', function(){
-  const s = BRIEFS.slice();
-  for (let i = s.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [s[i], s[j]] = [s[j], s[i]];
-  }
-  renderDeck(s);
-});
 
 /* ---------- rotating "how might we" ---------- */
 const LINES = [
