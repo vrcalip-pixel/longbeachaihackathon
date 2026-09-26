@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lifeline Relay - Pharmacy Logistics & Fail-Safe Dispatch</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti for successful delivery celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              900: '#14532d',
+            },
+            medical: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            },
+            crimson: {
+              500: '#ef4444',
+              600: '#dc2626',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom scrollbars and pulse animations */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    @keyframes radar-pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.4); opacity: 0.2; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+    .radar-ring {
+      animation: radar-pulse 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+    }
+
+    @keyframes phone-shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px) rotate(-1deg); }
+      40%, 80% { transform: translateX(4px) rotate(1deg); }
+    }
+    .shake-alert {
+      animation: phone-shake 0.5s ease-in-out 3;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Main Application Header -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- App Heading -->
+      <div class="flex items-center space-x-3">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-brand-600 to-medical-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
+          <i data-lucide="shield-plus" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white leading-none flex items-center space-x-2">
+            <span>Lifeline Relay</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Zero-Fail Dispatch</span>
+          </h1>
+          <p class="text-xs text-slate-400 mt-0.5">Pharmacy Logistics & Community Fail-Safe Relay Engine</p>
+        </div>
+      </div>
+
+      <!-- Header Quick Actions -->
+      <div class="flex items-center space-x-2.5">
+        <button id="btn-pitch-mode" onclick="togglePitchGuideModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center space-x-1.5 transition">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+          <span>Pitch Script</span>
+        </button>
+
+        <!-- Stakeholder Community Relay Phone Sim Full Screen Trigger -->
+        <button id="btn-phone-drawer" onclick="togglePhoneDrawer()" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-medical-600 hover:bg-medical-500 text-white flex items-center space-x-2 shadow-lg shadow-medical-500/20 transition relative">
+          <i data-lucide="smartphone" class="w-4 h-4"></i>
+          <span>Community Relay (Phone Sim)</span>
+          <span id="badge-sms-ping" class="hidden w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping absolute -top-1 -right-1"></span>
+        </button>
+
+        <button id="btn-reset" onclick="resetFullSimulation()" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800 transition" title="Reset Simulation">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl w-full mx-auto px-4 py-4 flex-1 flex flex-col gap-4">
+
+    <!-- View Switcher -->
+    <div class="flex flex-wrap items-center justify-between border-b border-slate-800 pb-3 gap-3">
+      <div class="flex items-center space-x-2 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+        <button id="tab-btn-dashboard" onclick="switchView('dashboard')" class="px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center space-x-2 bg-brand-600 text-white shadow">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          <span>1. Pharmacy Dispatch Hub</span>
+        </button>
+        <button id="tab-btn-driver-ops" onclick="switchView('driver-ops')" class="px-4 py-2 rounded-lg text-xs font-semibold transition flex items-center space-x-2 text-slate-400 hover:text-white">
+          <i data-lucide="columns-3" class="w-4 h-4"></i>
+          <span>2. Driver Courier & Live Operations Split</span>
+        </button>
+      </div>
+
+      <div class="flex items-center space-x-2 text-xs text-slate-400">
+        <span class="inline-flex items-center space-x-1.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg text-slate-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>System Status: <strong id="system-status-text" class="text-white font-semibold">Ready at Depot</strong></span>
+        </span>
+      </div>
+    </div>
+
+    <!-- View 1: Pharmacy Dispatch Hub -->
+    <div id="view-dashboard" class="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+      
+      <!-- Left Column: Patient Profile & Delegate Community Cluster (4 Cols) -->
+      <div class="lg:col-span-4 flex flex-col gap-4">
+        
+        <!-- Recipient Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm relative overflow-hidden">
+          <div class="absolute top-0 right-0 h-16 w-16 bg-brand-500/10 rounded-bl-full pointer-events-none"></div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold tracking-wider uppercase text-slate-400 flex items-center space-x-1">
+              <i data-lucide="user-check" class="w-3.5 h-3.5 text-brand-400"></i>
+              <span>Primary Recipient (Patient)</span>
+            </span>
+            <span id="patient-response-pill" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              Awaiting Check-in
+            </span>
+          </div>
+
+          <div class="flex items-start space-x-3 mb-3">
+            <div class="w-11 h-11 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-lg font-bold text-slate-200">
+              AP
+            </div>
+            <div>
+              <h3 class="font-bold text-white text-base">Arthur Pendelton (68)</h3>
+              <p class="text-xs text-slate-400">Oakridge Manor Apartments, Apt 4C</p>
+              <p class="text-[11px] text-slate-500 font-mono mt-0.5">+1 (555) 019-4821</p>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-950/70 border border-slate-800/80 rounded-xl space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Rx Payload:</span>
+              <span class="font-semibold text-emerald-400">Lantus Insulin (Cold-Chain)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Risk Profile:</span>
+              <span class="text-rose-400 font-medium">Acute Hypoglycemic Risk</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Entry Restriction:</span>
+              <span class="text-slate-300">Security Callbox required</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex-1 flex flex-col">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center space-x-1.5">
+              <i data-lucide="users" class="w-4 h-4 text-medical-400"></i>
+              <h4 class="font-semibold text-white text-sm">Vetted Micro-Community Delegates</h4>
+            </div>
+            <span class="text-[10px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded">Exact Same Node</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-3">
+            Pre-registered neighbors inside the same building. Zero driver detour required.
+          </p>
+
+          <!-- Backup 1: Sarah -->
+          <div id="card-delegate-sarah" class="p-3 mb-2 rounded-xl bg-slate-950 border border-slate-800 transition hover:border-slate-700">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-xs font-bold text-emerald-400">
+                  D1
+                </div>
+                <div>
+                  <div class="text-xs font-semibold text-slate-200">Sarah Jenkins</div>
+                  <div class="text-[11px] text-slate-400">Apt 3B (1 Floor Below Arthur)</div>
+                </div>
+              </div>
+              <span id="sarah-status-badge" class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400">
+                Standby
+              </span>
+            </div>
+          </div>
+
+          <!-- Backup 2: David -->
+          <div id="card-delegate-david" class="p-3 rounded-xl bg-slate-950 border border-slate-800 transition hover:border-slate-700">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2.5">
+                <div class="w-8 h-8 rounded-lg bg-medical-500/10 border border-medical-500/30 flex items-center justify-center text-xs font-bold text-medical-400">
+                  D2
+                </div>
+                <div>
+                  <div class="text-xs font-semibold text-slate-200">David Ross</div>
+                  <div class="text-[11px] text-slate-400">Apt 2A / Resident Super</div>
+                </div>
+              </div>
+              <span id="david-status-badge" class="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400">
+                Standby
+              </span>
+            </div>
+          </div>
+
+          <!-- HIPAA Zero-Knowledge Privacy Compliance Guarantee -->
+          <div class="mt-auto pt-3 border-t border-slate-800/80">
+            <div class="p-2.5 rounded-xl bg-emerald-950/20 border border-emerald-500/20 flex items-start space-x-2">
+              <i data-lucide="lock" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+              <div class="text-[11px] text-emerald-300/90 leading-tight">
+                <span class="font-semibold text-emerald-200">Zero-Knowledge Masking Active:</span>
+                Delegates never see Rx name, illness, or medical chart. Broadcast labels item as: <em class="text-white">"Temperature-Sensitive Priority Parcel"</em>.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="lg:col-span-8 flex flex-col gap-4">
+        
+        <!-- Live Route Convergence Map -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col relative overflow-hidden min-h-[300px]">
+          <div class="flex items-center justify-between mb-3 z-10">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-brand-400"></i>
+              <h4 class="font-semibold text-white text-sm">Last-Mile Dynamic Convergence Map</h4>
+            </div>
+            <div class="flex items-center space-x-3 text-xs">
+              <span class="flex items-center space-x-1 text-slate-400">
+                <span class="w-2.5 h-2.5 rounded-full bg-medical-500 inline-block"></span>
+                <span>Van 03 (Marcus)</span>
+              </span>
+              <span class="flex items-center space-x-1 text-slate-400">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                <span>Destination (Oakridge Manor)</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Interactive SVG Simulation Canvas -->
+          <div class="relative w-full flex-1 rounded-xl bg-slate-950 border border-slate-800 overflow-hidden min-h-[220px] flex items-center justify-center">
+            
+            <!-- Grid Lines Background -->
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            
+            <svg id="route-svg" class="w-full h-full absolute inset-0" viewBox="0 0 600 240">
+              <!-- Route Path -->
+              <path id="route-path" d="M 60 180 Q 200 40 320 140 T 520 70" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 6"/>
+              <path id="route-progress-path" d="M 60 180 Q 200 40 320 140 T 520 70" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-dashoffset="0" stroke-dasharray="1000"/>
+              
+              <!-- 5-Minute Horizon Warning Zone -->
+              <circle cx="520" cy="70" r="100" fill="#3b82f6" fill-opacity="0.05" stroke="#3b82f6" stroke-opacity="0.2" stroke-dasharray="4 4" />
+              <text x="440" y="190" fill="#64748b" font-size="10" font-family="monospace">5-Min AI Handover Horizon</text>
+
+              <!-- Depot Marker -->
+              <g transform="translate(60, 180)">
+                <circle r="14" fill="#0f172a" stroke="#64748b" stroke-width="2"/>
+                <circle r="5" fill="#94a3b8"/>
+                <text x="-20" y="28" fill="#94a3b8" font-size="11" font-weight="600">St. Jude Pharmacy</text>
+              </g>
+
+              <!-- Delivery Target Node (Oakridge Manor) -->
+              <g transform="translate(520, 70)">
+                <circle id="dest-pulse" r="22" fill="#22c55e" fill-opacity="0.2" class="radar-ring" />
+                <circle r="16" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+                <text x="-4" y="4" fill="#22c55e" font-size="12" font-weight="bold">⌂</text>
+                <text x="-40" y="-24" fill="#f8fafc" font-size="11" font-weight="bold">Oakridge Manor (Apt 4C)</text>
+              </g>
+
+              <!-- Moving Van Marker -->
+              <g id="van-marker" transform="translate(60, 180)">
+                <circle r="18" fill="#3b82f6" fill-opacity="0.3" class="animate-ping" />
+                <circle r="12" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+                <text x="-6" y="4" fill="#ffffff" font-size="10" font-weight="bold">🚚</text>
+              </g>
+            </svg>
+
+            <!-- Floating Overlay Telemetry HUD -->
+            <div class="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur border border-slate-800 p-2.5 rounded-xl text-xs flex items-center space-x-4">
+              <div>
+                <span class="text-slate-500 block text-[10px]">CURRENT SPEED</span>
+                <span id="telemetry-speed" class="font-mono font-bold text-white">24 MPH</span>
+              </div>
+              <div class="h-6 w-px bg-slate-800"></div>
+              <div>
+                <span class="text-slate-500 block text-[10px]">DISTANCE TO GATE</span>
+                <span id="telemetry-dist" class="font-mono font-bold text-white">2.8 MI</span>
+              </div>
+              <div class="h-6 w-px bg-slate-800"></div>
+              <div>
+                <span class="text-slate-500 block text-[10px]">RELAY READINESS</span>
+                <span id="telemetry-relay-status" class="font-semibold text-amber-400">Monitoring Arthur</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Route Progress Bar -->
+          <div class="mt-3 flex items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400 shrink-0">Route Progress</span>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div id="route-progress-bar" class="bg-gradient-to-r from-medical-500 to-brand-500 h-2 rounded-full transition-all duration-300 w-[0%]"></div>
+            </div>
+            <span id="route-progress-percent" class="font-mono text-slate-300 shrink-0">0%</span>
+          </div>
+
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex-1 flex flex-col">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="cpu" class="w-4 h-4 text-purple-400"></i>
+              <h4 class="font-semibold text-white text-sm">Autonomous AI Handover Engine</h4>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-purple-950 border border-purple-500/30 text-purple-300">
+                Active Dead-Reckoning
+              </span>
+            </div>
+            <button onclick="clearAILogs()" class="text-xs text-slate-500 hover:text-slate-400">Clear</button>
+          </div>
+
+          <!-- Log entries feed -->
+          <div id="ai-logs-container" class="space-y-2 overflow-y-auto max-h-[160px] pr-1 text-xs font-mono">
+            <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800/80 text-slate-400">
+              <span class="text-slate-600">[00:00]</span> Engine initialized. Order #RX-8942 tagged: Cold-chain medical priority. Monitoring Arthur (Apt 4C) check-in heartbeat.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="view-phones" class="hidden grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 flex-1">
+      
+      <!-- Phone 1: Arthur (The Patient in Crisis) -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 flex flex-col shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+          <div class="flex items-center space-x-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div>
+            <span class="text-xs font-bold text-white tracking-wide">Arthur's Phone (Patient)</span>
+          </div>
+          <span id="arthur-state-tag" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-950 text-emerald-300 border border-emerald-500/30">
+            Awaiting Ping
+          </span>
+        </div>
+
+        <!-- Phone screen body -->
+        <div class="flex-1 bg-slate-950 rounded-2xl border border-slate-800 p-3 flex flex-col justify-between overflow-hidden relative">
+          
+          <!-- SMS Message Thread -->
+          <div id="arthur-sms-thread" class="space-y-2.5 overflow-y-auto max-h-[340px] pr-1 text-xs">
+            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-slate-300">
+              <div class="text-[10px] text-brand-400 font-semibold mb-1">ST. JUDE PHARMACY</div>
+              Hi Arthur! Your temperature-sensitive Lantus insulin is being packed. Courier leaves in ~15 mins.
+            </div>
+          </div>
+
+          <!-- Arthur's Action Controls -->
+          <div class="pt-3 border-t border-slate-800 mt-2 space-y-2">
+            <div id="arthur-response-actions" class="grid grid-cols-2 gap-2">
+              <button onclick="arthurManualReply(true)" class="py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs transition">
+                "I am ready!" (Normal)
+              </button>
+              <button onclick="triggerArthurCrisis()" class="py-2 px-3 rounded-xl bg-rose-950 hover:bg-rose-900 border border-rose-600/40 text-rose-300 font-medium text-xs transition">
+                Simulate Shock (Silent)
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-500 text-center">Simulates patient responsiveness vs sudden hypoglycemia</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="phone-sarah-wrapper" class="bg-slate-900 border border-slate-800 rounded-3xl p-4 flex flex-col shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+          <div class="flex items-center space-x-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+            <span class="text-xs font-bold text-white tracking-wide">Sarah's Phone (Backup 1)</span>
+          </div>
+          <span id="sarah-alert-indicator" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-400">
+            Standby
+          </span>
+        </div>
+
+        <div class="flex-1 bg-slate-950 rounded-2xl border border-slate-800 p-3 flex flex-col justify-between overflow-hidden">
+          
+          <!-- SMS Message Thread -->
+          <div id="sarah-sms-thread" class="space-y-2.5 overflow-y-auto max-h-[310px] pr-1 text-xs">
+            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-slate-400">
+              <div class="text-[10px] text-slate-500 font-semibold mb-1">SYSTEM NOTICE</div>
+              You are listed as Primary Community Safety Delegate for neighbor Arthur (Apt 4C).
+            </div>
+          </div>
+
+          <!-- Interactive Natural Language SMS Box (AI Driven) -->
+          <div class="pt-3 border-t border-slate-800 mt-2 space-y-2">
+            <div class="flex items-center space-x-1.5">
+              <input id="sarah-input-sms" type="text" placeholder="Type SMS (e.g., 'On elevator now')" 
+                     class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+              <button onclick="sendSarahCustomSMS()" class="p-2 bg-brand-600 hover:bg-brand-500 rounded-xl text-white transition" title="Send SMS">
+                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+              <button onclick="quickReplySarah('YES')" class="flex-1 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-[11px] font-medium transition">
+                "YES, heading down"
+              </button>
+              <button onclick="quickReplySarah('PASS')" class="flex-1 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[11px] font-medium transition">
+                "PASS, not home"
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-500 text-center">AI NLP interprets unstructured answers</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="phone-david-wrapper" class="bg-slate-900 border border-slate-800 rounded-3xl p-4 flex flex-col shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+          <div class="flex items-center space-x-2">
+            <div class="w-2.5 h-2.5 rounded-full bg-medical-500"></div>
+            <span class="text-xs font-bold text-white tracking-wide">David's Phone (Backup 2 / Super)</span>
+          </div>
+          <span id="david-alert-indicator" class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-400">
+            Secondary
+          </span>
+        </div>
+
+        <div class="flex-1 bg-slate-950 rounded-2xl border border-slate-800 p-3 flex flex-col justify-between overflow-hidden">
+          
+          <div id="david-sms-thread" class="space-y-2.5 overflow-y-auto max-h-[310px] pr-1 text-xs">
+            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-slate-400">
+              <div class="text-[10px] text-slate-500 font-semibold mb-1">SYSTEM NOTICE</div>
+              Secondary safety delegate standby for Arthur Pendelton. Activates only if Backup 1 fails.
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-800 mt-2 space-y-2">
+            <button onclick="quickReplyDavid('ACCEPT')" class="w-full py-2 rounded-xl bg-medical-950 hover:bg-medical-900 border border-medical-500/40 text-medical-300 text-xs font-medium transition">
+              David Confirms: "I'll take the package at main lobby"
+            </button>
+            <p class="text-[10px] text-slate-500 text-center">Automatic failover destination</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div id="view-driver" class="hidden max-w-md mx-auto w-full flex-1">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl flex flex-col gap-4">
+        
+        <!-- Driver Top Header -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-9 h-9 rounded-xl bg-medical-600 flex items-center justify-center font-bold text-white text-sm">
+              M3
+            </div>
+            <div>
+              <div class="font-bold text-white text-sm">Marcus (Van 03)</div>
+              <div class="text-[11px] text-slate-400">Stop 4 of 18 • Priority Medical Stop</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">
+            ONLINE
+          </span>
+        </div>
+
+        <!-- Dynamic Destination Banner -->
+        <div id="driver-target-card" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 transition-all">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span>CURRENT TARGET RECIPIENT</span>
+            <span id="driver-target-badge" class="font-mono text-emerald-400 font-semibold">PRIMARY PATIENT</span>
+          </div>
+          <h3 id="driver-target-name" class="font-bold text-white text-lg">Arthur Pendelton</h3>
+          <p id="driver-target-address" class="text-xs text-slate-300">Oakridge Manor Apts, Apt 4C</p>
+          <div id="driver-instruction-pill" class="mt-2.5 p-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 flex items-center space-x-2">
+            <i data-lucide="info" class="w-4 h-4 text-medical-400 shrink-0"></i>
+            <span id="driver-instruction-text">Dial callbox #402. Wait 90s if no response.</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col items-center">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Secure Chain-of-Custody PIN</span>
+          <p class="text-xs text-slate-400 text-center mb-3">Ask receiver for the 4-digit code generated on their phone</p>
+          
+          <div class="flex space-x-2 mb-4">
+            <input type="text" maxlength="1" id="pin-1" class="w-12 h-14 bg-slate-900 border border-slate-700 rounded-xl text-center text-xl font-bold text-white focus:outline-none focus:border-brand-500" onkeyup="handlePinInput(1)">
+            <input type="text" maxlength="1" id="pin-2" class="w-12 h-14 bg-slate-900 border border-slate-700 rounded-xl text-center text-xl font-bold text-white focus:outline-none focus:border-brand-500" onkeyup="handlePinInput(2)">
+            <input type="text" maxlength="1" id="pin-3" class="w-12 h-14 bg-slate-900 border border-slate-700 rounded-xl text-center text-xl font-bold text-white focus:outline-none focus:border-brand-500" onkeyup="handlePinInput(3)">
+            <input type="text" maxlength="1" id="pin-4" class="w-12 h-14 bg-slate-900 border border-slate-700 rounded-xl text-center text-xl font-bold text-white focus:outline-none focus:border-brand-500" onkeyup="handlePinInput(4)">
+          </div>
+
+          <button id="btn-verify-pin" onclick="verifyDeliveryPin()" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-500 font-bold text-sm text-white transition flex items-center justify-center space-x-2 shadow-lg shadow-brand-500/20">
+            <i data-lucide="check-check" class="w-4 h-4"></i>
+            <span>Confirm Zero-Knowledge Handshake</span>
+          </button>
+        </div>
+
+        <!-- Driver Wellness Alert trigger -->
+        <button onclick="triggerWellnessEmergency()" class="w-full py-2.5 rounded-xl bg-rose-950/80 hover:bg-rose-900 border border-rose-600/40 text-rose-300 text-xs font-semibold flex items-center justify-center space-x-2 transition">
+          <i data-lucide="shield-alert" class="w-4 h-4 text-rose-400"></i>
+          <span>Report Urgent Wellness Anomaly to Pharmacy</span>
+        </button>
+
+      </div>
+    </div>
+
+    <div id="view-split" class="hidden grid-cols-1 xl:grid-cols-12 gap-4 flex-1">
+      <div class="xl:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-col h-[520px]">
+        <div class="text-xs font-bold text-brand-400 mb-2 flex items-center space-x-1.5">
+          <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+          <span>Pharmacy Dispatch View</span>
+        </div>
+        <div id="split-hub-clone" class="flex-1 overflow-y-auto text-xs space-y-2">
+          <!-- Dynamically synced via JavaScript -->
+        </div>
+      </div>
+
+      <div class="xl:col-span-5 bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-col h-[520px]">
+        <div class="text-xs font-bold text-medical-400 mb-2 flex items-center space-x-1.5">
+          <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+          <span>Active Delegate Phone (Sarah)</span>
+        </div>
+        <div id="split-phone-clone" class="flex-1 bg-slate-950 rounded-xl p-3 flex flex-col justify-between overflow-hidden">
+          <!-- Cloned phone display -->
+        </div>
+      </div>
+
+      <div class="xl:col-span-3 bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-col h-[520px]">
+        <div class="text-xs font-bold text-amber-400 mb-2 flex items-center space-x-1.5">
+          <i data-lucide="truck" class="w-3.5 h-3.5"></i>
+          <span>Driver Terminal</span>
+        </div>
+        <div id="split-driver-clone" class="flex-1 bg-slate-950 rounded-xl p-3 flex flex-col justify-between">
+          <!-- Cloned driver mini view -->
+        </div>
+      </div>
+    </div>
+
+    <!-- View 2: Combined Driver Courier Terminal + Live Operations Split View -->
+    <div id="view-driver-ops" class="hidden grid-cols-1 xl:grid-cols-12 gap-5 flex-1">
+      
+      <!-- Driver Terminal Section (Left / Top - 5 Cols) -->
+      <div class="xl:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl flex flex-col gap-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-9 h-9 rounded-xl bg-medical-600 flex items-center justify-center font-bold text-white text-sm">
+              M3
+            </div>
+            <div>
+              <div class="font-bold text-white text-sm">Marcus (Van 03 Terminal)</div>
+              <div class="text-[11px] text-slate-400">Stop 4 of 18 • Priority Cold-Chain Parcel</div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30">
+            IN-TRANSIT
+          </span>
+        </div>
+
+        <!-- Dynamic Destination Banner -->
+        <div id="driver-target-card" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 transition-all">
+          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+            <span>CURRENT TARGET RECIPIENT</span>
+            <span id="driver-target-badge" class="font-mono text-emerald-400 font-semibold">PRIMARY PATIENT</span>
+          </div>
+          <h3 id="driver-target-name" class="font-bold text-white text-lg">Arthur Pendelton</h3>
+          <p id="driver-target-address" class="text-xs text-slate-300">Oakridge Manor Apts, Apt 4C</p>
+          <div id="driver-instruction-pill" class="mt-2.5 p-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 flex items-center space-x-2">
+            <i data-lucide="info" class="w-4 h-4 text-medical-400 shrink-0"></i>
+            <span id="driver-instruction-text">Dial callbox #402. Wait 90s if no response.</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col items-center">
+          <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Secure Chain-of-Custody PIN</span>
+          <p class="text-xs text-slate-400 text-center mb-3">Ask receiver for the 4-digit code generated on their phone</p>
+          
+          <div class="flex space-x-2 mb-4">
+            <input type="text" maxlength="1" id="pin-1" class="w-12 h-14 bg-slate-900 border border-slate-700 rounded-xl text-center text-xl font-bold text-white focus:outline-none focus:border-brand-500" onkeyup="handlePinInput(1)">
+            <input type="text" maxlength="1" id="pin-2" class="w-12 h-14 bg-slate-900 border border-slate-700 rounded-xl text-center text-xl font-bold text-white focus:outline-none focus:border-brand-500" onkeyup="handlePinInput(2)">
+            <input type="text" maxlength="1" id="pin-3" class="w-12 h-14 bg-slate-900 border border-slate-700 rounded-xl text-center text-xl font-bold text-white focus:outline-none focus:border-brand-500" onkeyup="handlePinInput(3)">
+            <input type="text" maxlength="1" id="pin-4" class="w-12 h-14 bg-slate-900 border border-slate-700 rounded-xl text-center text-xl font-bold text-white focus:outline-none focus:border-brand-500" onkeyup="handlePinInput(4)">
+          </div>
+
+          <button id="btn-verify-pin" onclick="verifyDeliveryPin()" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-500 font-bold text-sm text-white transition flex items-center justify-center space-x-2 shadow-lg shadow-brand-500/20">
+            <i data-lucide="check-check" class="w-4 h-4"></i>
+            <span>Confirm Zero-Knowledge Handshake</span>
+          </button>
+        </div>
+
+        <button onclick="triggerWellnessEmergency()" class="w-full py-2.5 rounded-xl bg-rose-950/80 hover:bg-rose-900 border border-rose-600/40 text-rose-300 text-xs font-semibold flex items-center justify-center space-x-2 transition mt-auto">
+          <i data-lucide="shield-alert" class="w-4 h-4 text-rose-400"></i>
+          <span>Report Urgent Wellness Anomaly to Pharmacy</span>
+        </button>
+      </div>
+
+      <!-- Live Operations Split Monitoring Section (Right - 7 Cols) -->
+      <div class="xl:col-span-7 flex flex-col gap-4">
+        
+        <!-- Live Synchronized Dispatch Status -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 flex flex-col">
+          <div class="text-xs font-bold text-brand-400 mb-2 flex items-center space-x-1.5">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+            <span>Live Telemetry & Command Synchronization</span>
+          </div>
+          <div id="split-hub-clone" class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+        <!-- Dynamic Delegate Phone Feed Preview -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-4 flex-1 flex flex-col min-h-[320px]">
+          <div class="flex items-center justify-between text-xs font-bold text-medical-400 mb-2">
+            <div class="flex items-center space-x-1.5">
+              <i data-lucide="message-square" class="w-4 h-4"></i>
+              <span>Active Delegate SMS Stream Preview</span>
+            </div>
+            <button onclick="togglePhoneDrawer()" class="text-slate-400 hover:text-white text-[11px] underline">Open Stakeholder Phones Drawer →</button>
+          </div>
+          <div id="split-phone-clone" class="flex-1 bg-slate-950 rounded-2xl p-3 border border-slate-800 flex flex-col justify-between">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Full-Screen Community Relay (Phone Sim) Stakeholder View Modal -->
+  <div id="drawer-phones" class="fixed inset-0 bg-slate-950/98 backdrop-blur-lg z-50 transform translate-y-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col overflow-hidden">
+    
+    <!-- Full-Screen Top Control Header with Embedded Scenario & Launch Controls -->
+    <div class="p-4 border-b border-slate-800 bg-slate-900 flex flex-wrap items-center justify-between gap-4 shrink-0">
+      
+      <!-- Left Branding -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-medical-600/30 border border-medical-500/40 flex items-center justify-center">
+          <i data-lucide="smartphone" class="w-5 h-5 text-medical-400"></i>
+        </div>
+        <div>
+          <h2 class="font-bold text-white text-base leading-tight">Community Relay Simulator</h2>
+          <p class="text-xs text-slate-400">Interactive Multi-Stakeholder Phone Experience • Arthur, Sarah & David</p>
+        </div>
+      </div>
+
+      <!-- Embedded Scenario & Step Simulation Launch Controls -->
+      <div class="flex items-center space-x-2 bg-slate-950 p-2 rounded-2xl border border-slate-800">
+        <span class="text-xs font-semibold text-slate-400 px-2 flex items-center space-x-1">
+          <i data-lucide="sliders" class="w-3.5 h-3.5 text-brand-400"></i>
+          <span>Scenario Control:</span>
+        </span>
+        
+        <button onclick="triggerArthurCrisis()" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-rose-950/80 hover:bg-rose-900 border border-rose-600/50 text-rose-300 flex items-center space-x-1.5 transition">
+          <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-400"></i>
+          <span>Simulate Arthur Crisis</span>
+        </button>
+
+        <button id="btn-fast-forward" onclick="stepSimulation()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-500 text-white flex items-center space-x-2 transition shadow-lg shadow-brand-500/20">
+          <i data-lucide="fast-forward" class="w-3.5 h-3.5"></i>
+          <span id="btn-step-label">Launch In-Transit Route</span>
+        </button>
+      </div>
+
+      <!-- Close Full-Screen Overlay Button -->
+      <button onclick="togglePhoneDrawer()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition border border-slate-800 flex items-center space-x-1 text-xs">
+        <span>Close View</span>
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Full-Screen Interactive Layout Grid (Map + AI Engine + 3 Phones) -->
+    <div class="flex-1 overflow-y-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 max-w-7xl w-full mx-auto">
+      
+      <!-- Left Column (5 Cols): Embedded Map & Autonomous AI Handover Engine -->
+      <div class="lg:col-span-5 flex flex-col gap-4">
+        
+        <!-- Last-Mile Dynamic Convergence Map -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col relative overflow-hidden">
+          <div class="flex items-center justify-between mb-3 z-10">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="map-pin" class="w-4 h-4 text-brand-400"></i>
+              <h4 class="font-semibold text-white text-sm">Last-Mile Convergence Map</h4>
+            </div>
+            <div class="flex items-center space-x-2 text-[11px] text-slate-400">
+              <span class="flex items-center space-x-1">
+                <span class="w-2 h-2 rounded-full bg-medical-500 inline-block"></span>
+                <span>Van 03</span>
+              </span>
+              <span class="flex items-center space-x-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                <span>Oakridge</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Interactive SVG Simulation Canvas -->
+          <div class="relative w-full rounded-xl bg-slate-950 border border-slate-800 overflow-hidden min-h-[190px] flex items-center justify-center">
+            
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+            
+            <svg id="route-svg-modal" class="w-full h-full absolute inset-0" viewBox="0 0 600 240">
+              <path id="route-path-modal" d="M 60 180 Q 200 40 320 140 T 520 70" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 6"/>
+              <path id="route-progress-path-modal" d="M 60 180 Q 200 40 320 140 T 520 70" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-dashoffset="0" stroke-dasharray="1000"/>
+              
+              <circle cx="520" cy="70" r="100" fill="#3b82f6" fill-opacity="0.05" stroke="#3b82f6" stroke-opacity="0.2" stroke-dasharray="4 4" />
+
+              <g transform="translate(60, 180)">
+                <circle r="14" fill="#0f172a" stroke="#64748b" stroke-width="2"/>
+                <circle r="5" fill="#94a3b8"/>
+                <text x="-20" y="28" fill="#94a3b8" font-size="11" font-weight="600">St. Jude Pharmacy</text>
+              </g>
+
+              <g transform="translate(520, 70)">
+                <circle r="22" fill="#22c55e" fill-opacity="0.2" class="radar-ring" />
+                <circle r="16" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+                <text x="-4" y="4" fill="#22c55e" font-size="12" font-weight="bold">⌂</text>
+                <text x="-40" y="-24" fill="#f8fafc" font-size="11" font-weight="bold">Oakridge Manor (Apt 4C)</text>
+              </g>
+
+              <g id="van-marker-modal" transform="translate(60, 180)">
+                <circle r="18" fill="#3b82f6" fill-opacity="0.3" class="animate-ping" />
+                <circle r="12" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+                <text x="-6" y="4" fill="#ffffff" font-size="10" font-weight="bold">🚚</text>
+              </g>
+            </svg>
+
+            <!-- Floating Overlay Telemetry HUD -->
+            <div class="absolute bottom-2 left-2 bg-slate-900/90 backdrop-blur border border-slate-800 p-2 rounded-xl text-[11px] flex items-center space-x-3">
+              <div>
+                <span class="text-slate-500 block text-[9px]">SPEED</span>
+                <span id="telemetry-speed-modal" class="font-mono font-bold text-white">24 MPH</span>
+              </div>
+              <div class="h-5 w-px bg-slate-800"></div>
+              <div>
+                <span class="text-slate-500 block text-[9px]">DISTANCE</span>
+                <span id="telemetry-dist-modal" class="font-mono font-bold text-white">2.8 MI</span>
+              </div>
+              <div class="h-5 w-px bg-slate-800"></div>
+              <div>
+                <span class="text-slate-500 block text-[9px]">RELAY READINESS</span>
+                <span id="telemetry-relay-status-modal" class="font-semibold text-amber-400">Monitoring Arthur</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Route Progress Bar -->
+          <div class="mt-2.5 flex items-center justify-between gap-2 text-[11px]">
+            <span class="text-slate-400 shrink-0">Progress</span>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div id="route-progress-bar-modal" class="bg-gradient-to-r from-medical-500 to-brand-500 h-2 rounded-full transition-all duration-300 w-[0%]"></div>
+            </div>
+            <span id="route-progress-percent-modal" class="font-mono text-slate-300 shrink-0">0%</span>
+          </div>
+
+        </div>
+
+        <!-- Autonomous AI Handover Engine Log -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex-1 flex flex-col min-h-[180px]">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="cpu" class="w-4 h-4 text-purple-400"></i>
+              <h4 class="font-semibold text-white text-xs">Autonomous AI Engine Log</h4>
+              <span class="px-2 py-0.5 rounded text-[9px] bg-purple-950 border border-purple-500/30 text-purple-300">
+                Active
+              </span>
+            </div>
+            <button onclick="clearAILogs()" class="text-[11px] text-slate-500 hover:text-slate-400">Clear</button>
+          </div>
+
+          <div id="ai-logs-container-modal" class="space-y-2 overflow-y-auto max-h-[180px] pr-1 text-[11px] font-mono flex-1">
+            <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800/80 text-slate-400">
+              <span class="text-slate-600">[00:00]</span> Engine initialized. Order #RX-8942 tagged: Cold-chain medical priority. Monitoring Arthur check-in.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column (7 Cols): 3 Stakeholder Mobile Phone Interfaces -->
+      <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- Phone 1: Arthur (Patient) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-3.5 flex flex-col shadow-2xl relative h-[480px]">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+            <div class="flex items-center space-x-1.5">
+              <div class="w-2 h-2 rounded-full bg-slate-600"></div>
+              <span class="text-[11px] font-bold text-white tracking-wide">Arthur (Patient)</span>
+            </div>
+            <span id="arthur-state-tag" class="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-emerald-950 text-emerald-300 border border-emerald-500/30">
+              Awaiting
+            </span>
+          </div>
+
+          <div id="arthur-sms-thread" class="flex-1 bg-slate-950 rounded-2xl p-2.5 space-y-2 overflow-y-auto text-[11px] border border-slate-800/80 mb-2">
+            <div class="bg-slate-900 p-2 rounded-xl text-slate-300 border border-slate-800">
+              <div class="text-[9px] text-brand-400 font-semibold mb-0.5">ST. JUDE PHARMACY</div>
+              Hi Arthur! Your temperature-sensitive Lantus insulin is being packed. Courier leaves in ~15 mins.
+            </div>
+          </div>
+
+          <div class="space-y-1.5 pt-1.5 border-t border-slate-800">
+            <div class="grid grid-cols-2 gap-1.5">
+              <button onclick="arthurManualReply(true)" class="py-1.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-[11px] transition">
+                "I'm ready!"
+              </button>
+              <button onclick="triggerArthurCrisis()" class="py-1.5 px-2 rounded-xl bg-rose-950 hover:bg-rose-900 border border-rose-600/40 text-rose-300 font-semibold text-[11px] transition">
+                Shock (Silent)
+              </button>
+            </div>
+            <p class="text-[9px] text-slate-500 text-center">Patient response vs blackout</p>
+          </div>
+        </div>
+
+        <!-- Phone 2: Sarah (Primary Backup) -->
+        <div id="phone-sarah-wrapper" class="bg-slate-900 border border-slate-800 rounded-3xl p-3.5 flex flex-col shadow-2xl relative h-[480px]">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+            <div class="flex items-center space-x-1.5">
+              <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+              <span class="text-[11px] font-bold text-white tracking-wide">Sarah (Backup 1)</span>
+            </div>
+            <span id="sarah-alert-indicator" class="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-slate-800 text-slate-400">
+              Standby
+            </span>
+          </div>
+
+          <div id="sarah-sms-thread" class="flex-1 bg-slate-950 rounded-2xl p-2.5 space-y-2 overflow-y-auto text-[11px] border border-slate-800/80 mb-2">
+            <div class="bg-slate-900 p-2 rounded-xl text-slate-400 border border-slate-800">
+              <div class="text-[9px] text-slate-500 font-semibold mb-0.5">SYSTEM NOTICE</div>
+              Primary Community Delegate for Arthur (Apt 4C).
+            </div>
+          </div>
+
+          <div class="space-y-1.5 pt-1.5 border-t border-slate-800">
+            <div class="flex items-center space-x-1">
+              <input id="sarah-input-sms" type="text" placeholder="Type SMS..." 
+                     class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-[11px] text-white placeholder-slate-500 focus:outline-none focus:border-brand-500">
+              <button onclick="sendSarahCustomSMS()" class="p-1.5 bg-brand-600 hover:bg-brand-500 rounded-xl text-white transition" title="Send SMS">
+                <i data-lucide="send" class="w-3 h-3"></i>
+              </button>
+            </div>
+            <div class="flex items-center space-x-1.5">
+              <button onclick="quickReplySarah('YES')" class="flex-1 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-emerald-300 text-[10px] font-medium transition">
+                "YES, heading down"
+              </button>
+              <button onclick="quickReplySarah('PASS')" class="flex-1 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-[10px] font-medium transition">
+                "PASS"
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone 3: David (Secondary Backup) -->
+        <div id="phone-david-wrapper" class="bg-slate-900 border border-slate-800 rounded-3xl p-3.5 flex flex-col shadow-2xl relative h-[480px]">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+            <div class="flex items-center space-x-1.5">
+              <div class="w-2 h-2 rounded-full bg-medical-500"></div>
+              <span class="text-[11px] font-bold text-white tracking-wide">David (Backup 2)</span>
+            </div>
+            <span id="david-alert-indicator" class="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-slate-800 text-slate-400">
+              Secondary
+            </span>
+          </div>
+
+          <div id="david-sms-thread" class="flex-1 bg-slate-950 rounded-2xl p-2.5 space-y-2 overflow-y-auto text-[11px] border border-slate-800/80 mb-2">
+            <div class="bg-slate-900 p-2 rounded-xl text-slate-400 border border-slate-800">
+              <div class="text-[9px] text-slate-500 font-semibold mb-0.5">SYSTEM NOTICE</div>
+              Secondary safety delegate standby. Activates if Backup 1 fails.
+            </div>
+          </div>
+
+          <div class="pt-1.5 border-t border-slate-800 space-y-1.5">
+            <button onclick="quickReplyDavid('ACCEPT')" class="w-full py-2 rounded-xl bg-medical-950 hover:bg-medical-900 border border-medical-500/40 text-medical-300 text-[11px] font-semibold transition">
+              David Confirms: "I'll take at lobby"
+            </button>
+            <p class="text-[9px] text-slate-500 text-center">Failover destination</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Updated 2-View State Machine
+    const SIM_STATE = {
+      orderId: "RX-8942",
+      recipient: "Arthur Pendelton (Apt 4C)",
+      delegate1: "Sarah Jenkins (Apt 3B)",
+      delegate2: "David Ross (Apt 2A)",
+      currentETASeconds: 720,
+      phase: 0,
+      currentRatio: 0,
+      arthurResponded: false,
+      arthurCrisis: false,
+      sarahAccepted: false,
+      davidAccepted: false,
+      activeDelegate: null,
+      generatedPIN: "4829",
+      isAutoPlaying: false,
+      currentView: 'dashboard',
+      phoneDrawerOpen: false
+    };
+
+    // Helper utility to update all elements sharing the same ID across modal and main views
+    function updateAllById(id, fn) {
+      const elements = document.querySelectorAll(`[id="${id}"]`);
+      elements.forEach(el => fn(el));
+    }
+
+    function setBadgeState(id, text, className) {
+      updateAllById(id, el => {
+        if (text !== undefined) el.innerText = text;
+        if (className !== undefined) el.className = className;
+      });
+    }
+
+    function togglePhoneDrawer() {
+      const drawer = document.getElementById('drawer-phones');
+      SIM_STATE.phoneDrawerOpen = !SIM_STATE.phoneDrawerOpen;
+      if (SIM_STATE.phoneDrawerOpen) {
+        drawer.classList.remove('translate-y-full');
+        lucide.createIcons();
+        moveVanMarker(SIM_STATE.currentRatio);
+      } else {
+        drawer.classList.add('translate-y-full');
+      }
+    }
+
+    function appendAILog(text) {
+      const timeStr = new Date().toLocaleTimeString([], { minute: '2-digit', second: '2-digit' });
+      ['ai-logs-container', 'ai-logs-container-modal'].forEach(id => {
+        const container = document.getElementById(id);
+        if (!container) return;
+        const row = document.createElement('div');
+        row.className = "p-2 rounded-lg bg-slate-950/80 border border-slate-800/80 text-slate-300";
+        row.innerHTML = `<span class="text-purple-400">[${timeStr}]</span> ${text}`;
+        container.appendChild(row);
+        container.scrollTop = container.scrollHeight;
+      });
+      if (SIM_STATE.currentView === 'split') updateSplitViewClones();
+    }
+
+    function clearAILogs() {
+      ['ai-logs-container', 'ai-logs-container-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = '';
+      });
+    }
+
+    function updateTelemetry(status, eta, speed, dist, progress) {
+      ['system-status-text', 'system-status-text-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = status;
+      });
+      ['telemetry-speed', 'telemetry-speed-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = `${speed} MPH`;
+      });
+      ['telemetry-dist', 'telemetry-dist-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = dist;
+      });
+      ['route-progress-bar', 'route-progress-bar-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.width = `${progress}%`;
+      });
+      ['route-progress-percent', 'route-progress-percent-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = `${progress}%`;
+      });
+      ['eta-clock', 'eta-clock-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = eta;
+      });
+    }
+
+    function moveVanMarker(ratio) {
+      SIM_STATE.currentRatio = ratio;
+      ['route-path', 'route-path-modal'].forEach((pathId, idx) => {
+        const path = document.getElementById(pathId);
+        if (!path) return;
+        const totalLen = path.getTotalLength();
+        const pt = path.getPointAtLength(totalLen * ratio);
+        const vanId = idx === 0 ? 'van-marker' : 'van-marker-modal';
+        const van = document.getElementById(vanId);
+        if (van) {
+          van.setAttribute('transform', `translate(${pt.x}, ${pt.y})`);
+        }
+        const progressPathId = idx === 0 ? 'route-progress-path' : 'route-progress-path-modal';
+        const progressPath = document.getElementById(progressPathId);
+        if (progressPath) {
+          progressPath.style.strokeDashoffset = `${1000 - (1000 * ratio)}`;
+        }
+      });
+    }
+
+    // Web Audio Synthesizer Engine
+    const AudioEngine = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      },
+      beep(freq = 600, type = 'sine', duration = 0.1) {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) { console.log(e); }
+      },
+      chimeSuccess() {
+        this.beep(523.25, 'sine', 0.15);
+        setTimeout(() => this.beep(659.25, 'sine', 0.15), 120);
+        setTimeout(() => this.beep(783.99, 'sine', 0.3), 240);
+      },
+      warning() {
+        this.beep(300, 'sawtooth', 0.2);
+        setTimeout(() => this.beep(250, 'sawtooth', 0.3), 150);
+      },
+      alertPing() {
+        this.beep(880, 'triangle', 0.15);
+        setTimeout(() => this.beep(880, 'triangle', 0.15), 150);
+      }
+    };
+
+    function switchView(viewName) {
+      SIM_STATE.currentView = viewName;
+      ['dashboard', 'driver-ops', 'driver', 'phones', 'split'].forEach(v => {
+        const viewEl = document.getElementById(`view-${v}`);
+        const btnEl = document.getElementById(`tab-btn-${v}`);
+        if (viewEl) {
+          viewEl.classList.add('hidden');
+          viewEl.classList.remove('grid', 'block');
+        }
+        if (btnEl) {
+          btnEl.classList.remove('bg-brand-600', 'text-white', 'shadow');
+          btnEl.classList.add('text-slate-400');
+        }
+      });
+
+      const activeEl = document.getElementById(`view-${viewName}`);
+      const activeBtn = document.getElementById(`tab-btn-${viewName}`);
+      
+      if (activeEl) {
+        activeEl.classList.remove('hidden');
+        activeEl.classList.add('grid');
+      }
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow');
+        activeBtn.classList.remove('text-slate-400');
+      }
+      updateSplitViewClones();
+      lucide.createIcons();
+    }
+
+    function updateSplitViewClones() {
+      const hubClone = document.getElementById('split-hub-clone');
+      const phoneClone = document.getElementById('split-phone-clone');
+
+      if (hubClone) {
+        hubClone.innerHTML = `
+          <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-slate-400 font-semibold">Primary Target</div>
+            <div class="text-white">Arthur Pendelton (Apt 4C)</div>
+            <div class="text-amber-400 font-semibold">${SIM_STATE.arthurCrisis ? 'CRISIS / UNRESPONSIVE' : 'In Transit'}</div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-slate-400 font-semibold">Active Delegate</div>
+            <div class="text-white">${SIM_STATE.activeDelegate ? SIM_STATE.activeDelegate : 'None (Routing to Arthur)'}</div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-purple-400 font-semibold">AI Log Update</div>
+            <div class="text-slate-300 text-[11px] font-mono truncate">${document.querySelector('#ai-logs-container div:last-child')?.innerText || 'Engine active.'}</div>
+          </div>
+        `;
+      }
+
+      if (phoneClone) {
+        const sarahThread = document.querySelector('#sarah-sms-thread');
+        phoneClone.innerHTML = `
+          <div class="text-xs font-semibold text-white mb-2 flex justify-between items-center">
+            <span>Sarah (Backup 1) SMS Stream</span>
+            <span class="text-emerald-400 font-mono">${SIM_STATE.sarahAccepted ? 'ACCEPTED' : 'STANDBY'}</span>
+          </div>
+          <div class="space-y-2 text-xs flex-1 overflow-y-auto mb-2 pr-1">
+            ${sarahThread ? sarahThread.innerHTML : ''}
+          </div>
+          <div class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-300 flex justify-between items-center">
+            <span>One-Time Handshake PIN:</span>
+            <strong class="text-brand-400 font-mono text-sm tracking-wider">${SIM_STATE.sarahAccepted ? SIM_STATE.generatedPIN : '****'}</strong>
+          </div>
+        `;
+      }
+    }
+
+    function stepSimulation() {
+      AudioEngine.beep(600, 'sine', 0.1);
+      
+      if (SIM_STATE.phase === 0) {
+        // Phase 1: Van leaves pharmacy depot
+        SIM_STATE.phase = 1;
+        updateAllById('btn-step-label', el => el.innerText = "Advance to 5-Min Horizon");
+        updateTelemetry("EN ROUTE (12 MINS)", "12:00", 24, "2.8 MI", 25);
+        
+        appendAILog("Driver Marcus (Van 03) launched stop #4. Pinging primary recipient Arthur & broadcasting informational standby to 2 vetted delegates.");
+        
+        sendArthurSMS("Your St. Jude pharmacy delivery is on the way (Est. 12 mins). Reply 1 to confirm you are ready.");
+        sendSarahSMS("Arthur's scheduled insulin delivery is 12 minutes away. You are on standby as primary safety delegate.");
+        sendDavidSMS("Informational ping: Arthur's pharmacy delivery in transit (12 mins away).");
+
+        moveVanMarker(0.25);
+      } 
+      else if (SIM_STATE.phase === 1) {
+        // Phase 2: 5-Minute Horizon reached & Arthur is unresponsive
+        SIM_STATE.phase = 2;
+        SIM_STATE.arthurCrisis = true; // Arthur does not respond
+        updateAllById('btn-step-label', el => el.innerText = "Trigger Sarah Delegate Accept");
+        
+        updateTelemetry("CONVERGENCE HORIZON (5 MINS)", "05:00", 28, "1.1 MI", 60);
+        
+        setBadgeState('patient-response-pill', 'UNRESPONSIVE (5m Warning)', 'px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 animate-pulse');
+        
+        appendAILog("CRITICAL ALERT: Arthur Pendelton unresponsive at 5-minute convergence horizon. Automatic failover triggered to Backup 1 (Sarah Jenkins, Apt 3B).");
+        AudioEngine.alertPing();
+
+        // Broadcast notifications to all three phone panels
+        sendArthurSMS("ALERT: 5-minute check-in timeout. Autonomous failover initiating to registered micro-community delegate.");
+        sendSarahSMS("URGENT: Arthur hasn't checked in for his temp-sensitive delivery (Arriving in 4 mins). Can you meet courier at front gate to receive package? Reply YES or PASS.", true);
+        sendDavidSMS("STANDBY NOTICE: Primary recipient Arthur unresponsive at 5-min horizon. Primary Delegate Sarah Jenkins engaged.");
+        
+        updateAllById('badge-sms-ping', el => el.classList.remove('hidden'));
+        updateAllById('phone-sarah-wrapper', el => {
+          el.classList.add('shake-alert');
+          setTimeout(() => el.classList.remove('shake-alert'), 1500);
+        });
+
+        moveVanMarker(0.65);
+      }
+      else if (SIM_STATE.phase === 2) {
+        // Phase 3: Sarah replies YES and accepts the handover
+        quickReplySarah("YES");
+      }
+      else if (SIM_STATE.phase === 3) {
+        // Phase 4: Driver arrives at the gate and enters Sarah's PIN
+        SIM_STATE.phase = 4;
+        updateAllById('btn-step-label', el => el.innerText = "Complete Delivery");
+        updateTelemetry("DRIVER AT MAIN GATE", "00:30", 0, "0.0 MI", 95);
+        moveVanMarker(0.98);
+
+        // Pre-fill PIN inputs across all views
+        updateAllById('pin-1', el => el.value = SIM_STATE.generatedPIN[0]);
+        updateAllById('pin-2', el => el.value = SIM_STATE.generatedPIN[1]);
+        updateAllById('pin-3', el => el.value = SIM_STATE.generatedPIN[2]);
+        updateAllById('pin-4', el => el.value = SIM_STATE.generatedPIN[3]);
+
+        appendAILog("Driver Marcus arrived at Oakridge Manor. Delegate Sarah Jenkins standing at gate with single-use PIN #4829.");
+        switchView('driver');
+      }
+      else if (SIM_STATE.phase === 4) {
+        verifyDeliveryPin();
+      }
+    }
+
+    function quickReplySarah(intent) {
+      if (intent === 'YES') {
+        processSarahInputText("I'm on it, heading down to the gate now!");
+      } else {
+        processSarahInputText("Sorry, I'm out walking the dog right now.");
+      }
+    }
+
+    function sendSarahCustomSMS() {
+      const inputs = document.querySelectorAll('[id="sarah-input-sms"]');
+      let text = "";
+      inputs.forEach(input => {
+        if (input.value.trim()) text = input.value.trim();
+        input.value = '';
+      });
+      if (!text) return;
+      processSarahInputText(text);
+    }
+
+    function processSarahInputText(rawText) {
+      const threads = document.querySelectorAll('[id="sarah-sms-thread"]');
+      threads.forEach(thread => {
+        const bubble = document.createElement('div');
+        bubble.className = "bg-brand-600 text-white p-2.5 rounded-xl ml-6 text-xs shadow mb-2";
+        bubble.innerText = rawText;
+        thread.appendChild(bubble);
+        thread.scrollTop = thread.scrollHeight;
+      });
+
+      const lower = rawText.toLowerCase();
+      
+      setTimeout(() => {
+        if (lower.includes('yes') || lower.includes('heading down') || lower.includes('on it') || lower.includes('sure') || lower.includes('ok') || lower.includes('coming') || lower.includes('minute') || lower.includes('min')) {
+          // CONFIRMED ACCEPTANCE
+          SIM_STATE.sarahAccepted = true;
+          SIM_STATE.activeDelegate = "Sarah Jenkins (Apt 3B)";
+          SIM_STATE.phase = 3;
+          updateAllById('btn-step-label', el => el.innerText = "Simulate Arrival at Gate");
+
+          AudioEngine.chimeSuccess();
+          appendAILog(`AI NLP Engine parsed intent: [ACCEPT_CONFIRMED] from delegate Sarah. Redirecting driver handoff to Building Entry.`);
+          
+          sendSarahSMS(`CONFIRMED! Thank you Sarah. Show courier Marcus this 1-time PIN at the gate: [ ${SIM_STATE.generatedPIN} ]. Please perform a welfare check on Arthur when handing off.`);
+          sendArthurSMS(`UPDATE: Delegate Sarah Jenkins (Apt 3B) accepted handover. Driver meeting Sarah at gate.`);
+          sendDavidSMS(`UPDATE: Delegate Sarah Jenkins accepted handover for Arthur's order.`);
+
+          // Update UI badges across all views
+          setBadgeState('sarah-status-badge', 'ACCEPTED (PIN Issued)', 'px-2 py-0.5 rounded text-[10px] font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30');
+          setBadgeState('sarah-alert-indicator', 'ACTIVE DELEGATE', 'px-2 py-0.5 rounded text-[10px] font-bold bg-brand-500/20 text-brand-300 border border-brand-500/30');
+
+          updateDriverTargetToDelegate();
+
+        } else if (lower.includes('no') || lower.includes('pass') || lower.includes('dog') || lower.includes('cant') || lower.includes("can't") || lower.includes('out') || lower.includes('busy')) {
+          // REJECTED / BUSY -> AUTOMATIC FAILOVER TO BACKUP 2 (DAVID)
+          AudioEngine.warning();
+          appendAILog(`AI NLP Engine parsed intent: [DELEGATE_UNAVAILABLE] from Sarah. Dynamic failover routing immediately to Backup 2 (David Ross, Apt 2A).`);
+          
+          setBadgeState('sarah-status-badge', 'Unavailable', 'px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-500');
+
+          sendDavidSMS("PRIORITY ESCALATION: Arthur (4C) needs delivery handoff and Backup 1 is unavailable. Can you meet courier at lobby in 3 mins? Reply ACCEPT to receive PIN.", true);
+          sendArthurSMS("NOTICE: Backup 1 unavailable. Escalating failover to Secondary Delegate David Ross.");
+          
+          updateAllById('phone-david-wrapper', el => {
+            el.classList.add('shake-alert');
+            setTimeout(() => el.classList.remove('shake-alert'), 1500);
+          });
+
+        } else {
+          sendSarahSMS("Lifeline AI: We detected your reply. Please confirm: Can you meet driver at the gate in 3 minutes? Reply YES or PASS.");
+        }
+        
+        if (SIM_STATE.currentView === 'split') updateSplitViewClones();
+      }, 600);
+    }
+
+    function quickReplyDavid(intent) {
+      if (intent === 'ACCEPT') {
+        SIM_STATE.davidAccepted = true;
+        SIM_STATE.activeDelegate = "David Ross (Apt 2A / Super)";
+        SIM_STATE.phase = 3;
+        updateAllById('btn-step-label', el => el.innerText = "Simulate Arrival at Gate");
+
+        AudioEngine.chimeSuccess();
+        appendAILog(`AI Engine confirmed Backup 2 (David Ross) as active handoff delegate. Driver route updated.`);
+
+        sendDavidSMS(`CONFIRMED! Thank you David. Courier Marcus arriving at main lobby in ~2 mins. Your single-use verification PIN is: [ ${SIM_STATE.generatedPIN} ].`);
+        sendArthurSMS(`UPDATE: Secondary Delegate David Ross accepted handover at lobby.`);
+        sendSarahSMS(`NOTICE: Secondary Delegate David Ross accepted delivery for Arthur.`);
+
+        setBadgeState('david-status-badge', 'ACCEPTED (PIN Issued)', 'px-2 py-0.5 rounded text-[10px] font-bold bg-medical-500/20 text-medical-300 border border-medical-500/30');
+
+        updateDriverTargetToDelegate("David Ross", "Apt 2A (Ground Floor Lobby)");
+      }
+    }
+
+    function updateDriverTargetToDelegate(name = "Sarah Jenkins", loc = "Apt 3B (Front Gate Entry)") {
+      updateAllById('driver-target-card', el => el.className = "p-4 rounded-2xl bg-brand-950/30 border border-brand-500/40 transition-all");
+      updateAllById('driver-target-badge', el => {
+        el.innerText = "SAFETY DELEGATE RELAY";
+        el.className = "font-mono text-amber-400 font-semibold";
+      });
+      updateAllById('driver-target-name', el => el.innerText = name);
+      updateAllById('driver-target-address', el => el.innerText = `Oakridge Manor - ${loc}`);
+      updateAllById('driver-instruction-pill', el => el.className = "mt-2.5 p-2 rounded-xl bg-brand-950 border border-brand-500/30 text-xs text-brand-200 flex items-center space-x-2");
+      updateAllById('driver-instruction-text', el => el.innerText = "Arthur unresponsive. Deliver to vetted delegate at entry. Verify 4-digit PIN.");
+    }
+
+    function handlePinInput(idx) {
+      const inputs = document.querySelectorAll(`[id="pin-${idx}"]`);
+      inputs.forEach(input => {
+        if (input.value.length === 1 && idx < 4) {
+          const nextInputs = document.querySelectorAll(`[id="pin-${idx + 1}"]`);
+          nextInputs.forEach(n => n.focus());
+        }
+      });
+    }
+
+    function verifyDeliveryPin() {
+      const p1 = document.getElementById('pin-1')?.value || "4";
+      const p2 = document.getElementById('pin-2')?.value || "8";
+      const p3 = document.getElementById('pin-3')?.value || "2";
+      const p4 = document.getElementById('pin-4')?.value || "9";
+      const entered = `${p1}${p2}${p3}${p4}`;
+
+      if (entered === SIM_STATE.generatedPIN) {
+        AudioEngine.chimeSuccess();
+        
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+
+        appendAILog(`ZERO-KNOWLEDGE HANDSHAKE VERIFIED! Single-use PIN matched. Chain-of-custody recorded. Arthur & Pharmacy notified.`);
+        
+        updateTelemetry("Delivered & Verified", "00:00", 0, "0.0 MI", 100);
+        ['telemetry-relay-status', 'telemetry-relay-status-modal'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.innerText = "Handshake Complete";
+            el.className = "font-semibold text-emerald-400";
+          }
+        });
+
+        sendArthurSMS(`DELIVERY SUCCESS: Your temperature-sensitive insulin was securely received by delegate ${SIM_STATE.activeDelegate}. Safe handover completed.`);
+        sendSarahSMS(`SUCCESS: Delivery handshake verified with courier Marcus! Thank you for assisting Arthur.`);
+        sendDavidSMS(`STATUS: Delivery completed via verified PIN handshake by ${SIM_STATE.activeDelegate}.`);
+        
+        updateAllById('btn-verify-pin', el => {
+          el.className = "w-full py-3 rounded-xl bg-emerald-600 font-bold text-sm text-white flex items-center justify-center space-x-2";
+          el.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 text-white"></i><span>Delivery Completed (Zero Failed Attempt)</span>`;
+        });
+        lucide.createIcons();
+
+        updateAllById('btn-step-label', el => el.innerText = "Run Complete");
+      } else {
+        AudioEngine.warning();
+        appendAILog(`PIN Verification Failed: Invalid authorization token entered by driver.`);
+      }
+      if (SIM_STATE.currentView === 'split') updateSplitViewClones();
+    }
+
+    function triggerArthurCrisis() {
+      SIM_STATE.arthurCrisis = true;
+      setBadgeState('patient-response-pill', 'CRISIS DETECTED (Silent)', 'px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 animate-pulse');
+      
+      appendAILog(`Arthur Pendelton in acute hypoglycemic episode. No mobile interaction registered. Fail-safe protocol armed.`);
+      AudioEngine.warning();
+
+      sendArthurSMS("CRITICAL ALERT: Automated check-in timeout. Urgent wellness monitoring active. Rerouting delivery to building delegate.");
+
+      if (SIM_STATE.phase < 2) {
+        SIM_STATE.phase = 1;
+        stepSimulation();
+      }
+    }
+
+    function triggerWellnessEmergency() {
+      AudioEngine.warning();
+      appendAILog(`URGENT WELLNESS ESCALATION: Driver Marcus flagged emergency at Oakridge Manor Apt 4C. Dispensing pharmacist alerted; local EMS standby.`);
+      const modal = document.getElementById('modal-emergency-alert');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function dismissEmergencyModal() {
+      const modal = document.getElementById('modal-emergency-alert');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function sendArthurSMS(msg) {
+      appendSMSBubble('arthur-sms-thread', msg, 'bg-slate-900', 'text-brand-400');
+    }
+    function sendSarahSMS(msg, isUrgent = false) {
+      appendSMSBubble('sarah-sms-thread', msg, isUrgent ? 'bg-amber-950/80 border border-amber-500/40 text-amber-200' : 'bg-slate-900', 'text-emerald-400');
+    }
+    function sendDavidSMS(msg, isUrgent = false) {
+      appendSMSBubble('david-sms-thread', msg, isUrgent ? 'bg-medical-950/80 border border-medical-500/40 text-medical-200' : 'bg-slate-900', 'text-medical-400');
+    }
+    
+    function appendSMSBubble(threadId, msg, bgClass, headerColor) {
+      const threads = document.querySelectorAll(`[id="${threadId}"]`);
+      threads.forEach(thread => {
+        const b = document.createElement('div');
+        b.className = `${bgClass} p-2.5 rounded-xl border border-slate-800 text-slate-200 text-xs shadow-sm mb-2 transition-all duration-300`;
+        b.innerHTML = `<div class="text-[10px] ${headerColor} font-semibold mb-1">LIFELINE RELAY DISPATCH</div>${msg}`;
+        thread.appendChild(b);
+        thread.scrollTop = thread.scrollHeight;
+      });
+    }
+
+    function arthurManualReply(isReady) {
+      if (isReady) {
+        SIM_STATE.arthurResponded = true;
+        SIM_STATE.arthurCrisis = false;
+        appendAILog("Arthur checked in: 'I am ready at home'. Primary delivery confirmed.");
+        sendArthurSMS("Arthur: 'I am at home and ready for the insulin delivery.'");
+        setBadgeState('patient-response-pill', 'Confirmed Ready', 'px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30');
+        AudioEngine.chimeSuccess();
+      }
+    }
+
+    function resetFullSimulation() {
+      SIM_STATE.phase = 0;
+      SIM_STATE.arthurCrisis = false;
+      SIM_STATE.sarahAccepted = false;
+      SIM_STATE.davidAccepted = false;
+      SIM_STATE.activeDelegate = null;
+      
+      updateAllById('btn-step-label', el => el.innerText = "Launch In-Transit Route");
+      setBadgeState('patient-response-pill', 'Awaiting Check-in', 'px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30');
+      setBadgeState('sarah-status-badge', 'Standby', 'px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400');
+      setBadgeState('david-status-badge', 'Standby', 'px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-400');
+      
+      updateAllById('driver-target-badge', el => {
+        el.innerText = "PRIMARY PATIENT";
+        el.className = "font-mono text-emerald-400 font-semibold";
+      });
+      updateAllById('driver-target-name', el => el.innerText = "Arthur Pendelton");
+      updateAllById('driver-target-address', el => el.innerText = "Oakridge Manor Apts, Apt 4C");
+      
+      updateTelemetry("Ready at Depot", "12:00", 0, "2.8 MI", 0);
+      moveVanMarker(0);
+      clearAILogs();
+
+      // Reset SMS threads to initial states across all instances
+      ['arthur-sms-thread', 'sarah-sms-thread', 'david-sms-thread'].forEach(id => {
+        document.querySelectorAll(`[id="${id}"]`).forEach(el => {
+          if (id === 'arthur-sms-thread') {
+            el.innerHTML = `<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-slate-300 mb-2"><div class="text-[10px] text-brand-400 font-semibold mb-1">ST. JUDE PHARMACY</div>Hi Arthur! Your temperature-sensitive Lantus insulin is being packed. Courier leaves in ~15 mins.</div>`;
+          } else if (id === 'sarah-sms-thread') {
+            el.innerHTML = `<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-slate-400 mb-2"><div class="text-[10px] text-slate-500 font-semibold mb-1">SYSTEM NOTICE</div>You are listed as Primary Community Safety Delegate for neighbor Arthur (Apt 4C).</div>`;
+          } else if (id === 'david-sms-thread') {
+            el.innerHTML = `<div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-slate-400 mb-2"><div class="text-[10px] text-slate-500 font-semibold mb-1">SYSTEM NOTICE</div>Secondary safety delegate standby for Arthur Pendelton. Activates only if Backup 1 fails.</div>`;
+          }
+        });
+      });
+
+      appendAILog("Simulation reset. System ready at Depot.");
+      switchView('dashboard');
+    }
+
+    function togglePitchGuideModal() {
+      const modal = document.getElementById('modal-pitch-guide');
+      if (modal) modal.classList.toggle('hidden');
+    }
+
+    function runPitchDemoSequence() {
+      resetFullSimulation();
+      switchView('driver-ops');
+      togglePhoneDrawer();
+      setTimeout(() => stepSimulation(), 1000);
+      setTimeout(() => stepSimulation(), 5000);
+      setTimeout(() => stepSimulation(), 10000);
+      setTimeout(() => stepSimulation(), 14000);
+      setTimeout(() => stepSimulation(), 17000);
+    }
+
+    // Initialize on window load
+    window.onload = function() {
+      lucide.createIcons();
+      moveVanMarker(0);
+    };
+  </script>
+</body>
+</html>

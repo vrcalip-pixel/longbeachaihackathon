@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nail Princess 💅 - Dual Portal Salon App</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            skyBlue: {
+              50: '#F0F9FF',
+              100: '#E0F2FE',
+              200: '#BAE6FD',
+              300: '#7DD3FC',
+              DEFAULT: '#38BDF8',
+              dark: '#0284C7'
+            },
+            babyBlue: {
+              light: '#E0F7FA',
+              DEFAULT: '#B2EBF2',
+              dark: '#80DEEA'
+            },
+            babyPink: {
+              light: '#FFF0F5',
+              DEFAULT: '#FFD1DC',
+              dark: '#F4A6B8'
+            },
+            gold: {
+              light: '#FFF8E7',
+              DEFAULT: '#D4AF37',
+              rose: '#B76E79',
+              dark: '#AA820A'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #E0F2FE 0%, #FFF0F5 50%, #E0F7FA 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .gold-gradient-bg {
+      background: linear-gradient(135deg, #D4AF37 0%, #FFD700 50%, #B8860B 100%);
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #AA820A 0%, #D4AF37 50%, #B76E79 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .pastel-gradient-bg {
+      background: linear-gradient(135deg, #BAE6FD 0%, #FFD1DC 50%, #B2EBF2 100%);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .glass-card-dark {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .gold-glow {
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.35);
+    }
+
+    .pink-glow {
+      box-shadow: 0 0 20px rgba(255, 182, 193, 0.5);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 240, 245, 0.6);
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #38BDF8;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #D4AF37;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .shimmer-btn {
+      background: linear-gradient(90deg, #D4AF37 0%, #FFF8E7 50%, #D4AF37 100%);
+      background-size: 200% 100%;
+      animation: shimmer 3s infinite;
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between relative">
+
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="showLandingGateway()">
+        <div class="w-10 h-10 rounded-full gold-gradient-bg flex items-center justify-center text-white font-serif font-bold text-xl shadow-md transform hover:rotate-6 transition-transform">
+          👑
+        </div>
+        <div>
+          <h1 class="font-serif font-bold text-xl tracking-tight text-slate-900 flex items-center gap-1.5">
+            Nail Princess <span class="text-[10px] px-2 py-0.5 rounded-full bg-pink-100 text-pink-600 font-sans font-bold uppercase tracking-wider">Studio App</span>
+          </h1>
+          <p class="text-[11px] text-slate-500 font-medium">Luxury Gel & Acrylic Nail Art • Bianca</p>
+        </div>
+      </div>
+
+      <!-- Quick Switch Bar -->
+      <div class="flex items-center gap-2">
+        <div class="bg-slate-100 p-1 rounded-full border border-slate-200 flex items-center">
+          <button onclick="showClientPortal()" id="nav-btn-client" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 bg-white text-slate-900 shadow-sm flex items-center gap-1.5">
+            <i class="fa-solid fa-heart text-pink-500"></i> Client View
+          </button>
+          <button onclick="triggerOwnerAuth()" id="nav-btn-owner" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-crown text-amber-500"></i> Owner HQ
+          </button>
+        </div>
+
+        <!-- Lock/Gateway Button -->
+        <button onclick="showLandingGateway()" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-xs transition-colors" title="Return to Portal Login Gateway">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER AREA -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+    <!-- ================================================================= -->
+    <!-- SECTION 0: ENTRY LANDING GATEWAY SCREEN (Choose Client vs Owner) -->
+    <!-- ================================================================= -->
+    <div id="portal-gateway" class="space-y-8 max-w-4xl mx-auto py-6">
+      
+      <div class="text-center space-y-3">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-amber-300 text-xs font-bold text-amber-800 shadow-sm">
+          <span>✨ Welcome to Bianca's Salon Portal</span>
+        </div>
+        <h2 class="font-serif text-3xl sm:text-5xl font-extrabold text-slate-900">
+          Nail Princess <span class="gold-gradient-text">Experience</span>
+        </h2>
+        <p class="text-sm text-slate-600 max-w-md mx-auto">
+          Choose your login portal below to explore the client studio experience or access Bianca's owner management suite.
+        </p>
+      </div>
+
+      <!-- DUAL LOGIN CHOICE CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+
+        <!-- CLIENT PORTAL ENTRY CARD -->
+        <div class="glass-card rounded-3xl p-8 border-2 border-pink-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between relative overflow-hidden group">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-pink-200/40 rounded-full blur-2xl group-hover:scale-125 transition-transform"></div>
+          
+          <div class="space-y-6 relative z-10">
+            <div class="flex items-center justify-between">
+              <div class="w-14 h-14 rounded-2xl bg-pink-100 border border-pink-300 flex items-center justify-center text-2xl shadow-sm">
+                💅
+              </div>
+              <span class="text-[10px] font-extrabold bg-pink-100 text-pink-700 uppercase tracking-widest px-3 py-1 rounded-full border border-pink-200">
+                Public Access
+              </span>
+            </div>
+
+            <div>
+              <h3 class="font-serif text-2xl font-bold text-slate-900">Client Portal Login</h3>
+              <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                Browse latest nail sets, view live openings, check service pricing, explore policies, and book your next appointment directly with Bianca.
+              </p>
+            </div>
+
+            <ul class="space-y-2 text-xs text-slate-700 font-medium">
+              <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-pink-500"></i> Live Openings Ticker</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-pink-500"></i> Transparent Price Menu & Sets</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-pink-500"></i> Interactive Story Highlights</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-pink-500"></i> Instant 1-Click Booking</li>
+            </ul>
+          </div>
+
+          <div class="pt-8 relative z-10">
+            <button onclick="showClientPortal()" class="w-full py-3.5 rounded-2xl bg-pink-500 hover:bg-pink-600 text-white font-bold text-sm shadow-lg hover:shadow-pink-300/50 transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-heart"></i> Enter Client Portal
+            </button>
+          </div>
+        </div>
+
+        <!-- OWNER PORTAL ENTRY CARD (BIANCA HQ) -->
+        <div class="glass-card rounded-3xl p-8 border-2 border-amber-300 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between relative overflow-hidden group">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-amber-200/40 rounded-full blur-2xl group-hover:scale-125 transition-transform"></div>
+
+          <div class="space-y-6 relative z-10">
+            <div class="flex items-center justify-between">
+              <div class="w-14 h-14 rounded-2xl gold-gradient-bg text-white flex items-center justify-center text-2xl shadow-md">
+                👑
+              </div>
+              <span class="text-[10px] font-extrabold bg-amber-100 text-amber-800 uppercase tracking-widest px-3 py-1 rounded-full border border-amber-300 flex items-center gap-1">
+                <i class="fa-solid fa-lock text-[9px]"></i> Owner Protected
+              </span>
+            </div>
+
+            <div>
+              <h3 class="font-serif text-2xl font-bold text-slate-900">Owner Page Login</h3>
+              <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                Password protected hub for Bianca to manage social auto-posting, AI review bots, local ad campaigns, and schedule management.
+              </p>
+            </div>
+
+            <ul class="space-y-2 text-xs text-slate-700 font-medium">
+              <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-amber-500"></i> AI Multi-Platform Social Poster</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-amber-500"></i> 3-Step Local Radius Ad Builder</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-amber-500"></i> Gemini AI Caption Generator</li>
+              <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-amber-500"></i> Magic Calendar & Flash Deals</li>
+            </ul>
+          </div>
+
+          <div class="pt-8 relative z-10 space-y-2">
+            <button onclick="triggerOwnerAuth()" class="w-full py-3.5 rounded-2xl gold-gradient-bg text-slate-900 font-extrabold text-sm shadow-lg hover:opacity-95 transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-key"></i> Bianca Owner HQ Login
+            </button>
+            <p class="text-[10px] text-center text-slate-500">Demo PIN: <span class="font-mono font-bold text-amber-700">1234</span></p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- SECTION 1: PUBLIC CLIENT PORTAL VIEW                               -->
+    <!-- ================================================================= -->
+    <div id="portal-client" class="space-y-8 hidden">
+
+      <!-- Hero Banner & Profile Overview -->
+      <section class="glass-card rounded-3xl p-6 md:p-8 shadow-xl border-t-4 border-pink-400 relative overflow-hidden">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
+            <div class="relative">
+              <div class="w-24 h-24 rounded-full p-1 gold-gradient-bg shadow-lg">
+                <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=250" alt="Nail Art Showcase" class="w-full h-full object-cover rounded-full border-2 border-white">
+              </div>
+              <span class="absolute bottom-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border-2 border-white flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Openings
+              </span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center justify-center sm:justify-start gap-2">
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-slate-900">Nail Princess 💅✨</h2>
+                <i class="fa-solid fa-circle-check text-sky-500 text-lg"></i>
+              </div>
+              <p class="text-xs font-semibold text-pink-600">by Bianca • Gel & Acrylic Specialist</p>
+              <p class="text-xs text-slate-600">📍 Private Salon Studio • Downtown Arts District</p>
+              <p class="text-xs text-slate-500 flex items-center justify-center sm:justify-start gap-2 pt-1">
+                <span><i class="fa-solid fa-star text-amber-400"></i> 4.98 (124 reviews)</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-shield-heart text-pink-400"></i> Licensed Specialist</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 w-full md:w-auto">
+            <button onclick="openBookingModal('Hero Banner')" class="flex-1 md:flex-none px-6 py-3.5 rounded-2xl gold-gradient-bg text-slate-900 font-extrabold text-xs shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-calendar-check"></i> Book Appointment Now
+            </button>
+            <button onclick="switchClientTab('tab-social')" class="px-5 py-3.5 rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition-all flex items-center gap-2">
+              <i class="fa-brands fa-instagram text-pink-500"></i> Instagram Layout
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Client Navigation Tabs -->
+      <div class="flex border-b border-slate-200 space-x-6 overflow-x-auto custom-scrollbar pb-1">
+        <button onclick="switchClientTab('tab-social')" id="tab-btn-social" class="tab-client-btn font-bold text-xs py-2.5 px-1 border-b-2 border-pink-500 text-slate-900 flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-brands fa-instagram text-pink-500"></i> Highlights & Feed
+        </button>
+        <button onclick="switchClientTab('tab-services')" id="tab-btn-services" class="tab-client-btn font-semibold text-xs py-2.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-hand text-amber-500"></i> Service Menu & Rates
+        </button>
+        <button onclick="switchClientTab('tab-availability')" id="tab-btn-availability" class="tab-client-btn font-semibold text-xs py-2.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-clock text-sky-500"></i> Weekly Openings Ticker
+        </button>
+        <button onclick="switchClientTab('tab-policies')" id="tab-btn-policies" class="tab-client-btn font-semibold text-xs py-2.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-file-contract text-emerald-500"></i> Policies & Aftercare
+        </button>
+        <button onclick="switchClientTab('tab-comments')" id="tab-btn-comments" class="tab-client-btn font-semibold text-xs py-2.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+          <i class="fa-solid fa-comments text-purple-500"></i> Live Social Wall (AI Bot)
+        </button>
+      </div>
+
+      <!-- CLIENT TAB 1: SOCIAL PROFILE & HIGHLIGHTS -->
+      <div id="client-tab-social" class="client-tab-content space-y-8">
+        
+        <!-- IG Profile Box -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-lg border border-pink-200 max-w-4xl mx-auto space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-2">
+              <i class="fa-brands fa-instagram text-2xl text-pink-500"></i>
+              <span class="font-bold text-xs text-slate-900">nailprincess_official</span>
+            </div>
+            <span class="text-[10px] bg-pink-100 text-pink-700 font-bold px-3 py-1 rounded-full">
+              Tap Highlights Below 👇
+            </span>
+          </div>
+
+          <!-- Bio text -->
+          <div class="text-xs text-slate-700 space-y-1.5 leading-relaxed font-sans" id="bio-display-text">
+            <p class="font-bold text-sm text-slate-900">👑 Nail Princess 💅✨</p>
+            <p><i>by Bianca | Luxury Gel & Acrylic Nail Specialist</i></p>
+            <p>🌸 Sky Blue, Baby Pink & Gold Dream Sets</p>
+            <p>📍 Private Salon Studio — Downtown Arts District</p>
+            <p>✨ Builder Gel | Chrome Almond | French Tips & Hand-painted Art</p>
+            <p class="font-bold text-pink-600">📅 This Week’s Openings Below! 👇</p>
+          </div>
+
+          <!-- STORY HIGHLIGHT BUBBLES -->
+          <div class="border-t border-slate-100 pt-6">
+            <div class="flex items-center gap-4 overflow-x-auto custom-scrollbar pb-3 px-1">
+              
+              <button onclick="openHighlightModal('book')" class="flex flex-col items-center gap-1.5 group flex-shrink-0">
+                <div class="w-16 h-16 rounded-full p-0.5 gold-gradient-bg group-hover:scale-105 transition-transform shadow-sm">
+                  <div class="w-full h-full bg-pink-50 rounded-full flex items-center justify-center border-2 border-white text-pink-500 font-bold text-xl">
+                    📅
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-slate-700">BOOK</span>
+              </button>
+
+              <button onclick="openHighlightModal('prices')" class="flex flex-col items-center gap-1.5 group flex-shrink-0">
+                <div class="w-16 h-16 rounded-full p-0.5 gold-gradient-bg group-hover:scale-105 transition-transform shadow-sm">
+                  <div class="w-full h-full bg-sky-50 rounded-full flex items-center justify-center border-2 border-white text-sky-500 font-bold text-xl">
+                    💸
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-slate-700">PRICES</span>
+              </button>
+
+              <button onclick="openHighlightModal('availability')" class="flex flex-col items-center gap-1.5 group flex-shrink-0">
+                <div class="w-16 h-16 rounded-full p-0.5 gold-gradient-bg group-hover:scale-105 transition-transform shadow-sm">
+                  <div class="w-full h-full bg-amber-50 rounded-full flex items-center justify-center border-2 border-white text-amber-500 font-bold text-xl">
+                    ⚡
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-slate-700">OPENINGS</span>
+              </button>
+
+              <button onclick="openHighlightModal('policies')" class="flex flex-col items-center gap-1.5 group flex-shrink-0">
+                <div class="w-16 h-16 rounded-full p-0.5 gold-gradient-bg group-hover:scale-105 transition-transform shadow-sm">
+                  <div class="w-full h-full bg-emerald-50 rounded-full flex items-center justify-center border-2 border-white text-emerald-500 font-bold text-xl">
+                    📜
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-slate-700">POLICIES</span>
+              </button>
+
+              <button onclick="openHighlightModal('reviews')" class="flex flex-col items-center gap-1.5 group flex-shrink-0">
+                <div class="w-16 h-16 rounded-full p-0.5 gold-gradient-bg group-hover:scale-105 transition-transform shadow-sm">
+                  <div class="w-full h-full bg-purple-50 rounded-full flex items-center justify-center border-2 border-white text-purple-500 font-bold text-xl">
+                    🌟
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-slate-700">REVIEWS</span>
+              </button>
+
+              <button onclick="openHighlightModal('aftercare')" class="flex flex-col items-center gap-1.5 group flex-shrink-0">
+                <div class="w-16 h-16 rounded-full p-0.5 gold-gradient-bg group-hover:scale-105 transition-transform shadow-sm">
+                  <div class="w-full h-full bg-teal-50 rounded-full flex items-center justify-center border-2 border-white text-teal-500 font-bold text-xl">
+                    🧼
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-slate-700">AFTERCARE</span>
+              </button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- PINNED POSTS TOP ROW -->
+        <div>
+          <h3 class="font-serif text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-thumbtack text-amber-500"></i> Pinned Posts on Profile
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div class="glass-card rounded-2xl overflow-hidden border border-pink-200 shadow-md flex flex-col justify-between">
+              <div class="h-40 bg-gradient-to-br from-pink-100 to-sky-100 p-4 flex flex-col justify-center items-center text-center relative">
+                <span class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-extrabold px-2 py-0.5 rounded">PINNED 1</span>
+                <span class="text-3xl mb-1">💅✨</span>
+                <h4 class="font-serif font-bold text-slate-900 text-base">Welcome to Nail Princess</h4>
+              </div>
+              <div class="p-4 space-y-3">
+                <p class="text-xs text-slate-600 line-clamp-2">Hi dolls! I'm Bianca. Here is everything you need to know about booking luxury sets...</p>
+                <button onclick="openPinnedModal(1)" class="w-full py-2 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl text-xs font-bold transition-colors">Read Full Post</button>
+              </div>
+            </div>
+
+            <div class="glass-card rounded-2xl overflow-hidden border border-sky-200 shadow-md flex flex-col justify-between">
+              <div class="h-40 bg-gradient-to-br from-sky-100 to-amber-100 p-4 flex flex-col justify-center items-center text-center relative">
+                <span class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-extrabold px-2 py-0.5 rounded">PINNED 2</span>
+                <span class="text-3xl mb-1">💳✨</span>
+                <h4 class="font-serif font-bold text-slate-900 text-base">Service & Price Menu</h4>
+              </div>
+              <div class="p-4 space-y-3">
+                <p class="text-xs text-slate-600 line-clamp-2">Transparent pricing menu for Gel Extensions, Builder Gel Overlays & Tiered Art...</p>
+                <button onclick="openPinnedModal(2)" class="w-full py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl text-xs font-bold transition-colors">View Pricing</button>
+              </div>
+            </div>
+
+            <div class="glass-card rounded-2xl overflow-hidden border border-amber-200 shadow-md flex flex-col justify-between">
+              <div class="h-40 bg-gradient-to-br from-amber-100 to-pink-100 p-4 flex flex-col justify-center items-center text-center relative">
+                <span class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-extrabold px-2 py-0.5 rounded">PINNED 3</span>
+                <span class="text-3xl mb-1">📜✨</span>
+                <h4 class="font-serif font-bold text-slate-900 text-base">Booking Rules & Policies</h4>
+              </div>
+              <div class="p-4 space-y-3">
+                <p class="text-xs text-slate-600 line-clamp-2">$25 deposit rules, 15-minute grace period, and cancellation policies...</p>
+                <button onclick="openPinnedModal(3)" class="w-full py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-xl text-xs font-bold transition-colors">Read Studio Rules</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CLIENT TAB 2: SERVICE MENU & RATES -->
+      <div id="client-tab-services" class="client-tab-content space-y-6 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass-card rounded-2xl p-6 border border-pink-200 shadow-sm space-y-4">
+            <h4 class="font-serif font-bold text-lg text-slate-900 border-b pb-2">Full Sets & Structure</h4>
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <div>
+                  <span class="font-bold text-slate-900 block text-sm">Princess Gel Extension Set</span>
+                  <span class="text-slate-500">Full gel-x extension set + solid gel color</span>
+                </div>
+                <span class="font-extrabold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg">$80+</span>
+              </div>
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <div>
+                  <span class="font-bold text-slate-900 block text-sm">Builder Gel Natural Overlay</span>
+                  <span class="text-slate-500">Strengthening structured manicures</span>
+                </div>
+                <span class="font-extrabold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg">$65+</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="font-bold text-slate-900 block text-sm">Structure Fill / Refill</span>
+                  <span class="text-slate-500">Maintenance fill (2-3 weeks)</span>
+                </div>
+                <span class="font-extrabold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-lg">$55+</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-6 border border-sky-200 shadow-sm space-y-4">
+            <h4 class="font-serif font-bold text-lg text-slate-900 border-b pb-2">Nail Art Tier Add-Ons</h4>
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <div>
+                  <span class="font-bold text-slate-900 block text-sm">Tier 1: French & Minimalist</span>
+                  <span class="text-slate-500">French tips, chrome accent, gold foil</span>
+                </div>
+                <span class="font-extrabold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-lg">+$15</span>
+              </div>
+              <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <div>
+                  <span class="font-bold text-slate-900 block text-sm">Tier 2: Chrome & Blooming Art</span>
+                  <span class="text-slate-500">Full chrome set, blooming floral, aura designs</span>
+                </div>
+                <span class="font-extrabold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-lg">+$25</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="font-bold text-slate-900 block text-sm">Tier 3: 3D Charms & Custom Art</span>
+                  <span class="text-slate-500">Handcrafted 3D gems, character art</span>
+                </div>
+                <span class="font-extrabold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-lg">+$40+</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENT TAB 3: WEEKLY OPENINGS TICKER -->
+      <div id="client-tab-availability" class="client-tab-content space-y-6 hidden">
+        <div class="bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-3xl p-6 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <span class="bg-white/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">⚡ Live Slot Feed</span>
+            <h3 class="font-serif text-2xl font-bold mt-2">This Week's Open Appointments</h3>
+          </div>
+          <button onclick="openBookingModal('Availability Ticker')" class="px-5 py-2.5 bg-amber-400 text-slate-900 font-bold rounded-xl text-xs hover:bg-amber-300">
+            Grab Available Slot
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="weekly-slots-client-container">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- CLIENT TAB 4: POLICIES & AFTERCARE -->
+      <div id="client-tab-policies" class="client-tab-content space-y-6 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass-card rounded-2xl p-6 border border-amber-200 shadow-sm space-y-3 text-xs">
+            <h4 class="font-serif font-bold text-base text-slate-900">Studio Policies</h4>
+            <p><strong>💳 $25 Deposit:</strong> Non-refundable deposit required at booking to hold your time slot.</p>
+            <p><strong>⏰ Grace Period:</strong> 15-minute late allowance. Afterwards $15 late fee or rescheduling applies.</p>
+            <p><strong>🚫 Guests:</strong> Private studio space. Attendance limited to appointment holder.</p>
+          </div>
+
+          <div class="glass-card rounded-2xl p-6 border border-pink-200 shadow-sm space-y-3 text-xs">
+            <h4 class="font-serif font-bold text-base text-slate-900">Nail Aftercare Guide</h4>
+            <p>✨ Apply cuticle oil twice daily for maximum retention.</p>
+            <p>✨ Wear gloves while washing dishes or handling harsh cleaning solvents.</p>
+            <p>✨ Never use nails as tools to open soda cans or box tape.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENT TAB 5: LIVE COMMENTS & AI BOT WALL -->
+      <div id="client-tab-comments" class="client-tab-content space-y-6 hidden">
+        <div class="glass-card rounded-3xl p-6 border border-purple-200 shadow-md space-y-6 max-w-3xl mx-auto">
+          <div>
+            <h3 class="font-serif text-xl font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-comments text-purple-500"></i> Interactive Social Comment Wall
+            </h3>
+            <p class="text-xs text-slate-500">Leave a comment or question below and watch Bianca's AI Reputation Bot auto-reply instantly!</p>
+          </div>
+
+          <!-- Input form -->
+          <form onsubmit="postClientComment(event)" class="flex gap-2">
+            <input type="text" id="client-comment-input" required placeholder="Ask about prices, slots, or say hi..." class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-pink-400 outline-none">
+            <button type="submit" class="px-5 py-2.5 bg-pink-500 text-white font-bold text-xs rounded-xl hover:bg-pink-600 transition-colors">
+              Post Comment
+            </button>
+          </form>
+
+          <!-- Comment Feed -->
+          <div id="social-comment-feed" class="space-y-4 pt-2">
+            <!-- Dynamically populated comments -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- SECTION 2: BIANCA HQ OWNER PORTAL (Password Protected)            -->
+    <!-- ================================================================= -->
+    <div id="portal-owner" class="space-y-8 hidden">
+
+      <!-- OWNER AUTH MODAL / PIN LOCK BOX -->
+      <div id="owner-pin-lock" class="glass-card rounded-3xl p-8 max-w-md mx-auto text-center space-y-4 border-2 border-amber-300 shadow-xl my-12">
+        <div class="w-16 h-16 rounded-full gold-gradient-bg mx-auto flex items-center justify-center text-slate-900 text-2xl shadow-md">
+          🔒
+        </div>
+        <h3 class="font-serif text-2xl font-bold text-slate-900">Bianca HQ Owner Login</h3>
+        <p class="text-xs text-slate-500">Enter your 4-digit PIN to access Bianca's studio automation tools.</p>
+        
+        <div class="flex justify-center gap-2 pt-2">
+          <input type="password" id="owner-pin-input" maxlength="4" placeholder="••••" class="w-36 text-center text-2xl font-mono font-bold tracking-widest px-4 py-2.5 rounded-2xl border border-slate-300 focus:ring-2 focus:ring-amber-400 outline-none">
+        </div>
+
+        <button onclick="verifyOwnerPin()" class="w-full py-3.5 gold-gradient-bg text-slate-900 font-extrabold rounded-2xl text-xs shadow-md hover:opacity-90 transition-opacity">
+          Verify & Unlock Owner Portal
+        </button>
+
+        <div class="pt-2">
+          <span class="text-[11px] bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full border border-amber-300">
+            🔑 Demo PIN Hint: <span class="font-mono">1234</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- OWNER DASHBOARD CONTENT (Hidden until password verified) -->
+      <div id="owner-dashboard-content" class="space-y-8 hidden">
+
+        <!-- Top Status Bar & Master Switches -->
+        <div class="glass-card rounded-3xl p-6 border border-amber-200 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full gold-gradient-bg flex items-center justify-center text-white text-xl shadow-sm">
+              👑
+            </div>
+            <div>
+              <h2 class="font-serif font-bold text-2xl text-slate-900">Bianca HQ Control Center</h2>
+              <p class="text-xs text-slate-500">Automated Social Ads, AI Reviews & Live Availability</p>
+            </div>
+          </div>
+
+          <!-- Master Automation Switches -->
+          <div class="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-700">
+            <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-xl border shadow-sm">
+              <input type="checkbox" checked class="accent-sky-500 w-4 h-4"> Auto-Pilot Posts
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-xl border shadow-sm">
+              <input type="checkbox" checked class="accent-pink-500 w-4 h-4"> AI Review Bot
+            </label>
+            <button onclick="lockOwnerPortal()" class="px-4 py-2 bg-rose-100 text-rose-700 hover:bg-rose-200 rounded-xl transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-lock"></i> Lock HQ
+            </button>
+          </div>
+        </div>
+
+        <!-- BELLA MASCOT INTERACTIVE TIP CARD -->
+        <div class="glass-card rounded-3xl p-6 border-2 border-pink-300 shadow-lg relative overflow-hidden flex flex-col sm:flex-row items-center gap-5">
+          <div onclick="triggerBellaTip()" class="w-20 h-20 rounded-2xl bg-pink-100 border-2 border-pink-300 flex items-center justify-center text-4xl shadow-md cursor-pointer hover:scale-105 transition-transform flex-shrink-0">
+            🐶✨
+          </div>
+          <div class="flex-1 text-center sm:text-left space-y-1">
+            <div class="flex items-center justify-center sm:justify-start gap-2">
+              <span class="font-serif font-bold text-slate-900 text-base">Bella Mascot Studio Advisor</span>
+              <span class="text-[10px] bg-pink-100 text-pink-700 font-bold px-2 py-0.5 rounded-full">Click Bella for Tip!</span>
+            </div>
+            <p id="bella-tip-text" class="text-xs text-slate-700 font-medium">
+              "Hi Bianca! Posting fresh chrome almond sets during 6 PM - 8 PM peak hours increases direct DM booking inquiries by 40%!"
+            </p>
+          </div>
+        </div>
+
+        <!-- OWNER NAV TABS -->
+        <div class="flex border-b border-slate-200 space-x-6 overflow-x-auto custom-scrollbar pb-1">
+          <button onclick="switchOwnerTab('owner-tab-poster')" id="owner-tab-btn-poster" class="owner-tab-btn font-bold text-xs py-2.5 px-1 border-b-2 border-amber-500 text-slate-900 flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-paper-plane text-sky-500"></i> 1-Click Multi-Platform Auto-Poster
+          </button>
+          <button onclick="switchOwnerTab('owner-tab-adbuilder')" id="owner-tab-btn-adbuilder" class="owner-tab-btn font-semibold text-xs py-2.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-bullhorn text-pink-500"></i> 3-Step Local Radius Ad Builder
+          </button>
+          <button onclick="switchOwnerTab('owner-tab-assistant')" id="owner-tab-btn-assistant" class="owner-tab-btn font-semibold text-xs py-2.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Gemini AI Salon Assistant
+          </button>
+        </div>
+
+        <!-- OWNER TAB 1: AUTO-POSTER TOOL -->
+        <div id="owner-tab-poster" class="owner-tab-content space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Controls -->
+            <div class="glass-card rounded-3xl p-6 border border-sky-200 shadow-md space-y-4">
+              <h3 class="font-serif font-bold text-lg text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-cloud-arrow-up text-sky-500"></i> Post Dispatcher
+              </h3>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Select Preset Nail Style</label>
+                <select id="poster-style-select" onchange="updatePostPreview()" class="w-full p-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-sky-400 outline-none">
+                  <option value="chrome">Chrome Almond Glam ($95)</option>
+                  <option value="builder">Builder Gel Natural Overlay ($65)</option>
+                  <option value="french">Pastel French & Gold Leaf ($85)</option>
+                </select>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="block text-xs font-bold text-slate-700">Caption Text</label>
+                  <button onclick="generateGeminiCaption()" class="text-[10px] bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold px-2.5 py-1 rounded-lg transition-colors">
+                    ✨ Magic AI Write Caption
+                  </button>
+                </div>
+                <textarea id="poster-caption-input" rows="4" class="w-full p-3 rounded-xl border border-slate-300 text-xs font-sans focus:ring-2 focus:ring-sky-400 outline-none">✨ Fresh Chrome Almond sets by Bianca! 💅 Clean cuticles + long-lasting gel shine. Grab your slot for Friday!</textarea>
+              </div>
+
+              <div class="pt-2">
+                <button onclick="dispatchSocialPost()" class="w-full py-3.5 gold-gradient-bg text-slate-900 font-extrabold text-xs rounded-2xl shadow-md hover:opacity-95 transition-all">
+                  🚀 Publish Post to Instagram, Facebook & TikTok
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Phone Preview -->
+            <div class="glass-card rounded-3xl p-6 border border-pink-200 shadow-md flex justify-center items-center">
+              <div class="w-64 bg-slate-900 p-3 rounded-[35px] shadow-2xl border-4 border-slate-800 text-white space-y-3">
+                <div class="flex justify-between items-center text-[10px] text-slate-400 px-2 pt-1">
+                  <span>9:41 AM</span>
+                  <div class="flex gap-1"><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></div>
+                </div>
+
+                <div class="flex items-center gap-2 px-1">
+                  <div class="w-6 h-6 rounded-full gold-gradient-bg flex items-center justify-center text-[10px]">👑</div>
+                  <span class="text-[11px] font-bold">nailprincess_official</span>
+                </div>
+
+                <div class="aspect-square bg-slate-800 rounded-2xl overflow-hidden relative">
+                  <img id="phone-preview-img" src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Preview">
+                </div>
+
+                <div class="px-1 text-[10px] space-y-1">
+                  <p id="phone-preview-text" class="line-clamp-2 text-slate-300">
+                    ✨ Fresh Chrome Almond sets by Bianca! 💅 Clean cuticles + long-lasting gel shine.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- OWNER TAB 2: LOCAL AD BUILDER -->
+        <div id="owner-tab-adbuilder" class="owner-tab-content space-y-6 hidden">
+          <div class="glass-card rounded-3xl p-6 border border-pink-200 shadow-md space-y-6 max-w-2xl mx-auto">
+            <h3 class="font-serif font-bold text-lg text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-bullhorn text-pink-500"></i> 3-Step Local Radius Promotion
+            </h3>
+
+            <!-- Step 1 -->
+            <div class="space-y-2">
+              <span class="text-xs font-bold text-pink-600 uppercase tracking-wider">Step 1: Choose Promotional Offer</span>
+              <select class="w-full p-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-pink-400 outline-none">
+                <option>First-Time Client Special (10% Off Full Set)</option>
+                <option>Rainy Day Flash Deal ($15 Off Builder Gel)</option>
+                <option>Birthday Glam Discount (Free Tier 1 Art)</option>
+              </select>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-pink-600 uppercase tracking-wider">Step 2: Target Radius</span>
+                <span id="radius-val" class="font-bold text-slate-900">5 Miles Around Studio</span>
+              </div>
+              <input type="range" min="1" max="15" value="5" oninput="document.getElementById('radius-val').innerText = this.value + ' Miles Around Studio'" class="w-full accent-pink-500">
+            </div>
+
+            <!-- Step 3 -->
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-pink-600 uppercase tracking-wider">Step 3: Daily Budget</span>
+                <span id="budget-val" class="font-bold text-slate-900">$10 / Day</span>
+              </div>
+              <input type="range" min="5" max="50" step="5" value="10" oninput="document.getElementById('budget-val').innerText = '$' + this.value + ' / Day'" class="w-full accent-amber-500">
+            </div>
+
+            <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 flex justify-between items-center">
+              <div>
+                <p class="font-bold">Estimated Reach:</p>
+                <p class="text-slate-600">1,200 - 2,800 local clients / week</p>
+              </div>
+              <span class="font-bold text-emerald-600 bg-emerald-100 px-3 py-1 rounded-full">~6-12 New Bookings</span>
+            </div>
+
+            <button onclick="launchAdCampaign()" class="w-full py-3.5 gold-gradient-bg text-slate-900 font-extrabold text-xs rounded-2xl shadow-md">
+              Launch Local Campaign
+            </button>
+          </div>
+        </div>
+
+        <!-- OWNER TAB 3: GEMINI AI SALON ASSISTANT -->
+        <div id="owner-tab-assistant" class="owner-tab-content space-y-6 hidden">
+          <div class="glass-card rounded-3xl p-6 border border-amber-200 shadow-md space-y-4 max-w-2xl mx-auto">
+            <h3 class="font-serif font-bold text-lg text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-robot text-amber-500"></i> Gemini AI Salon Marketing Helper
+            </h3>
+            
+            <div id="ai-chat-history" class="h-64 bg-slate-900 text-slate-100 rounded-2xl p-4 overflow-y-auto custom-scrollbar text-xs space-y-3 font-sans">
+              <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
+                <p class="font-bold text-amber-400">✨ Gemini AI Assistant:</p>
+                <p class="text-slate-300 mt-1">Hi Bianca! How can I help grow Nail Princess today? Ask me for promo ideas, client script responses, or marketing tips!</p>
+              </div>
+            </div>
+
+            <form onsubmit="handleAIChatSubmit(event)" class="flex gap-2">
+              <input type="text" id="ai-chat-input" required placeholder="Ask Gemini AI (e.g. Write a flash sale promo text)..." class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-amber-400 outline-none">
+              <button type="submit" class="px-5 py-2.5 gold-gradient-bg text-slate-900 font-extrabold text-xs rounded-xl shadow-sm">
+                Ask Gemini
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ================================================================= -->
+  <!-- MODALS & OVERLAYS                                                 -->
+  <!-- ================================================================= -->
+
+  <!-- 1. STORY HIGHLIGHT MODAL -->
+  <div id="modal-highlight" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border-2 border-amber-300">
+      <div class="p-4 bg-gradient-to-r from-pink-100 to-sky-100 flex items-center justify-between border-b border-slate-200">
+        <div class="flex items-center gap-2">
+          <span id="highlight-emoji" class="text-2xl">📅</span>
+          <h3 id="highlight-title" class="font-serif font-bold text-slate-900 text-base">Highlight</h3>
+        </div>
+        <button onclick="closeModal('modal-highlight')" class="w-8 h-8 rounded-full bg-white text-slate-500 hover:text-slate-900 flex items-center justify-center shadow-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="highlight-body" class="p-6 text-xs text-slate-700 space-y-3">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="p-4 bg-slate-50 flex justify-end">
+        <button onclick="openBookingModal('Highlight CTA')" class="px-5 py-2.5 gold-gradient-bg font-extrabold text-xs text-slate-900 rounded-xl">
+          Book This Service
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PINNED POST MODAL -->
+  <div id="modal-pinned" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border-2 border-pink-300">
+      <div class="p-4 bg-pink-100 flex items-center justify-between">
+        <span class="bg-amber-400 text-slate-900 text-[10px] font-extrabold px-2 py-0.5 rounded">📌 PINNED POST</span>
+        <button onclick="closeModal('modal-pinned')" class="w-8 h-8 rounded-full bg-white text-slate-500 flex items-center justify-center shadow-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="pinned-body" class="p-6 text-xs text-slate-700 space-y-2">
+        <!-- Injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. EASY BOOKING MODAL -->
+  <div id="modal-booking" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="glass-card rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border-2 border-amber-400">
+      <div class="p-5 gold-gradient-bg text-slate-900 flex items-center justify-between">
+        <div>
+          <h3 class="font-serif font-bold text-lg">Book Nail Date with Bianca 💅</h3>
+          <p class="text-[10px] opacity-80" id="booking-modal-source">Source: Direct</p>
+        </div>
+        <button onclick="closeModal('modal-booking')" class="w-8 h-8 rounded-full bg-white/40 text-slate-900 hover:bg-white flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="handleBookingSubmit(event)" class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Full Name</label>
+          <input type="text" required placeholder="e.g. Jessica Smith" class="w-full p-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-pink-400 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Select Service</label>
+          <select class="w-full p-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-pink-400 outline-none">
+            <option>Princess Gel Extension Set ($80+)</option>
+            <option>Builder Gel Structure Overlay ($65+)</option>
+            <option>Structure Gel Fill ($55+)</option>
+          </select>
+        </div>
+        <div class="p-3 bg-pink-50 rounded-xl border border-pink-200 text-slate-600">
+          <p>💳 <strong>$25 Deposit</strong> required after submission to lock slot.</p>
+        </div>
+        <button type="submit" class="w-full py-3.5 gold-gradient-bg text-slate-900 font-extrabold rounded-xl shadow-md">
+          Confirm Appointment Request
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white/60 border-t border-pink-100 py-4 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+      Nail Princess Studio App © 2026 • Dual Portal System • Crafted for Bianca
+    </div>
+  </footer>
+
+  <!-- ================================================================= -->
+  <!-- APPLICATION JAVASCRIPT LOGIC                                      -->
+  <!-- ================================================================= -->
+  <script>
+    // App State
+    let isOwnerUnlocked = false;
+    const defaultOwnerPin = "1234";
+
+    const weeklyOpenings = [
+      { day: "Thursday", time: "2:00 PM", service: "Full Set / Fill", status: "open" },
+      { day: "Friday", time: "11:00 AM", service: "Gel Extensions", status: "open" },
+      { day: "Friday", time: "3:30 PM", service: "Builder Gel Overlay", status: "taken" },
+      { day: "Saturday", time: "4:30 PM", service: "Custom Nail Art Set", status: "open" }
+    ];
+
+    const socialComments = [
+      { author: "Samantha_M", text: "How long does the Builder Gel overlay last?", time: "5m ago", botReply: "Hi doll! Builder gel overlays typically last 3-4 weeks with proper aftercare! 💖" },
+      { author: "Chloe_Glam", text: "Do you have any Friday slots available?", time: "12m ago", botReply: "Yes! We have a Friday 11:00 AM slot available right now in our Openings Ticker! ✨" }
+    ];
+
+    const bellaTips = [
+      "Hi Bianca! Posting fresh chrome almond sets during 6 PM - 8 PM peak hours increases direct DM booking inquiries by 40%!",
+      "Tip: Remind clients to add a $15 Tier 1 French tip add-on during booking to boost average ticket value!",
+      "Pro Tip: Flash sale deal notifications posted on rainy afternoons fill open slots within 30 minutes!"
+    ];
+    let tipIdx = 0;
+
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      renderWeeklySlots();
+      renderCommentFeed();
+    });
+
+    // Navigation View Switchers
+    function showLandingGateway() {
+      document.getElementById('portal-gateway').classList.remove('hidden');
+      document.getElementById('portal-client').classList.add('hidden');
+      document.getElementById('portal-owner').classList.add('hidden');
+      
+      document.getElementById('nav-btn-client').className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
+      document.getElementById('nav-btn-owner').className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
+    }
+
+    function showClientPortal() {
+      document.getElementById('portal-gateway').classList.add('hidden');
+      document.getElementById('portal-client').classList.remove('hidden');
+      document.getElementById('portal-owner').classList.add('hidden');
+
+      document.getElementById('nav-btn-client').className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 bg-white text-slate-900 shadow-sm flex items-center gap-1.5";
+      document.getElementById('nav-btn-owner').className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
+    }
+
+    function triggerOwnerAuth() {
+      document.getElementById('portal-gateway').classList.add('hidden');
+      document.getElementById('portal-client').classList.add('hidden');
+      document.getElementById('portal-owner').classList.remove('hidden');
+
+      document.getElementById('nav-btn-owner').className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 bg-white text-slate-900 shadow-sm flex items-center gap-1.5";
+      document.getElementById('nav-btn-client').className = "px-3.5 py-1.5 rounded-full text-xs font-bold transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
+
+      if (!isOwnerUnlocked) {
+        document.getElementById('owner-pin-lock').classList.remove('hidden');
+        document.getElementById('owner-dashboard-content').classList.add('hidden');
+      }
+    }
+
+    function verifyOwnerPin() {
+      const val = document.getElementById('owner-pin-input').value;
+      if (val === defaultOwnerPin) {
+        isOwnerUnlocked = true;
+        document.getElementById('owner-pin-lock').classList.add('hidden');
+        document.getElementById('owner-dashboard-content').classList.remove('hidden');
+        confetti({ particleCount: 80, spread: 60 });
+      } else {
+        alert("Incorrect PIN! Hint: Use 1234");
+      }
+    }
+
+    function lockOwnerPortal() {
+      isOwnerUnlocked = false;
+      document.getElementById('owner-pin-input').value = '';
+      showLandingGateway();
+    }
+
+    // Client Sub-Tabs
+    function switchClientTab(tabId) {
+      document.querySelectorAll('.client-tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-client-btn').forEach(btn => {
+        btn.className = "tab-client-btn font-semibold text-xs py-2.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap";
+      });
+
+      document.getElementById('client-' + tabId).classList.remove('hidden');
+      const btn = document.getElementById('tab-btn-' + tabId.replace('tab-', ''));
+      if (btn) {
+        btn.className = "tab-client-btn font-bold text-xs py-2.5 px-1 border-b-2 border-pink-500 text-slate-900 flex items-center gap-2 whitespace-nowrap";
+      }
+    }
+
+    // Owner Sub-Tabs
+    function switchOwnerTab(tabId) {
+      document.querySelectorAll('.owner-tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.owner-tab-btn').forEach(btn => {
+        btn.className = "owner-tab-btn font-semibold text-xs py-2.5 px-1 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2 whitespace-nowrap";
+      });
+
+      document.getElementById(tabId).classList.remove('hidden');
+      const btn = document.getElementById(tabId.replace('owner-tab-', 'owner-tab-btn-'));
+      if (btn) {
+        btn.className = "owner-tab-btn font-bold text-xs py-2.5 px-1 border-b-2 border-amber-500 text-slate-900 flex items-center gap-2 whitespace-nowrap";
+      }
+    }
+
+    // Render Slots Ticker
+    function renderWeeklySlots() {
+      const container = document.getElementById('weekly-slots-client-container');
+      container.innerHTML = weeklyOpenings.map(slot => `
+        <div class="glass-card rounded-2xl p-4 border ${slot.status === 'open' ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200 opacity-60'} flex flex-col justify-between space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-xs text-slate-900">${slot.day}</span>
+            <span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full ${slot.status === 'open' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'}">
+              ${slot.status === 'open' ? 'AVAILABLE' : 'BOOKED'}
+            </span>
+          </div>
+          <div class="text-xs text-slate-600">
+            <p class="font-bold text-amber-700">🕒 ${slot.time}</p>
+            <p class="text-[11px] text-slate-500">${slot.service}</p>
+          </div>
+          ${slot.status === 'open' ? `
+            <button onclick="openBookingModal('${slot.day} @ ${slot.time}')" class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold transition-colors">
+              Grab Slot
+            </button>
+          ` : `
+            <span class="text-center block text-[10px] text-slate-400 py-1">Slot Filled</span>
+          `}
+        </div>
+      `).join('');
+    }
+
+    // Social Comment & AI Auto-Bot Reply
+    function renderCommentFeed() {
+      const container = document.getElementById('social-comment-feed');
+      container.innerHTML = socialComments.map(c => `
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2 text-xs">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-slate-900">@${c.author}</span>
+            <span class="text-[10px] text-slate-400">${c.time}</span>
+          </div>
+          <p class="text-slate-700">${c.text}</p>
+          <div class="p-3 bg-pink-50 rounded-xl border border-pink-200 text-slate-800 space-y-1">
+            <p class="font-bold text-pink-700 text-[11px] flex items-center gap-1">
+              👑 Bianca's AI Auto-Bot <span class="text-[9px] font-normal text-pink-500">• Reply</span>
+            </p>
+            <p class="text-[11px]">${c.botReply}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function postClientComment(e) {
+      e.preventDefault();
+      const input = document.getElementById('client-comment-input');
+      const text = input.value;
+      
+      const newComment = {
+        author: "Client_Guest",
+        text: text,
+        time: "Just now",
+        botReply: `Thanks for reaching out! 💕 Bianca would love to see you! Check our Price Menu or tap "Book Appointment" above to lock in your date!`
+      };
+
+      socialComments.unshift(newComment);
+      input.value = '';
+      renderCommentFeed();
+      confetti({ particleCount: 40, spread: 40 });
+    }
+
+    // Mascot Tips Cycle
+    function triggerBellaTip() {
+      tipIdx = (tipIdx + 1) % bellaTips.length;
+      document.getElementById('bella-tip-text').innerText = '"' + bellaTips[tipIdx] + '"';
+      confetti({ particleCount: 30, spread: 50 });
+    }
+
+    // Modal Helpers
+    function openHighlightModal(type) {
+      const modal = document.getElementById('modal-highlight');
+      const title = document.getElementById('highlight-title');
+      const emoji = document.getElementById('highlight-emoji');
+      const body = document.getElementById('highlight-body');
+
+      const data = {
+        book: { title: "BOOKING RULES 📅", emoji: "📅", html: "<p>1. Choose service<br>2. Select time slot<br>3. Submit $25 deposit.</p>" },
+        prices: { title: "PRICING MENU 💸", emoji: "💸", html: "<p>Gel Extensions: $80+<br>Builder Gel: $65+<br>Fills: $55+<br>Tier Art: +$15-$40+</p>" },
+        availability: { title: "OPEN SLOTS ⚡", emoji: "⚡", html: "<p>Check our live weekly openings ticker for instant slots!</p>" },
+        policies: { title: "POLICIES 📜", emoji: "📜", html: "<p>15-min grace period. 24h cancellation notice required.</p>" },
+        aftercare: { title: "AFTERCARE 🧼", emoji: "🧼", html: "<p>Oil cuticles daily and wear gloves during household chores!</p>" }
+      };
+
+      const item = data[type] || data.book;
+      title.innerText = item.title;
+      emoji.innerText = item.emoji;
+      body.innerHTML = item.html;
+      modal.classList.remove('hidden');
+    }
+
+    function openPinnedModal(num) {
+      const modal = document.getElementById('modal-pinned');
+      const body = document.getElementById('pinned-body');
+      if (num === 1) body.innerHTML = "<h4 class='font-bold'>Welcome! 💅✨</h4><p>I'm Bianca! Check my menu and policies before booking.</p>";
+      else if (num === 2) body.innerHTML = "<h4 class='font-bold'>Price Guide 💳</h4><p>Full Sets $80+, Fills $55+, Tiered Art +$15-$40.</p>";
+      else body.innerHTML = "<h4 class='font-bold'>Studio Rules 📜</h4><p>$25 deposit required. No extra guests.</p>";
+      modal.classList.remove('hidden');
+    }
+
+    function openBookingModal(source) {
+      document.getElementById('booking-modal-source').innerText = "Source: " + source;
+      document.getElementById('modal-booking').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function handleBookingSubmit(e) {
+      e.preventDefault();
+      closeModal('modal-booking');
+      confetti({ particleCount: 100, spread: 70 });
+      alert("✨ Appointment requested! SMS deposit link sent!");
+    }
+
+    // Owner Dispatcher Functions
+    function updatePostPreview() {
+      const val = document.getElementById('poster-style-select').value;
+      const img = document.getElementById('phone-preview-img');
+      if (val === 'chrome') img.src = "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400";
+      else if (val === 'builder') img.src = "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&q=80&w=400";
+      else img.src = "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&q=80&w=400";
+    }
+
+    function generateGeminiCaption() {
+      const input = document.getElementById('poster-caption-input');
+      input.value = "✨ Gemini AI Generating...";
+      setTimeout(() => {
+        input.value = "✨ Soft Luxury Gel Set by Bianca! 💅 Clean cuticles, long-lasting builder gel retention, and hand-painted art. Tap link in bio to claim your slot! 💕 #NailPrincess #GelNails";
+        document.getElementById('phone-preview-text').innerText = input.value;
+      }, 800);
+    }
+
+    function dispatchSocialPost() {
+      confetti({ particleCount: 100, spread: 80 });
+      alert("🚀 Published! Post automatically dispatched across Instagram, Facebook & TikTok!");
+    }
+
+    function launchAdCampaign() {
+      confetti({ particleCount: 80, spread: 60 });
+      alert("📢 Local Radius Campaign Launched around studio!");
+    }
+
+    function handleAIChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('ai-chat-input');
+      const text = input.value;
+      const history = document.getElementById('ai-chat-history');
+
+      history.innerHTML += `
+        <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
+          <p class="font-bold text-sky-400">👤 Bianca:</p>
+          <p class="text-slate-200 mt-0.5">${text}</p>
+        </div>
+        <div class="bg-slate-800 p-3 rounded-xl border border-slate-700">
+          <p class="font-bold text-amber-400">✨ Gemini AI Assistant:</p>
+          <p class="text-slate-300 mt-0.5">Great question! For "${text}", I recommend running a 24-hour flash sale story alert with an instant booking link to capture high-intent clients!</p>
+        </div>
+      `;
+      input.value = '';
+      history.scrollTop = history.scrollHeight;
+    }
+  </script>
+</body>
+</html>

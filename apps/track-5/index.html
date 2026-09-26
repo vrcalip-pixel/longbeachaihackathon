@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cooler Compton — Shade Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --canopy:#1F4E45; --canopy-2:#2E6B5E; --leaf:#8FC7A0;
+  --sun:#F2B134; --sun-soft:#FCEBC2;
+  --asphalt:#3A3F47; --paper:#F6F7F3; --card:#FFFFFF; --line:#D9DDD6;
+  --ink:#1D2320; --muted:#5B6660; --danger:#B3261E;
+  --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Bricolage Grotesque","Atkinson Hyperlegible",system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#12201D; --card:#1A2B27; --line:#2D423C; --ink:#EEF3EF; --muted:#A8B8B0;
+    --canopy:#8FC7A0; --canopy-2:#6FAE84; --sun-soft:#3B3220; --asphalt:#C9CFD6;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12201D; --card:#1A2B27; --line:#2D423C; --ink:#EEF3EF; --muted:#A8B8B0;
+  --canopy:#8FC7A0; --canopy-2:#6FAE84; --sun-soft:#3B3220; --asphalt:#C9CFD6;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font:400 18px/1.5 var(--body);-webkit-tap-highlight-color:transparent}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+h1,h2{font-family:var(--display);line-height:1.1;margin:0}
+.app{max-width:720px;margin:0 auto;padding:0 16px 120px}
+
+/* top bar */
+.bar{display:flex;align-items:center;gap:10px;padding:12px 0;position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);z-index:20}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:800;font-size:18px;color:var(--canopy)}
+.brand svg{width:28px;height:28px}
+.lang{margin-left:auto;display:flex;border:2px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{border:0;background:none;padding:8px 14px;min-height:44px;font-weight:700;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--canopy);color:var(--paper)}
+
+.screen{display:none}
+.screen.on{display:block;animation:in .25s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.screen.on{animation:none}}
+
+/* hero */
+.hero{padding:28px 0 8px}
+.hero h1{font-size:clamp(40px,11vw,72px);font-weight:800;letter-spacing:-.02em;color:var(--canopy)}
+.hero p{max-width:34ch;color:var(--muted);margin:14px 0 0}
+.sunline{height:10px;margin:24px 0;border-radius:6px;background:repeating-linear-gradient(90deg,var(--sun) 0 22px,transparent 22px 30px)}
+
+.choice{display:grid;gap:12px;margin-top:8px}
+.big{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:18px;border:2px solid var(--line);border-radius:18px;background:var(--card);min-height:76px}
+.big svg{flex:none;width:36px;height:36px;color:var(--canopy)}
+.big strong{display:block;font-size:19px}
+.big span{color:var(--muted);font-size:15px}
+.big:active{transform:scale(.99)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:56px;padding:0 24px;border-radius:14px;border:0;font-weight:700;font-size:18px;background:var(--canopy);color:var(--paper)}
+.btn.ghost{background:transparent;color:var(--canopy);border:2px solid var(--canopy)}
+.btn.sun{background:var(--sun);color:#2A2108}
+.btn:disabled{opacity:.45}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row .btn{flex:1 1 180px}
+
+/* code entry */
+.code-wrap{text-align:center;padding-top:20px}
+.code-wrap h2{font-size:30px}
+.code-wrap p{color:var(--muted);margin:8px auto 20px;max-width:32ch}
+.dots{display:flex;justify-content:center;gap:14px;margin-bottom:10px}
+.dots i{width:54px;height:64px;border-radius:14px;border:2px solid var(--line);background:var(--card);display:grid;place-items:center;font-style:normal;font-size:30px;font-weight:700}
+.dots i.fill{border-color:var(--canopy)}
+.err{color:var(--danger);min-height:28px;font-weight:700}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:320px;margin:0 auto}
+.pad button{min-height:64px;border-radius:16px;border:2px solid var(--line);background:var(--card);font-size:26px;font-weight:700}
+.pad button:active{background:var(--sun-soft)}
+.hint{font-size:14px;color:var(--muted);margin-top:14px}
+
+/* map */
+.maphead{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:6px 0 10px}
+.maphead h2{font-size:26px}
+.maphead p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none}
+.chip{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border-radius:999px;border:2px solid var(--line);background:var(--card);font-weight:700;font-size:15px}
+.chip .sw{width:12px;height:12px;border-radius:50%}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.mapbox{position:relative;border-radius:20px;overflow:hidden;border:2px solid var(--line);background:#E9EDE4;touch-action:none}
+:root[data-theme="dark"] .mapbox{background:#20302B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mapbox{background:#20302B}}
+.mapbox svg{display:block;width:100%;height:auto}
+.street{stroke:#FFFFFF;stroke-linecap:round}
+.st-label{font:700 9px var(--body);fill:#7A857E}
+.creek{fill:none;stroke:#8DBBD8;stroke-width:5;stroke-linecap:round}
+.pin{cursor:pointer}
+.pin circle.hit{fill:transparent}
+.pin .dot{stroke:#fff;stroke-width:2.5}
+.pin.sel .dot{stroke:var(--sun);stroke-width:4}
+.pin.done .tick{display:block}
+.pin .tick{display:none}
+.maptools{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.maptools button{width:44px;height:44px;border-radius:12px;border:0;background:var(--card);color:var(--ink);font-size:22px;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.mapnote{font-size:13px;color:var(--muted);margin:8px 2px 0}
+.list{margin-top:14px;display:grid;gap:8px}
+.list button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);min-height:56px}
+.list .sw{width:14px;height:14px;border-radius:50%;flex:none}
+.list small{display:block;color:var(--muted)}
+.list .added{margin-left:auto;font-size:13px;font-weight:700;color:var(--canopy-2)}
+
+/* detail sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,20,17,.45);z-index:40;display:none}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:92%;overflow:auto;background:var(--card);border-radius:24px 24px 0 0;padding:10px 18px calc(18px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .28s ease-out;max-width:720px;margin:0 auto}
+.sheet.open{transform:none}
+@media (prefers-reduced-motion:reduce){.sheet{transition:none}}
+.grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
+.thumb{border-radius:16px;overflow:hidden;aspect-ratio:16/7;background:var(--sun-soft)}
+.thumb svg{width:100%;height:100%;display:block}
+.sheet h2{font-size:26px;margin-top:14px}
+.meta{color:var(--muted);font-size:15px;margin:2px 0 14px}
+fieldset{border:0;padding:0;margin:0 0 14px}
+legend{font-weight:700;margin-bottom:8px}
+.needs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.need{position:relative}
+.need input{position:absolute;opacity:0;pointer-events:none}
+.need label{display:flex;align-items:center;gap:10px;min-height:60px;padding:10px 12px;border-radius:14px;border:2px solid var(--line);font-weight:700;font-size:16px;line-height:1.2}
+.need label .ic{font-size:22px}
+.need input:checked+label{border-color:var(--canopy);background:color-mix(in srgb,var(--leaf) 30%,transparent)}
+.need input:focus-visible+label{outline:3px solid var(--sun);outline-offset:2px}
+textarea{width:100%;min-height:96px;padding:12px;border-radius:14px;border:2px solid var(--line);background:var(--paper);resize:vertical}
+.close-x{position:absolute;right:14px;top:14px;width:44px;height:44px;border-radius:50%;border:0;background:var(--card);font-size:22px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+
+/* after add */
+.added-box{text-align:center;padding:10px 0}
+.added-box .ok{width:64px;height:64px;border-radius:50%;background:var(--canopy);color:var(--paper);display:grid;place-items:center;margin:6px auto 12px;font-size:32px}
+
+/* finish pill */
+.finish{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;display:none;align-items:center;gap:10px;min-height:52px;padding:0 18px 0 8px;border-radius:999px;border:0;background:var(--asphalt);color:var(--paper);font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.finish b{min-width:36px;height:36px;border-radius:50%;background:var(--sun);color:#2A2108;display:grid;place-items:center}
+.finish.show{display:inline-flex}
+
+/* review */
+.review h2{font-size:30px;margin:10px 0 4px}
+.review>p{color:var(--muted);margin:0 0 14px}
+.tbl{overflow-x:auto;border:2px solid var(--line);border-radius:16px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:16px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:14px;color:var(--muted);font-weight:700}
+tr:last-child td{border-bottom:0}
+td .tag{display:inline-block;margin:0 4px 4px 0;padding:2px 8px;border-radius:8px;background:var(--sun-soft);font-size:14px}
+td .rm{border:0;background:none;color:var(--danger);font-weight:700;min-height:44px}
+
+.thanks{text-align:center;padding-top:40px}
+.thanks h2{font-size:clamp(34px,9vw,52px);color:var(--canopy)}
+.thanks p{color:var(--muted);max-width:34ch;margin:12px auto 24px}
+#qr{display:inline-block;padding:12px;background:#fff;border-radius:14px;margin:8px 0}
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translate(-50%,-150%);background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:12px;z-index:60;transition:transform .25s;font-weight:700}
+.toast.on{transform:translate(-50%,0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="brand" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><circle cx="22" cy="10" r="6" fill="#F2B134"/><path d="M4 26c0-8 5-14 12-14s12 6 12 14z" fill="#1F4E45"/><rect x="15" y="20" width="2.5" height="8" fill="#1F4E45"/></svg>
+      <span data-i="brand">Cooler Compton</span>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </header>
+
+  <!-- 1. Welcome -->
+  <section class="screen on" id="s-welcome">
+    <div class="hero">
+      <h1 data-i="heroTitle">Where does your block need shade?</h1>
+      <p data-i="heroSub">Mark the parks, schools and streets that get too hot. Your answers help the state decide where to plant trees and build shade first.</p>
+    </div>
+    <div class="sunline" aria-hidden="true"></div>
+    <p style="font-weight:700;margin:0 0 8px" data-i="howUsing">How are you taking the survey?</p>
+    <div class="choice">
+      <button class="big" data-mode="phone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
+        <div><strong data-i="phone">On my phone</strong><span data-i="phoneSub">I scanned the QR code</span></div>
+      </button>
+      <button class="big" data-mode="kiosk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="13" rx="2"/><path d="M12 16v5M8 21h8"/></svg>
+        <div><strong data-i="kiosk">At a kiosk</strong><span data-i="kioskSub">Clears itself when you finish</span></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- 2. Code -->
+  <section class="screen" id="s-code">
+    <div class="code-wrap">
+      <h2 data-i="codeTitle">Enter your access code</h2>
+      <p data-i="codeSub">You got this 4-digit code when your residency was verified in person.</p>
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="err" id="codeErr" role="alert"></div>
+      <label class="sr" for="codeInput" data-i="codeTitle">Enter your access code</label>
+      <input id="codeInput" class="sr" inputmode="numeric" maxlength="4" autocomplete="one-time-code">
+      <div class="pad" id="pad"></div>
+      <p class="hint" data-i="testHint">Testing? Use 1234.</p>
+    </div>
+  </section>
+
+  <!-- 3. Map -->
+  <section class="screen" id="s-map">
+    <div class="maphead">
+      <div><h2 data-i="mapTitle">Tap a place that needs shade</h2><p data-i="mapSub">Filter by type, then tap a pin.</p></div>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter"></div>
+    <div class="mapbox" id="mapbox">
+      <svg id="map" viewBox="0 0 400 340" role="img" aria-label="Map of Compton"></svg>
+      <div class="maptools">
+        <button id="zin" aria-label="Zoom in">+</button>
+        <button id="zout" aria-label="Zoom out">−</button>
+      </div>
+    </div>
+    <p class="mapnote" data-i="mapNote">Pins are approximate. Drag to move the map.</p>
+    <div class="list" id="placeList" aria-label="Places"></div>
+  </section>
+
+  <!-- 4. Added -->
+  <section class="screen" id="s-added">
+    <div class="added-box">
+      <div class="ok" aria-hidden="true">✓</div>
+      <h2 style="font-size:28px" data-i="addedTitle">Added to your list</h2>
+      <p style="color:var(--muted)" id="addedName"></p>
+      <div class="row" style="margin-top:18px">
+        <button class="btn" id="another" data-i="another">Add another place</button>
+        <button class="btn ghost" id="goReview" data-i="finishReview">Finish and review</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Review -->
+  <section class="screen review" id="s-review">
+    <h2 data-i="reviewTitle">Check your list</h2>
+    <p data-i="reviewSub">Remove anything you don’t want to send.</p>
+    <div class="tbl"><table>
+      <thead><tr><th data-i="thPlace">Place</th><th data-i="thAsk">What you asked for</th><th data-i="thType">Type</th><th data-i="thNote">Notes</th><th><span class="sr">Remove</span></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn ghost" id="backMap" data-i="addMore">Add more places</button>
+      <button class="btn sun" id="submit" data-i="submit">Send my answers</button>
+    </div>
+  </section>
+
+  <!-- 6. Thanks -->
+  <section class="screen" id="s-thanks">
+    <div class="thanks">
+      <h2 data-i="thanksTitle">Thank you. Your answers were sent.</h2>
+      <p id="thanksSub" data-i="thanksPhone">You can close this page now.</p>
+      <div id="kioskQrWrap" hidden>
+        <p style="margin:0;font-weight:700" data-i="qrLabel">Next person: scan to use your own phone</p>
+        <div id="qr"></div>
+      </div>
+      <div class="row" style="justify-content:center">
+        <button class="btn" id="closeBtn" data-i="close">Close</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Detail sheet -->
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="dName">
+  <div class="grab"></div>
+  <button class="close-x" id="dClose" aria-label="Close">×</button>
+  <div class="thumb" id="dThumb"></div>
+  <h2 id="dName"></h2>
+  <p class="meta" id="dMeta"></p>
+  <fieldset>
+    <legend data-i="needLegend">What would help here? Pick all that apply.</legend>
+    <div class="needs" id="needs"></div>
+  </fieldset>
+  <label for="dNote" style="font-weight:700;display:block;margin-bottom:8px" data-i="noteLabel">Tell us more (optional)</label>
+  <textarea id="dNote" data-ph="notePh" placeholder="Example: No shade at the bus stop, kids wait here after school"></textarea>
+  <div class="row" style="margin-top:14px">
+    <button class="btn" id="dAdd" disabled data-i="addPlace">Add this place</button>
+  </div>
+</div>
+
+<button class="finish" id="finishPill" aria-label="Finish and review"><b id="count">0</b><span data-i="finish">Finish</span></button>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ---------- Translation layer ----------
+   Built-in dictionary so language switches instantly and offline (kiosk-safe).
+   To add Google Cloud Translation later, route missing keys through a server
+   endpoint in translateText(); the page itself cannot call Google directly. */
+const I18N = {
+  en:{brand:"Cooler Compton",heroTitle:"Where does your block need shade?",heroSub:"Mark the parks, schools and streets that get too hot. Your answers help the state decide where to plant trees and build shade first.",howUsing:"How are you taking the survey?",phone:"On my phone",phoneSub:"I scanned the QR code",kiosk:"At a kiosk",kioskSub:"Clears itself when you finish",codeTitle:"Enter your access code",codeSub:"You got this 4-digit code when your residency was verified in person.",testHint:"Testing? Use 1234.",codeBad:"That code didn’t work. Check the card you were given and try again.",mapTitle:"Tap a place that needs shade",mapSub:"Filter by type, then tap a pin.",mapNote:"Pins are approximate. Drag to move the map.",all:"All",parks:"Parks",schools:"Schools",public:"Public areas",neighborhoods:"Neighborhoods",needLegend:"What would help here? Pick all that apply.",noteLabel:"Tell us more (optional)",notePh:"Example: No shade at the bus stop, kids wait here after school",addPlace:"Add this place",addedTitle:"Added to your list",another:"Add another place",finishReview:"Finish and review",finish:"Finish",reviewTitle:"Check your list",reviewSub:"Remove anything you don’t want to send.",thPlace:"Place",thAsk:"What you asked for",thType:"Type",thNote:"Notes",addMore:"Add more places",submit:"Send my answers",remove:"Remove",emptyList:"Your list is empty. Add a place from the map.",thanksTitle:"Thank you. Your answers were sent.",thanksPhone:"You can close this page now.",thanksKiosk:"This screen will clear for the next person.",qrLabel:"Next person: scan to use your own phone",close:"Close",added:"Added",savedLocal:"Saved on this device. Staff will upload it.",
+    need:{tree:"Shade tree",canopy:"Shade structure",grass:"Grass or green space",water:"Drinking water",mist:"Misting / cooling station",seat:"Shaded seating",pave:"Cooler pavement",fix:"Repair or service"}},
+  es:{brand:"Compton Más Fresco",heroTitle:"¿Dónde necesita sombra tu cuadra?",heroSub:"Marca los parques, escuelas y calles que se calientan demasiado. Tus respuestas ayudan al estado a decidir dónde plantar árboles y construir sombra primero.",howUsing:"¿Cómo estás haciendo la encuesta?",phone:"En mi teléfono",phoneSub:"Escaneé el código QR",kiosk:"En un quiosco",kioskSub:"Se borra al terminar",codeTitle:"Ingresa tu código de acceso",codeSub:"Recibiste este código de 4 dígitos cuando verificaron tu residencia en persona.",testHint:"¿Probando? Usa 1234.",codeBad:"Ese código no funcionó. Revisa la tarjeta que te dieron e inténtalo de nuevo.",mapTitle:"Toca un lugar que necesita sombra",mapSub:"Filtra por tipo y toca un punto.",mapNote:"Los puntos son aproximados. Arrastra para mover el mapa.",all:"Todos",parks:"Parques",schools:"Escuelas",public:"Áreas públicas",neighborhoods:"Vecindarios",needLegend:"¿Qué ayudaría aquí? Elige todo lo que aplique.",noteLabel:"Cuéntanos más (opcional)",notePh:"Ejemplo: No hay sombra en la parada del autobús, los niños esperan aquí después de clases",addPlace:"Agregar este lugar",addedTitle:"Agregado a tu lista",another:"Agregar otro lugar",finishReview:"Terminar y revisar",finish:"Terminar",reviewTitle:"Revisa tu lista",reviewSub:"Quita lo que no quieras enviar.",thPlace:"Lugar",thAsk:"Lo que pediste",thType:"Tipo",thNote:"Notas",addMore:"Agregar más lugares",submit:"Enviar mis respuestas",remove:"Quitar",emptyList:"Tu lista está vacía. Agrega un lugar desde el mapa.",thanksTitle:"Gracias. Tus respuestas fueron enviadas.",thanksPhone:"Ya puedes cerrar esta página.",thanksKiosk:"Esta pantalla se borrará para la próxima persona.",qrLabel:"Próxima persona: escanea para usar tu propio teléfono",close:"Cerrar",added:"Agregado",savedLocal:"Guardado en este dispositivo. El personal lo subirá.",
+    need:{tree:"Árbol de sombra",canopy:"Estructura de sombra",grass:"Pasto o área verde",water:"Agua potable",mist:"Estación de rocío / enfriamiento",seat:"Asientos con sombra",pave:"Pavimento más fresco",fix:"Reparación o servicio"}}
+};
+let lang="en";
+const t=k=>I18N[lang][k]??I18N.en[k]??k;
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{el.textContent=t(el.dataset.i)});
+  document.querySelectorAll("[data-ph]").forEach(el=>{el.placeholder=t(el.dataset.ph)});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+  renderChips();renderPins();renderList();renderNeeds();renderRows();
+  if(state.current) fillSheet(state.current);
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;applyLang()});
+
+/* ---------- Data ---------- */
+const CATS={
+  parks:{color:"#2E8B57",icon:"🌳"},
+  schools:{color:"#2F6FB3",icon:"🏫"},
+  public:{color:"#8A5CC2",icon:"🏛️"},
+  neighborhoods:{color:"#D08A0A",icon:"🏘️"}
+};
+const NEEDS=[["tree","🌳"],["canopy","⛱️"],["grass","🌱"],["water","🚰"],["mist","💨"],["seat","🪑"],["pave","🛣️"],["fix","🛠️"]];
+// Approximate lat/lon for test purposes — swap in the city's GIS layer for production.
+const PLACES=[
+  {id:"gonzales",name:"Gonzales Park",cat:"parks",lat:33.8818,lon:-118.2365},
+  {id:"wilson",name:"Wilson Park",cat:"parks",lat:33.9047,lon:-118.2154},
+  {id:"lueders",name:"Lueders Park",cat:"parks",lat:33.8998,lon:-118.2402},
+  {id:"tragniew",name:"Tragniew Park",cat:"parks",lat:33.8826,lon:-118.2107},
+  {id:"kelly",name:"Kelly Park",cat:"parks",lat:33.9064,lon:-118.2436},
+  {id:"creektrail",name:"Compton Creek Trail",cat:"parks",lat:33.8905,lon:-118.2262},
+  {id:"chs",name:"Compton High School",cat:"schools",lat:33.8927,lon:-118.2165},
+  {id:"dhs",name:"Dominguez High School",cat:"schools",lat:33.8779,lon:-118.1947},
+  {id:"centennial",name:"Centennial High School",cat:"schools",lat:33.9045,lon:-118.2519},
+  {id:"college",name:"Compton College",cat:"schools",lat:33.8768,lon:-118.2092},
+  {id:"cityhall",name:"Compton City Hall",cat:"public",lat:33.8962,lon:-118.2240},
+  {id:"library",name:"Compton Library",cat:"public",lat:33.8948,lon:-118.2262},
+  {id:"transit",name:"MLK Jr. Transit Center",cat:"public",lat:33.8975,lon:-118.2205},
+  {id:"gateway",name:"Gateway Towne Center",cat:"public",lat:33.8745,lon:-118.2150},
+  {id:"richland",name:"Richland Farms",cat:"neighborhoods",lat:33.8880,lon:-118.2470},
+  {id:"sunnycove",name:"Sunny Cove",cat:"neighborhoods",lat:33.8850,lon:-118.1990},
+  {id:"leland",name:"Leland",cat:"neighborhoods",lat:33.9030,lon:-118.2300},
+  {id:"eastcompton",name:"East Compton",cat:"neighborhoods",lat:33.8960,lon:-118.1900}
+];
+const B={n:33.912,s:33.868,w:-118.262,e:-118.182};
+const X=lon=>(lon-B.w)/(B.e-B.w)*400, Y=lat=>(B.n-lat)/(B.n-B.s)*340;
+
+/* ---------- State ---------- */
+const state={mode:"phone",filter:"all",current:null,picks:[],code:""};
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));
+  $("finishPill").classList.toggle("show",state.picks.length>0&&(id==="s-map"||id==="s-added"));window.scrollTo(0,0);bumpIdle();}
+function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2200)}
+
+/* ---------- Welcome ---------- */
+document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;show("s-code");if(state.mode==="phone")$("codeInput").focus()});
+
+/* ---------- Code ---------- */
+const VALID=["1234"]; // placeholder: replace with server-side check against issued codes
+const pad=$("pad");
+["1","2","3","4","5","6","7","8","9","⌫","0","✓"].forEach(k=>{const b=document.createElement("button");b.textContent=k;
+  b.setAttribute("aria-label",k==="⌫"?"Delete":k==="✓"?"Enter":k);b.onclick=()=>key(k);pad.appendChild(b)});
+function key(k){ $("codeErr").textContent="";
+  if(k==="⌫")state.code=state.code.slice(0,-1);else if(k==="✓")return check();else if(state.code.length<4)state.code+=k;
+  drawDots(); if(state.code.length===4)setTimeout(check,150);}
+$("codeInput").addEventListener("input",e=>{state.code=e.target.value.replace(/\D/g,"").slice(0,4);e.target.value=state.code;drawDots();if(state.code.length===4)check()});
+function drawDots(){document.querySelectorAll(".dots i").forEach((d,i)=>{d.textContent=state.code[i]?"•":"";d.classList.toggle("fill",!!state.code[i])})}
+function check(){ if(VALID.includes(state.code)){show("s-map")} else {$("codeErr").textContent=t("codeBad");state.code="";$("codeInput").value="";drawDots()} }
+
+/* ---------- Map ---------- */
+const map=$("map");
+function baseMap(){
+  const streets=[
+    {d:`M0 ${Y(33.9018)} H400`,n:"Rosecrans Ave"},{d:`M0 ${Y(33.8960)} H400`,n:"Compton Blvd"},
+    {d:`M0 ${Y(33.8885)} H400`,n:"Alondra Blvd"},{d:`M0 ${Y(33.8740)} H400`,n:"Artesia Blvd"},
+    {d:`M${X(-118.2375)} 0 V340`,n:"Wilmington Ave"},{d:`M${X(-118.2175)} 0 V340`,n:"Alameda St"},
+    {d:`M${X(-118.2105)} 0 V340`,n:"Long Beach Blvd"},{d:`M${X(-118.1960)} 0 V340`,n:"Atlantic Ave"},
+    {d:`M${X(-118.2530)} 0 V340`,n:"Central Ave"}
+  ];
+  let s=`<g id="world"><rect width="400" height="340" fill="transparent"/>`;
+  // city outline tint
+  s+=`<path d="M22 30 L380 22 L392 300 L60 318 Z" fill="#DCE6D6" opacity=".55"/>`;
+  s+=`<path class="creek" d="M${X(-118.2330)} 0 C ${X(-118.2300)} 90, ${X(-118.2250)} 170, ${X(-118.2200)} 340"/>`;
+  streets.forEach(st=>{const w=/Blvd|Ave$/.test(st.n)?5:4;s+=`<path class="street" d="${st.d}" stroke-width="${w}"/>`});
+  streets.forEach(st=>{const m=st.d.match(/M([\d.]+) ([\d.]+) (H|V)/);const x=+m[1],y=+m[2];
+    s+=m[3]==="H"?`<text class="st-label" x="6" y="${y-4}">${st.n}</text>`:`<text class="st-label" transform="translate(${x+3} 334) rotate(-90)">${st.n}</text>`});
+  s+=`<g id="pins"></g></g>`;
+  map.innerHTML=s;
+}
+function renderChips(){
+  const c=$("chips");c.innerHTML="";
+  ["all","parks","schools","public","neighborhoods"].forEach(k=>{const b=document.createElement("button");b.className="chip";
+    b.innerHTML=(k==="all"?"":`<span class="sw" style="background:${CATS[k].color}"></span>`)+t(k);
+    b.setAttribute("aria-pressed",state.filter===k);b.onclick=()=>{state.filter=k;renderChips();renderPins();renderList()};c.appendChild(b)});
+}
+const visible=()=>PLACES.filter(p=>state.filter==="all"||p.cat===state.filter);
+const isDone=id=>state.picks.some(p=>p.place.id===id);
+function renderPins(){
+  const g=map.querySelector("#pins");if(!g)return;g.innerHTML="";
+  visible().forEach(p=>{const x=X(p.lon),y=Y(p.lat);
+    const el=document.createElementNS("http://www.w3.org/2000/svg","g");
+    el.setAttribute("class","pin"+(isDone(p.id)?" done":"")+(state.current?.id===p.id?" sel":""));
+    el.setAttribute("transform",`translate(${x} ${y})`);el.setAttribute("tabindex","0");el.setAttribute("role","button");el.setAttribute("aria-label",p.name);
+    el.innerHTML=`<circle class="hit" r="18"/><circle class="dot" r="9" fill="${CATS[p.cat].color}"/><path class="tick" d="M-4 0 l3 3 l5 -6" stroke="#fff" stroke-width="2.5" fill="none"/>`;
+    el.addEventListener("pointerup",e=>{if(!drag.moved)openSheet(p)});
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openSheet(p)}});
+    g.appendChild(el)});
+}
+function renderList(){
+  const l=$("placeList");l.innerHTML="";
+  visible().forEach(p=>{const b=document.createElement("button");
+    b.innerHTML=`<span class="sw" style="background:${CATS[p.cat].color}"></span><span>${p.name}<small>${t(p.cat)}</small></span>${isDone(p.id)?`<span class="added">✓ ${t("added")}</span>`:""}`;
+    b.onclick=()=>openSheet(p);l.appendChild(b)});
+}
+/* pan & zoom */
+const view={s:1,x:0,y:0};const drag={on:false,moved:false};
+function applyView(){const w=map.querySelector("#world");w&&w.setAttribute("transform",`translate(${view.x} ${view.y}) scale(${view.s})`)}
+function zoom(f){const ns=Math.min(3,Math.max(1,view.s*f));const cx=200,cy=170;view.x=cx-(cx-view.x)*(ns/view.s);view.y=cy-(cy-view.y)*(ns/view.s);view.s=ns;clampView();applyView()}
+function clampView(){const minX=400-400*view.s,minY=340-340*view.s;view.x=Math.min(0,Math.max(minX,view.x));view.y=Math.min(0,Math.max(minY,view.y))}
+$("zin").onclick=()=>zoom(1.4);$("zout").onclick=()=>zoom(1/1.4);
+map.addEventListener("pointerdown",e=>{drag.on=true;drag.moved=false;drag.sx=e.clientX;drag.sy=e.clientY;drag.vx=view.x;drag.vy=view.y});
+window.addEventListener("pointermove",e=>{if(!drag.on)return;const r=map.getBoundingClientRect().width/400;const dx=(e.clientX-drag.sx)/r,dy=(e.clientY-drag.sy)/r;
+  if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;view.x=drag.vx+dx;view.y=drag.vy+dy;clampView();applyView()});
+window.addEventListener("pointerup",()=>{setTimeout(()=>drag.on=false,0)});
+
+/* ---------- Detail sheet ---------- */
+function thumbSVG(p){const c=CATS[p.cat].color;
+  return `<svg viewBox="0 0 320 140" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <rect width="320" height="140" fill="#FCEBC2"/><circle cx="270" cy="34" r="22" fill="#F2B134"/>
+  <rect y="96" width="320" height="44" fill="${c}" opacity=".85"/>
+  <rect y="108" width="320" height="6" fill="#fff" opacity=".5"/>
+  <g fill="${c}"><circle cx="60" cy="74" r="26"/><rect x="57" y="80" width="6" height="22"/><circle cx="122" cy="82" r="18"/><rect x="120" y="86" width="4" height="14"/></g>
+  <text x="300" y="130" text-anchor="end" font-size="34">${CATS[p.cat].icon}</text></svg>`}
+function renderNeeds(){
+  const n=$("needs");const checked=[...n.querySelectorAll("input:checked")].map(i=>i.value);n.innerHTML="";
+  NEEDS.forEach(([k,ic])=>{const d=document.createElement("div");d.className="need";
+    d.innerHTML=`<input type="checkbox" id="n-${k}" value="${k}" ${checked.includes(k)?"checked":""}><label for="n-${k}"><span class="ic" aria-hidden="true">${ic}</span>${t("need")[k]}</label>`;n.appendChild(d)});
+  n.querySelectorAll("input").forEach(i=>i.onchange=()=>{$("dAdd").disabled=!n.querySelector("input:checked")});
+}
+function fillSheet(p){$("dThumb").innerHTML=thumbSVG(p);$("dName").textContent=p.name;$("dMeta").textContent=t(p.cat)+" · Compton, CA"}
+function openSheet(p){
+  state.current=p;fillSheet(p);
+  const prev=state.picks.find(x=>x.place.id===p.id);
+  renderNeeds();$("needs").querySelectorAll("input").forEach(i=>i.checked=!!prev?.needs.includes(i.value));
+  $("dNote").value=prev?.note||"";$("dAdd").disabled=!prev;
+  $("scrim").style.display="block";requestAnimationFrame(()=>$("sheet").classList.add("open"));renderPins();
+  setTimeout(()=>$("dClose").focus(),300);bumpIdle();
+}
+function closeSheet(){$("sheet").classList.remove("open");$("scrim").style.display="none";state.current=null;renderPins()}
+$("dClose").onclick=closeSheet;$("scrim").onclick=closeSheet;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&state.current)closeSheet()});
+$("dAdd").onclick=()=>{
+  const p=state.current;const needs=[...$("needs").querySelectorAll("input:checked")].map(i=>i.value);
+  const entry={place:p,needs,note:$("dNote").value.trim(),lang};
+  const i=state.picks.findIndex(x=>x.place.id===p.id);i>=0?state.picks[i]=entry:state.picks.push(entry);
+  $("count").textContent=state.picks.length;$("addedName").textContent=p.name;
+  closeSheet();renderList();show("s-added");
+};
+$("another").onclick=()=>show("s-map");
+$("goReview").onclick=$("finishPill").onclick=()=>{renderRows();show("s-review")};
+$("backMap").onclick=()=>show("s-map");
+
+/* ---------- Review & submit ---------- */
+function renderRows(){
+  const tb=$("rows");if(!tb)return;tb.innerHTML="";
+  if(!state.picks.length){tb.innerHTML=`<tr><td colspan="5">${t("emptyList")}</td></tr>`;$("submit").disabled=true;return}
+  $("submit").disabled=false;
+  state.picks.forEach((e,i)=>{const tr=document.createElement("tr");
+    tr.innerHTML=`<td><strong></strong></td><td>${e.needs.map(n=>`<span class="tag">${t("need")[n]}</span>`).join("")}</td><td>${t(e.place.cat)}</td><td class="note"></td><td><button class="rm">${t("remove")}</button></td>`;
+    tr.querySelector("strong").textContent=e.place.name;tr.querySelector(".note").textContent=e.note||"—";
+    tr.querySelector(".rm").onclick=()=>{state.picks.splice(i,1);$("count").textContent=state.picks.length;renderRows();renderList();renderPins()};
+    tb.appendChild(tr)});
+}
+let dbRef=null;
+(async()=>{try{if(window.claude?.use){dbRef=await window.claude.use("db")}}catch(e){}})();
+$("submit").onclick=async()=>{
+  $("submit").disabled=true;
+  // Structured record, ready for AI triage / state reporting
+  const record={city:"Compton",mode:state.mode,language:lang,submittedAt:new Date().toISOString(),
+    items:state.picks.map(e=>({placeId:e.place.id,place:e.place.name,category:e.place.cat,lat:e.place.lat,lon:e.place.lon,needs:e.needs,note:e.note}))};
+  let sent=false;
+  if(dbRef){try{await dbRef.collection("submissions").add(record);sent=true}catch(e){}}
+  if(!sent){try{const q=JSON.parse(localStorage.getItem("pendingSubmissions")||"[]");q.push(record);localStorage.setItem("pendingSubmissions",JSON.stringify(q));toast(t("savedLocal"))}catch(e){}}
+  const kiosk=state.mode==="kiosk";
+  $("thanksSub").dataset.i=kiosk?"thanksKiosk":"thanksPhone";$("thanksSub").textContent=t($("thanksSub").dataset.i);
+  $("kioskQrWrap").hidden=!kiosk;
+  if(kiosk&&window.QRCode){$("qr").innerHTML="";new QRCode($("qr"),{text:location.href,width:150,height:150})}
+  show("s-thanks");$("finishPill").classList.remove("show");
+  if(kiosk)setTimeout(reset,20000);
+};
+$("closeBtn").onclick=()=>{if(state.mode==="kiosk")reset();else{reset();try{window.close()}catch(e){}}};
+
+/* ---------- Reset / kiosk privacy timeout ---------- */
+function reset(){state.picks=[];state.code="";state.current=null;state.filter="all";$("count").textContent="0";$("codeInput").value="";drawDots();
+  view.s=1;view.x=0;view.y=0;applyView();closeSheet();lang="en";applyLang();show("s-welcome")}
+let idle;function bumpIdle(){clearTimeout(idle);if(state.mode==="kiosk"&&!$("s-welcome").classList.contains("on"))idle=setTimeout(reset,120000)}
+["pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,bumpIdle));
+
+baseMap();applyLang();
+</script>
+</body>
+</html>
