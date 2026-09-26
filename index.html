@@ -206,7 +206,7 @@ a{color:inherit}
 @media(max-width:760px){.maplink{padding:4px 0}.maplink-cue{font-size:9px}}
 
 /* seat strip */
-.seats{border-top:1px solid var(--line-lt);display:grid;grid-template-columns:repeat(3,1fr);position:relative;z-index:2}
+.seats{border-top:1px solid var(--line-lt);display:grid;grid-template-columns:repeat(4,1fr);position:relative;z-index:2}
 .seat{padding:20px var(--pad);border-right:1px solid var(--line-lt);text-decoration:none;display:block;
   transition:background .18s ease}
 a.seat:hover{background:rgba(255,255,255,.07)}
@@ -219,6 +219,7 @@ a.seat b:after{content:" ↗";color:var(--gold);font-size:16px;vertical-align:mi
 .meter i{display:block;height:100%;background:var(--gold);width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
 .seat:nth-child(2) .meter i{background:var(--aqua)}
 .seat:nth-child(3) .meter i{background:var(--volt)}
+@media(max-width:1000px){.seats{grid-template-columns:repeat(2,1fr)}.seat:nth-child(2){border-right:0}.seat:nth-child(-n+2){border-bottom:1px solid var(--line-lt)}}
 @media(max-width:700px){.seats{grid-template-columns:1fr}.seat{border-right:0;border-bottom:1px solid var(--line-lt)}}
 
 /* ---------- for families (collapsible) ---------- */
@@ -563,19 +564,19 @@ footer a{color:var(--gold)}
   <div class="seats" id="tickets">
     <a class="seat" href="briefs/">
       <span class="mono">Today</span><b>Your brief</b>
-      <span class="seat-note">Track number on your badge · brief, room, toolkit</span>
+      <span class="seat-note">Track number on your badge</span>
     </a>
     <a class="seat" href="tools/">
       <span class="mono">Today</span><b>AI tools guide</b>
-      <span class="seat-note">Gemini · Canva · everything else, by age</span>
+      <span class="seat-note">Gemini, Canva, and the rest</span>
     </a>
     <a class="seat" href="#schedule">
       <span class="mono">Today</span><b>Run of show</b>
-      <span class="seat-note">Check-in 8:00 · finals 2:15 in Dyer Hall</span>
+      <span class="seat-note">Check-in 8:00 · finals 2:15</span>
     </a>
     <a class="seat" href="https://maps.app.goo.gl/b4tZzoSgeUpsrqKx6" target="_blank" rel="noopener">
-      <span class="mono">Getting here</span><b>Park in PS2 ↗</b>
-      <span class="seat-note">Then walk to Dyer Hall, QQ Building</span>
+      <span class="mono">Getting here</span><b>Park in PS2</b>
+      <span class="seat-note">Then walk to Dyer Hall, QQ</span>
     </a>
   </div>
 </header>
