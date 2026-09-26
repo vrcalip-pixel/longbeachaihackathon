@@ -1,12 +1,21 @@
-# Publishing the student apps — Sunday checklist
+# Finalist apps — the 2:00 PM procedure (and Sunday cleanup)
 
-1. Download the Google Form's upload folder from Drive to your computer.
-2. Open every HTML file in a browser first. You are hosting it on your domain; make sure it's the app they pitched and nothing else.
-3. Put `sort-apps.py` in the same folder as the downloaded files and run:
+## Tonight
+- Upload the whole `apps` folder to the repo (gallery page reads "live at 2:30").
+- Put the six QR codes (qr-track-1 … qr-track-6) on one slide: "Scan your track's finalist."
+- Pick one AI mentor as the uploader. Give them this page and your GitHub login open on their laptop.
 
-       python3 sort-apps.py
+## 1:30–2:00 — pitch-offs
+- Each coach emails the winning squad's downloaded HTML file. Subject: "Track N finalist".
 
-   It creates `apps/<slug>/index.html` for each file (slug from the filename — rename files to the app name first, e.g. `cita-facil.html`).
-4. Edit `apps/index.html`: fill each card (app name, person, one sentence, squad, schools), point each button at the matching `<slug>/`, and add the WINNER tag to one card. Delete cards for tracks with no finalist file.
-5. Drag the `apps` folder onto the GitHub uploader from inside the site folder. Wait two minutes. Open longbeachaihackathon.org/apps/ on your phone.
-6. Recap post: link to /apps/, group photo, academy dates.
+## 2:00–2:15 — uploader
+1. On the laptop, make six folders: track-1, track-2, … track-6.
+2. Put each finalist file inside its folder, renamed to `index.html`. Open each one in a browser first (10 seconds — you're hosting it on the domain).
+3. Repo → open the `apps` folder → Add file → Upload files → drag all six folders in at once → Commit.
+4. Wait two minutes. Open longbeachaihackathon.org/apps/track-1/ on a phone.
+
+## 2:30 — deliberation
+- Show the QR slide. "Scan your track's finalist."
+
+## Sunday
+- Edit `apps/index.html`: fill each card (app name, person, one sentence, squad, schools); add the WINNER tag. Change "go live here at 2:30 PM" to past tense. Upload the file.
