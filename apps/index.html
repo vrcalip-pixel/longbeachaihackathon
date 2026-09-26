@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The apps — iUrban Teen's 2026 AI Hackathon, Long Beach</title>
+<meta name="description" content="The apps students built in one day at iUrban Teen's 2026 AI Hackathon at Long Beach City College. Open them on your phone.">
+<meta property="og:title" content="The apps — AI Hackathon Long Beach"><meta property="og:description" content="Six squads, six real problems, six working apps — built between 9:45 and 1:10."><meta property="og:image" content="https://longbeachaihackathon.org/media/hero.jpg">
+<link rel="canonical" href="https://longbeachaihackathon.org/apps/">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
+:root{--ink:#07172B;--ink-2:#0E2540;--paper:#EDEFF2;--paper-2:#fff;--gold:#FFB81C;--volt:#E8348B;--aqua:#00BFC7;--muted:#4A6076;--line:rgba(7,23,43,.14);--display:"Archivo",Impact,sans-serif;--body:"Space Grotesk","Helvetica Neue",Arial,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;--wrap:960px;--pad:clamp(18px,4vw,36px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:900;font-stretch:118%;line-height:.94;letter-spacing:-.025em;text-transform:uppercase}
+h1{font-size:clamp(34px,7vw,64px)}h2{font-size:clamp(26px,4.6vw,40px)}h3{font-size:clamp(19px,2.6vw,24px);text-transform:none;font-stretch:100%;letter-spacing:-.01em;line-height:1.15}
+p{margin:0 0 .8em}a{color:inherit}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.skip{position:absolute;left:-9999px;background:var(--gold);color:var(--ink);padding:12px 18px;font-weight:700;z-index:300}.skip:focus{left:12px;top:12px}
+:focus-visible{outline:3px solid var(--volt);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+.nav{position:sticky;top:0;z-index:100;background:var(--ink);color:#fff;border-bottom:1px solid rgba(255,255,255,.16)}
+.nav-in{max-width:var(--wrap);margin:0 auto;padding:12px var(--pad);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--display);font-weight:900;font-stretch:118%;letter-spacing:.02em;text-decoration:none;font-size:15px;white-space:nowrap}.logo i{font-style:normal;color:var(--gold)}
+.nav-links{display:flex;gap:16px;overflow-x:auto;scrollbar-width:none}.nav-links a{color:#fff;text-decoration:none;font-size:14px;font-weight:600;white-space:nowrap}.nav-links a.here{color:var(--gold)}
+.hero{background:var(--ink);color:#fff;padding:clamp(28px,6vw,60px) 0 clamp(24px,4vw,40px)}
+.hero .mono{color:var(--gold)}.hero p{max-width:56ch;font-size:clamp(16px,2vw,19px);opacity:.9}
+.tracks{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:22px}
+.tracks a{display:block;background:var(--ink-2);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:12px 8px;text-decoration:none;color:#fff;text-align:center}
+.tracks a b{display:block;font-family:var(--display);font-size:28px;font-weight:900;color:var(--gold);line-height:1}.tracks a span{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;margin-top:6px}
+.tracks a small{display:block;font-size:12px;opacity:.8;margin-top:4px;line-height:1.2}
+@media(max-width:640px){.tracks{grid-template-columns:repeat(3,1fr)}}
+section{padding:clamp(28px,5vw,56px) 0;border-bottom:1px solid var(--line)}
+.kicker{display:flex;align-items:center;gap:14px;margin-bottom:14px}.kicker .rule{flex:1;height:1px;background:var(--line)}
+.brief{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3.5vw,34px);margin:18px 0}
+.brief .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.brief .num{font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:.06em;color:var(--volt)}
+.brief .room{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--gold);padding:5px 10px;border-radius:6px}
+.brief h3{font-size:clamp(24px,4vw,34px);margin:4px 0 12px;font-stretch:112%;text-transform:uppercase;letter-spacing:-.02em;line-height:.98;font-weight:900}
+.hmw{background:#FFF6DD;border-left:5px solid var(--gold);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0 18px;font-size:18px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}@media(max-width:700px){.two{grid-template-columns:1fr}}
+.two h4,.side h4{margin:14px 0 6px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--volt);font-weight:600}.two h4:first-child{margin-top:0}
+.two ul{margin:0;padding-left:20px}.two li{margin:0 0 6px}
+.think{background:var(--paper);border-radius:10px;padding:12px 14px;margin-top:10px}
+.dl{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:10px 16px;background:var(--ink);color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:15px}.dl:hover{background:var(--ink-2)}
+.btn{display:inline-block;background:var(--gold);color:var(--ink);text-decoration:none;font-weight:700;padding:11px 18px;border-radius:8px}
+table{width:100%;border-collapse:collapse;margin:10px 0}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.t{font-family:var(--mono);font-weight:600;white-space:nowrap;width:1%}td.w{font-family:var(--display);font-size:26px;font-weight:900;color:var(--volt);width:1%;line-height:1}
+.sentence{background:var(--paper-2);border:2px solid var(--ink);border-radius:12px;padding:18px 20px;font-size:18px;line-height:1.9}
+.sentence u{text-decoration:none;border-bottom:2px solid var(--ink);padding:0 30px}
+.tool{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.tool b{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:3px}
+@media(max-width:560px){.tool{grid-template-columns:1fr;gap:2px}}
+footer{background:var(--ink);color:#fff;padding:36px 0 28px}footer a{color:var(--gold)}footer .fine{font-size:13px;opacity:.7;margin-top:16px}
+.note{background:#FFF6DD;border:1px solid rgba(255,184,28,.5);border-radius:10px;padding:12px 16px;margin:12px 0}
+@media print{.nav,.dl,.btn,footer{display:none}.brief{break-inside:avoid;border:1px solid #999}body{background:#fff}}
+
+.kinds{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}@media(max-width:640px){.kinds{grid-template-columns:1fr}}
+.kind{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:20px 22px}.kind .mono{color:var(--volt)}.kind h3{margin:8px 0 8px}.kind p{font-size:15px;margin:0 0 6px}
+.kind .use{font-size:14px;color:var(--muted)}
+.age{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:3px 8px;border-radius:6px;white-space:nowrap;font-weight:600}
+.a13{background:#DDF7F8;color:#06515A}.a18{background:#FBE0EC;color:#8A0F4D}.aq{background:#FFF6DD;color:#7A5100}
+td a{font-weight:600}td small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.pick{background:var(--ink);color:#fff;border-radius:14px;padding:22px 24px;margin-top:16px}.pick h3{color:var(--gold)}.pick p{font-size:15px}.pick ol{margin:8px 0 0;padding-left:20px}.pick li{margin:0 0 6px;font-size:15px}
+@media(max-width:640px){table,thead,tbody,tr,th,td{display:block}thead{display:none}tr{border-bottom:1px solid var(--line);padding:10px 0}td{border:0;padding:3px 0}td.t{width:auto}}
+
+.apps{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px}@media(max-width:640px){.apps{grid-template-columns:1fr}}
+.app{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:22px 24px;display:flex;flex-direction:column;gap:8px}
+.app .top{display:flex;justify-content:space-between;align-items:center;gap:10px}.app .num{font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.06em;color:var(--volt)}
+.app .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--gold);padding:4px 9px;border-radius:6px}
+.app h3{font-size:24px}.app p{font-size:15px;color:var(--muted);margin:0}.app .who{font-size:14px;color:var(--ink)}
+.app .btn{align-self:flex-start;margin-top:8px}
+</style></head><body>
+<a class="skip" href="#main">Skip to main content</a>
+<nav class="nav"><div class="nav-in"><a class="logo" href="../">iURBAN TEEN <i>×</i> LBCC</a><div class="nav-links"><a href="../">Home</a><a href="../briefs/">Challenges</a><a href="../tools/">AI tools</a><a href="../apps/" class=here>The apps</a></div></div></nav>
+<main id="main">
+<header class="hero"><div class="wrap">
+<span class="mono">Built Saturday, September 26, 2026 · 9:45 AM – 1:10 PM</span>
+<h1 style="margin:10px 0 14px">The apps</h1>
+<p>Every squad built something a judge could tap. These are the finalists — one per track — exactly as they were at 1:10 PM. Open one on your phone; they work offline and need no account.</p>
+</div></header>
+
+<section id="gallery"><div class="wrap">
+<div class="kicker"><span class="mono">Six finalists</span><span class="rule"></span></div>
+<h2>One person. One problem. One afternoon.</h2>
+<!-- ============================================================
+     ONE CARD PER APP. Copy the block below, one per squad.
+     Put each squad's downloaded HTML at  apps/<slug>/index.html
+     (e.g. apps/cita-facil/index.html) and point the button at
+     "<slug>/". Add the WINNER tag only to the overall winner.
+     ============================================================ -->
+<div class="apps">
+
+<div class="app">
+  <div class="top"><span class="num">TRACK 1 · HEALTH &amp; WELLNESS</span><span class="tag">Winner</span></div>
+  <h3>[App name]</h3>
+  <p class="who">Built for: [the person — e.g. Maria, a warehouse worker whose phone is in a locker until 2 PM]</p>
+  <p>[One sentence on what it does and what the AI does inside it.]</p>
+  <p>[Squad name] · [school(s)]</p>
+  <a class="btn" href="cita-facil/">Open the app →</a>
+</div>
+
+<div class="app">
+  <div class="top"><span class="num">TRACK 2 · LOGISTICS &amp; SUPPLY CHAIN</span></div>
+  <h3>[App name]</h3>
+  <p class="who">Built for: [the person]</p>
+  <p>[What it does.]</p>
+  <p>[Squad] · [school(s)]</p>
+  <a class="btn" href="track-2/">Open the app →</a>
+</div>
+
+<div class="app">
+  <div class="top"><span class="num">TRACK 3 · SMALL BUSINESS</span></div>
+  <h3>[App name]</h3>
+  <p class="who">Built for: [the person]</p>
+  <p>[What it does.]</p>
+  <p>[Squad] · [school(s)]</p>
+  <a class="btn" href="track-3/">Open the app →</a>
+</div>
+
+<div class="app">
+  <div class="top"><span class="num">TRACK 4 · EDUCATION</span></div>
+  <h3>[App name]</h3>
+  <p class="who">Built for: [the person]</p>
+  <p>[What it does.]</p>
+  <p>[Squad] · [school(s)]</p>
+  <a class="btn" href="track-4/">Open the app →</a>
+</div>
+
+<div class="app">
+  <div class="top"><span class="num">TRACK 5 · CLIMATE &amp; ENERGY</span></div>
+  <h3>[App name]</h3>
+  <p class="who">Built for: [the person]</p>
+  <p>[What it does.]</p>
+  <p>[Squad] · [school(s)]</p>
+  <a class="btn" href="track-5/">Open the app →</a>
+</div>
+
+<div class="app">
+  <div class="top"><span class="num">TRACK 6 · CREATIVE MEDIA</span></div>
+  <h3>[App name]</h3>
+  <p class="who">Built for: [the person]</p>
+  <p>[What it does.]</p>
+  <p>[Squad] · [school(s)]</p>
+  <a class="btn" href="track-6/">Open the app →</a>
+</div>
+
+</div>
+<p style="font-size:15px;color:var(--muted);margin-top:18px">These are front-end prototypes built with Gemini Canvas and Canva in about three hours. Buttons change what's on screen; nothing is sent anywhere. Every squad presented the risks of its own idea and a safeguard for each — that was scored.</p>
+</div></section>
+
+<section id="next"><div class="wrap">
+<div class="kicker"><span class="mono">What's next</span><span class="rule"></span></div>
+<h2>Keep building</h2>
+<p style="max-width:60ch;margin-top:12px">The four-week AI academy with TRIO Upward Bound continues this work: Oct 10, Nov 7, Dec 5, Jan 23, 1:00–4:00 PM. <!-- UPDATE with signup link when it exists --> Details from LBCC Adult Education: <a href="mailto:aep@lbcc.edu">aep@lbcc.edu</a>.</p>
+</div></section>
+</main><footer><div class="wrap"><h3 style="color:#fff">Saturday, September 26, 2026</h3><p>Long Beach City College, Trades &amp; Technology Campus.</p><p class="fine">iUrban Teen’s 2026 AI Hackathon, Long Beach. Host and organizer: iUrban Teen. Presenting sponsor: Autodesk. In partnership with Long Beach City College.</p></div></footer></body></html>
