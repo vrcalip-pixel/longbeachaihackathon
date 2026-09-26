@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Walk Board | Long Beach After-School Dog Walking</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              900: '#78350f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Comprehensive CSS Fallback ensuring zero unstyled content -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Fallback UI elements for sandboxed iframes */
+    .card-shadow {
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    }
+    .modal-shadow {
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+    }
+
+    /* Custom smooth transition classes */
+    .view-transition {
+      transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+    /* Hide scrollbars for clean mobile feel */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-amber-100 selection:text-amber-900">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Neighborhood Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black text-xl shadow-md shadow-amber-200 select-none">
+          🐕
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900 leading-tight">Walk Board</h1>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">Long Beach</span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium">Jamal's Neighborhood Dog Care (3:20 PM – 6:30 PM)</p>
+        </div>
+      </div>
+
+      <!-- Action Navigation with Jamal's Protected Access Button -->
+      <div class="flex items-center gap-2">
+        <div id="privacyShieldBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Client Data Protected</span>
+        </div>
+
+        <button 
+          id="btnJamalAccess" 
+          onclick="handleAdminAccessClick()"
+          class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition border border-slate-200 bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-50 shadow-xs active:scale-95">
+          <span id="adminLockIcon">🔒</span>
+          <span id="adminBtnLabel">Walker Access</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: CUSTOMER BOOKING PORTAL (Client-Safe, Zero Privacy Leaks)          -->
+    <!-- ========================================================================= -->
+    <div id="clientView" class="space-y-6">
+
+      <!-- Friendly Welcome Banner -->
+      <div class="bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 max-w-2xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-amber-50 text-xs font-semibold mb-3 border border-white/20">
+            <span>🎒</span> High School Junior • Licensed & Neighbor-Trusted
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
+            Reliable after-school walks right in our neighborhood.
+          </h2>
+          <p class="mt-2 text-sm text-amber-100 leading-relaxed font-medium">
+            Book walks directly onto Jamal's afternoon schedule. No waiting on text messages between classes—pick an open window and your pup is locked in.
+          </p>
+          <div class="mt-4 flex flex-wrap items-center gap-4 text-xs font-semibold text-white/90">
+            <span class="flex items-center gap-1.5 bg-black/15 px-3 py-1.5 rounded-xl">
+              <span>🕒</span> 3:20 PM – 6:30 PM
+            </span>
+            <span class="flex items-center gap-1.5 bg-black/15 px-3 py-1.5 rounded-xl">
+              <span>💵</span> Flat $20 per 35-min walk
+            </span>
+            <span class="flex items-center gap-1.5 bg-black/15 px-3 py-1.5 rounded-xl">
+              <span>🚴</span> Safe Bike Transit
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Schedule & Slot Selector Grid -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 card-shadow">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100">
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <span>📅</span> Today's Afternoon Windows
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">Green slots are open. Tap any open slot to auto-fill the form below.</p>
+          </div>
+          <span id="slotsCountBadge" class="self-start sm:self-auto text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+            Loading slots...
+          </span>
+        </div>
+
+        <!-- The Slot Grid (Privacy Protected: Client details hidden) -->
+        <div id="slotsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+          <!-- Dynamic rendering by JS -->
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <span class="flex items-center gap-1.5 font-medium">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Available
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-300 ml-2"></span> Reserved (Privacy Shielded)
+          </span>
+          <span class="italic">Conflicting times are automatically locked</span>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 card-shadow">
+        <div class="mb-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold mb-2">
+            <span>📝</span> Step 2
+          </div>
+          <h3 class="text-xl font-black text-slate-900">Request a Dog Walk</h3>
+          <p class="text-xs text-slate-500 mt-1">
+            Fill in your dog's routine and address. Jamal gets notified immediately on his dispatch board.
+          </p>
+        </div>
+
+        <form id="bookingForm" onsubmit="handleCustomerBooking(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- Dog Name -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Dog's Name <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="formDogName" 
+                required 
+                placeholder="e.g., Buster" 
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition"
+              >
+            </div>
+
+            <!-- Dog Breed / Temperament -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Breed / Size
+              </label>
+              <input 
+                type="text" 
+                id="formDogBreed" 
+                placeholder="e.g., Golden Retriever (60 lbs)" 
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition"
+              >
+            </div>
+
+            <!-- Owner Name -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Owner First & Last Name <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="formOwnerName" 
+                required 
+                placeholder="e.g., Mrs. Gable" 
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition"
+              >
+            </div>
+
+            <!-- Owner Phone Number -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Cell Phone Number <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="tel" 
+                id="formOwnerPhone" 
+                required 
+                placeholder="e.g., (562) 555-0192" 
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition"
+              >
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              Long Beach Home Address <span class="text-rose-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="formAddress" 
+              required 
+              placeholder="e.g., 3424 E 7th St, Long Beach, CA" 
+              class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition"
+            >
+          </div>
+
+          <!-- Time Window Selection -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Earliest Start Time <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="time" 
+                id="formStartTime" 
+                min="15:20" 
+                max="18:00" 
+                value="16:00" 
+                required 
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Latest Finish Time <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                type="time" 
+                id="formEndTime" 
+                min="15:50" 
+                max="18:30" 
+                value="16:40" 
+                required 
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition"
+              >
+            </div>
+          </div>
+
+          <!-- Notes / Gate Code -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+              Walk Instructions & Key Access
+            </label>
+            <textarea 
+              id="formNotes" 
+              rows="2" 
+              placeholder="e.g., Side gate code 4412. Leash is by coat rack. Pulls near squirrels." 
+              class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:bg-white transition"
+            ></textarea>
+            <p class="text-[11px] text-slate-500 mt-1">
+              🔒 Privacy Guarantee: Your gate codes and phone number are strictly encrypted and only viewable by Jamal on his private dispatch phone.
+            </p>
+          </div>
+
+          <!-- Pricing summary & Submit -->
+          <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl font-black text-slate-900">$20.00</span>
+              <span class="text-xs text-slate-500 leading-tight">Pay after walk via cash, Venmo, or Apple Cash</span>
+            </div>
+            
+            <button 
+              type="submit" 
+              class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-sm shadow-lg shadow-amber-500/20 active:scale-95 transition flex items-center justify-center gap-2">
+              <span>🐾</span>
+              <span>Confirm & Lock In Walk</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: JAMAL'S BACKEND DISPATCH SPREADSHEET (PIN Protected)              -->
+    <!-- ========================================================================= -->
+    <div id="adminView" class="hidden space-y-6">
+
+      <!-- Admin Top Status Bar -->
+      <div class="bg-slate-900 text-white rounded-3xl p-6 shadow-xl space-y-5">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 font-black flex items-center justify-center text-2xl">
+              🚴
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg font-extrabold text-white">Jamal's Dispatch Sheet</h2>
+                <span class="px-2 py-0.5 rounded-md bg-amber-400 text-slate-950 font-mono-code font-bold text-[10px]">ROUTE ACTIVE</span>
+              </div>
+              <p class="text-xs text-slate-400">Authenticated Route Management & Schedule Conflict Prevention</p>
+            </div>
+          </div>
+
+          <!-- Quick Lock Button to protect privacy when neighbor is looking -->
+          <button 
+            onclick="lockAdminView()" 
+            class="inline-flex items-center justify-center gap-2 text-xs font-bold bg-slate-800 hover:bg-rose-950 hover:text-rose-300 text-slate-200 border border-slate-700 px-4 py-2.5 rounded-xl transition shadow-xs active:scale-95">
+            <span>🔒</span>
+            <span>Lock & Return to Customer View</span>
+          </button>
+        </div>
+
+        <!-- Metric KPI Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700">
+            <span class="text-[11px] font-bold text-slate-400 block">Total Walks</span>
+            <span id="metricTotalWalks" class="text-2xl font-black text-white">3</span>
+          </div>
+
+          <div class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700">
+            <span class="text-[11px] font-bold text-amber-400 block">Pending / En Route</span>
+            <span id="metricPendingWalks" class="text-2xl font-black text-amber-400">2</span>
+          </div>
+
+          <div class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700">
+            <span class="text-[11px] font-bold text-emerald-400 block">Completed</span>
+            <span id="metricCompletedWalks" class="text-2xl font-black text-emerald-400">1</span>
+          </div>
+
+          <div class="bg-slate-800/80 rounded-2xl p-3 border border-slate-700">
+            <span class="text-[11px] font-bold text-slate-400 block">Projected Cash</span>
+            <span id="metricEarnings" class="text-2xl font-black text-white">$60</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Double-Booking Conflict Alert Banner -->
+      <div id="collisionBanner" class="hidden bg-rose-50 border-2 border-rose-400 rounded-3xl p-5 shadow-sm">
+        <div class="flex items-start gap-3">
+          <span class="text-2xl flex-shrink-0">⚠️</span>
+          <div>
+            <h4 class="text-sm font-extrabold text-rose-950">Schedule Overlap Alert!</h4>
+            <p id="collisionDetails" class="text-xs text-rose-800 mt-1 leading-relaxed">
+              Two dogs are scheduled within overlapping minutes. Adjust time windows below to avoid rushing.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spreadsheet Table Card -->
+      <div class="bg-white rounded-3xl border border-slate-200 card-shadow overflow-hidden">
+        
+        <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/50">
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <span>📋</span> Today's Route Spreadsheet
+            </h3>
+            <p class="text-xs text-slate-500">Full owner phone numbers, gate codes, and 1-tap navigation.</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button 
+              onclick="exportScheduleCSV()" 
+              class="px-3 py-1.5 text-xs font-bold bg-white text-slate-700 border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-xs flex items-center gap-1.5">
+              <span>📥</span> Export CSV
+            </button>
+            <button 
+              onclick="promptAddManualWalk()" 
+              class="px-3.5 py-1.5 text-xs font-bold bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-xs transition flex items-center gap-1.5">
+              <span>+</span> Add Walk
+            </button>
+          </div>
+        </div>
+
+        <!-- Responsive Table Container -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[10px]">
+                <th class="py-3.5 px-4 w-12 text-center">#</th>
+                <th class="py-3.5 px-4">Time Window</th>
+                <th class="py-3.5 px-4">Dog & Breed</th>
+                <th class="py-3.5 px-4">Owner & Phone</th>
+                <th class="py-3.5 px-4">Address (Maps)</th>
+                <th class="py-3.5 px-4">Notes & Gate Code</th>
+                <th class="py-3.5 px-4 text-center">Status</th>
+                <th class="py-3.5 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="spreadsheetBody" class="divide-y divide-slate-100">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Jamal's PIN Authentication Modal -->
+  <div id="pinModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 modal-shadow border border-slate-200 text-center space-y-4">
+      
+      <div class="w-14 h-14 mx-auto rounded-3xl bg-amber-100 text-amber-700 flex items-center justify-center text-3xl font-black">
+        🔒
+      </div>
+
+      <div>
+        <h3 class="text-lg font-black text-slate-900">Jamal's Route Login</h3>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+          Client addresses, gate codes, and phone numbers are encrypted to protect client privacy.
+        </p>
+      </div>
+
+      <form onsubmit="verifyPin(event)" class="space-y-4 pt-2">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">Enter 4-Digit Passcode</label>
+          <input 
+            type="password" 
+            id="pinInput" 
+            maxlength="4" 
+            inputmode="numeric" 
+            pattern="[0-9]*" 
+            placeholder="••••" 
+            required 
+            class="w-40 mx-auto text-center text-3xl tracking-[0.5em] font-mono-code font-bold bg-slate-50 border-2 border-slate-200 rounded-2xl py-2.5 focus:outline-none focus:border-amber-500 focus:bg-white transition"
+          >
+          <p id="pinErrorMsg" class="text-xs text-rose-600 font-bold mt-2 hidden">Incorrect passcode. Try again.</p>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 text-[11px] text-amber-900 text-left">
+          <span class="font-bold">Prototype PIN:</span> Enter <span class="font-mono-code font-bold bg-white px-1.5 py-0.5 rounded border border-amber-300">4412</span> to unlock Jamal's spreadsheet.
+        </div>
+
+        <div class="flex items-center justify-center gap-2 pt-2">
+          <button 
+            type="button" 
+            onclick="closePinModal()" 
+            class="w-1/2 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition">
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="w-1/2 py-2.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white shadow-md transition">
+            Unlock Route
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification System (No disruptive alerts) -->
+  <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 transform -translate-y-24 opacity-0 pointer-events-none w-11/12 max-w-md">
+    <div class="bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3.5 border border-slate-700">
+      <span id="toastIcon" class="text-2xl flex-shrink-0">🐶</span>
+      <div class="flex-1 text-xs">
+        <p id="toastTitle" class="font-bold text-sm text-amber-400">Notification</p>
+        <p id="toastBody" class="text-slate-300 mt-0.5 leading-snug">Message body goes here.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Application State
+    const JAMAL_PIN = "4412";
+    let isAdminUnlocked = false;
+
+    // Initial pre-loaded sample walks (sorted chronologically)
+    let walks = [
+      {
+        id: "w1",
+        dogName: "Luna",
+        breed: "French Bulldog",
+        ownerName: "Mr. Torres",
+        phone: "(562) 555-0143",
+        address: "2150 E 4th St, Long Beach, CA",
+        startTime: "15:30",
+        endTime: "16:05",
+        notes: "Lockbox code 2049. Luna loves belly rubs, bring harness.",
+        status: "walked" // 'scheduled', 'en_route', 'walked'
+      },
+      {
+        id: "w2",
+        dogName: "Buster",
+        breed: "Golden Retriever",
+        ownerName: "Mrs. Gable",
+        phone: "(562) 555-0812",
+        address: "3424 E 7th St, Long Beach, CA",
+        startTime: "16:15",
+        endTime: "16:50",
+        notes: "Side gate code 4412. Leash is by front door coat rack.",
+        status: "en_route"
+      },
+      {
+        id: "w3",
+        dogName: "Chloe",
+        breed: "Poodle Mix",
+        ownerName: "Elena Rostova",
+        phone: "(562) 555-0377",
+        address: "830 Ocean Blvd #4B, Long Beach, CA",
+        startTime: "17:00",
+        endTime: "17:35",
+        notes: "Call on intercom #04. High prey drive, keep on short leash.",
+        status: "scheduled"
+      }
+    ];
+
+    // Helper: Convert "16:15" to "4:15 PM"
+    function formatTime12h(timeStr) {
+      if (!timeStr) return '';
+      const [h, m] = timeStr.split(':').map(Number);
+      const period = h >= 12 ? 'PM' : 'AM';
+      const hours12 = h % 12 || 12;
+      return `${hours12}:${m < 10 ? '0' : ''}${m} ${period}`;
+    }
+
+    // Helper: Convert time string to minutes from midnight
+    function toMinutes(timeStr) {
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    // Toast Manager
+    let toastTimeout = null;
+    function showToast(title, body, icon = '🐶') {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastBody').textContent = body;
+      document.getElementById('toastIcon').textContent = icon;
+
+      toast.classList.remove('opacity-0', '-translate-y-24', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-24', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // Dynamic slots generator for customer view (3:20 PM - 6:30 PM)
+    const fixedSlots = [
+      { start: "15:30", end: "16:05" },
+      { start: "16:15", end: "16:50" },
+      { start: "17:00", end: "17:35" },
+      { start: "17:45", end: "18:20" }
+    ];
+
+    function renderCustomerSlots() {
+      const container = document.getElementById('slotsGrid');
+      container.innerHTML = '';
+
+      let availableCount = 0;
+
+      fixedSlots.forEach(slot => {
+        const slotStartMin = toMinutes(slot.start);
+        const slotEndMin = toMinutes(slot.end);
+
+        // Check if any booked walk collides with this slot
+        const booked = walks.find(w => {
+          const wStart = toMinutes(w.startTime);
+          const wEnd = toMinutes(w.endTime);
+          return (wStart < slotEndMin && wEnd > slotStartMin);
+        });
+
+        const slotCard = document.createElement('div');
+        const timeLabel = `${formatTime12h(slot.start)} – ${formatTime12h(slot.end)}`;
+
+        if (booked) {
+          // PRIVACY SHIELD: Do not show neighbor name or dog name to the public!
+          slotCard.className = "p-3.5 rounded-2xl bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-between opacity-80 cursor-not-allowed";
+          slotCard.innerHTML = `
+            <div>
+              <span class="text-xs font-bold block text-slate-600">${timeLabel}</span>
+              <span class="text-[10px] text-slate-400">After-School Block</span>
+            </div>
+            <span class="px-2 py-1 rounded-lg bg-slate-200 text-slate-700 text-[10px] font-bold flex items-center gap-1">
+              <span>🔒</span> Reserved
+            </span>
+          `;
+        } else {
+          availableCount++;
+          slotCard.className = "p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-300 text-emerald-950 flex items-center justify-between hover:bg-emerald-100 hover:border-emerald-400 cursor-pointer transition shadow-xs active:scale-95";
+          slotCard.innerHTML = `
+            <div>
+              <span class="text-xs font-bold block text-emerald-900">${timeLabel}</span>
+              <span class="text-[10px] text-emerald-700">Open for Booking</span>
+            </div>
+            <span class="px-2 py-1 rounded-lg bg-emerald-600 text-white text-[10px] font-bold shadow-xs">
+              Select
+            </span>
+          `;
+          slotCard.onclick = () => {
+            document.getElementById('formStartTime').value = slot.start;
+            document.getElementById('formEndTime').value = slot.end;
+            document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
+            showToast('Time Selected', `Form set to ${timeLabel}. Complete dog details below!`, '⏰');
+          };
+        }
+
+        container.appendChild(slotCard);
+      });
+
+      document.getElementById('slotsCountBadge').textContent = `${availableCount} Open Window${availableCount === 1 ? '' : 's'} Left`;
+    }
+
+    // Schedule Collision Detector for Jamal's peace of mind
+    function detectScheduleCollisions() {
+      const banner = document.getElementById('collisionBanner');
+      const details = document.getElementById('collisionDetails');
+      
+      const activeWalks = walks.filter(w => w.status !== 'walked');
+      let conflicts = [];
+
+      for (let i = 0; i < activeWalks.length; i++) {
+        for (let j = i + 1; j < activeWalks.length; j++) {
+          const w1 = activeWalks[i];
+          const w2 = activeWalks[j];
+          const start1 = toMinutes(w1.startTime);
+          const end1 = toMinutes(w1.endTime);
+          const start2 = toMinutes(w2.startTime);
+          const end2 = toMinutes(w2.endTime);
+
+          if (start1 < end2 && end1 > start2) {
+            conflicts.push(`"${w1.dogName}" (${formatTime12h(w1.startTime)}) overlaps with "${w2.dogName}" (${formatTime12h(w2.startTime)})`);
+          }
+        }
+      }
+
+      if (conflicts.length > 0) {
+        banner.classList.remove('hidden');
+        details.innerHTML = conflicts.map(c => `• ${c}`).join('<br>') + '<br><strong class="mt-1 block">Rethink sequence or adjust start times to give yourself 10 min bike transit!</strong>';
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    // Render Jamal's Dispatch Spreadsheet
+    function renderSpreadsheet() {
+      // Sort walks chronologically
+      walks.sort((a, b) => toMinutes(a.startTime) - toMinutes(b.startTime));
+
+      const tbody = document.getElementById('spreadsheetBody');
+      tbody.innerHTML = '';
+
+      let total = walks.length;
+      let completed = 0;
+      let pending = 0;
+
+      walks.forEach((walk, index) => {
+        if (walk.status === 'walked') completed++;
+        else pending++;
+
+        const tr = document.createElement('tr');
+        tr.className = `hover:bg-slate-50/80 transition ${walk.status === 'walked' ? 'bg-slate-50/40 text-slate-400' : ''}`;
+
+        // Status badge
+        let statusBadge = '';
+        if (walk.status === 'scheduled') {
+          statusBadge = '<span class="px-2 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200">Scheduled</span>';
+        } else if (walk.status === 'en_route') {
+          statusBadge = '<span class="px-2 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900 border border-blue-200 animate-pulse">🚴 En Route</span>';
+        } else {
+          statusBadge = '<span class="px-2 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-200">✅ Walked</span>';
+        }
+
+        // Google Maps URL
+        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(walk.address)}`;
+
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono-code font-bold text-center text-slate-400">${index + 1}</td>
+          <td class="py-3 px-4 whitespace-nowrap font-bold text-slate-900">
+            ${formatTime12h(walk.startTime)} – ${formatTime12h(walk.endTime)}
+          </td>
+          <td class="py-3 px-4">
+            <span class="font-extrabold text-slate-900 text-sm block">${escapeHtml(walk.dogName)}</span>
+            <span class="text-[11px] text-slate-500">${escapeHtml(walk.breed || 'Dog')}</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="font-semibold text-slate-800 block">${escapeHtml(walk.ownerName)}</span>
+            <a href="tel:${escapeHtml(walk.phone)}" class="text-[11px] text-amber-700 font-bold hover:underline">${escapeHtml(walk.phone)}</a>
+          </td>
+          <td class="py-3 px-4 max-w-xs">
+            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline flex items-center gap-1">
+              <span>📍</span> <span class="truncate">${escapeHtml(walk.address)}</span>
+            </a>
+          </td>
+          <td class="py-3 px-4 max-w-xs text-[11px] text-slate-600">
+            <div class="bg-amber-50/70 p-2 rounded-xl border border-amber-100">
+              ${escapeHtml(walk.notes || 'No special notes')}
+            </div>
+          </td>
+          <td class="py-3 px-4 text-center whitespace-nowrap">
+            ${statusBadge}
+          </td>
+          <td class="py-3 px-4 text-right whitespace-nowrap">
+            <div class="flex items-center justify-end gap-1.5">
+              ${walk.status !== 'walked' ? `
+                <button 
+                  onclick="toggleWalkStatus('${walk.id}', 'en_route')" 
+                  title="Mark En Route" 
+                  class="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-slate-200 bg-white hover:bg-blue-50 hover:text-blue-700 shadow-xs transition">
+                  🚴 On Way
+                </button>
+                <button 
+                  onclick="toggleWalkStatus('${walk.id}', 'walked')" 
+                  title="Mark Completed" 
+                  class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition">
+                  ✓ Walked
+                </button>
+              ` : `
+                <button 
+                  onclick="toggleWalkStatus('${walk.id}', 'scheduled')" 
+                  class="px-2 py-1 text-[10px] font-bold text-slate-500 hover:bg-slate-100 rounded-lg">
+                  Reopen
+                </button>
+              `}
+              <button 
+                onclick="removeWalk('${walk.id}')" 
+                title="Remove walk" 
+                class="px-2 py-1 text-[11px] font-bold text-rose-600 hover:bg-rose-50 rounded-lg transition">
+                ✕
+              </button>
+            </div>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      // Update KPI metrics
+      document.getElementById('metricTotalWalks').textContent = total;
+      document.getElementById('metricPendingWalks').textContent = pending;
+      document.getElementById('metricCompletedWalks').textContent = completed;
+      document.getElementById('metricEarnings').textContent = `$${total * 20}`;
+
+      detectScheduleCollisions();
+    }
+
+    // Toggle walk status
+    function toggleWalkStatus(id, newStatus) {
+      const walk = walks.find(w => w.id === id);
+      if (!walk) return;
+      walk.status = newStatus;
+      renderSpreadsheet();
+      renderCustomerSlots();
+      showToast('Status Updated', `${walk.dogName} is now marked as ${newStatus.replace('_', ' ')}.`, '📝');
+    }
+
+    // Remove walk from spreadsheet
+    function removeWalk(id) {
+      const walk = walks.find(w => w.id === id);
+      const name = walk ? walk.dogName : 'Walk';
+      walks = walks.filter(w => w.id !== id);
+      renderSpreadsheet();
+      renderCustomerSlots();
+      showToast('Walk Removed', `${name}'s slot is now cleared from the schedule.`, '🗑️');
+    }
+
+    // Customer Booking Form Submission
+    function handleCustomerBooking(e) {
+      e.preventDefault();
+
+      const dogName = document.getElementById('formDogName').value.trim();
+      const dogBreed = document.getElementById('formDogBreed').value.trim();
+      const ownerName = document.getElementById('formOwnerName').value.trim();
+      const ownerPhone = document.getElementById('formOwnerPhone').value.trim();
+      const address = document.getElementById('formAddress').value.trim();
+      const startTime = document.getElementById('formStartTime').value;
+      const endTime = document.getElementById('formEndTime').value;
+      const notes = document.getElementById('formNotes').value.trim();
+
+      if (toMinutes(endTime) <= toMinutes(startTime)) {
+        showToast('Invalid Time Window', 'Latest finish time must be after earliest start time.', '⚠️');
+        return;
+      }
+
+      const newWalk = {
+        id: 'w_' + Date.now(),
+        dogName,
+        breed: dogBreed,
+        ownerName,
+        phone: ownerPhone,
+        address,
+        startTime,
+        endTime,
+        notes,
+        status: 'scheduled'
+      };
+
+      walks.push(newWalk);
+      renderCustomerSlots();
+      if (isAdminUnlocked) renderSpreadsheet();
+
+      // Reset form
+      document.getElementById('bookingForm').reset();
+      document.getElementById('formStartTime').value = "16:00";
+      document.getElementById('formEndTime').value = "16:40";
+
+      showToast(
+        'Walk Confirmed!', 
+        `Thanks ${ownerName}! Jamal has ${dogName} booked for ${formatTime12h(startTime)}.`, 
+        '🎉'
+      );
+    }
+
+    // PIN Authentication Flow
+    function handleAdminAccessClick() {
+      if (isAdminUnlocked) {
+        // Toggle view
+        const adminView = document.getElementById('adminView');
+        if (adminView.classList.contains('hidden')) {
+          openAdminView();
+        } else {
+          lockAdminView();
+        }
+      } else {
+        openPinModal();
+      }
+    }
+
+    function openPinModal() {
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinErrorMsg').classList.add('hidden');
+      document.getElementById('pinModal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('pinInput').focus(), 150);
+    }
+
+    function closePinModal() {
+      document.getElementById('pinModal').classList.add('hidden');
+    }
+
+    function verifyPin(e) {
+      e.preventDefault();
+      const entered = document.getElementById('pinInput').value.trim();
+      if (entered === JAMAL_PIN) {
+        isAdminUnlocked = true;
+        closePinModal();
+        updateAdminNavButton();
+        openAdminView();
+        showToast('Welcome Jamal!', 'Client details and route sheet unlocked.', '🔓');
+      } else {
+        document.getElementById('pinErrorMsg').classList.remove('hidden');
+        document.getElementById('pinInput').value = '';
+        document.getElementById('pinInput').focus();
+      }
+    }
+
+    function lockAdminView() {
+      isAdminUnlocked = false;
+      updateAdminNavButton();
+      document.getElementById('adminView').classList.add('hidden');
+      document.getElementById('clientView').classList.remove('hidden');
+      renderCustomerSlots();
+      showToast('Board Locked', 'Client phone numbers and addresses hidden from view.', '🔒');
+    }
+
+    function openAdminView() {
+      document.getElementById('clientView').classList.add('hidden');
+      document.getElementById('adminView').classList.remove('hidden');
+      renderSpreadsheet();
+    }
+
+    function updateAdminNavButton() {
+      const icon = document.getElementById('adminLockIcon');
+      const label = document.getElementById('adminBtnLabel');
+      const btn = document.getElementById('btnJamalAccess');
+
+      if (isAdminUnlocked) {
+        icon.textContent = '📊';
+        label.textContent = "Jamal's Dispatch";
+        btn.className = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500 text-white shadow-sm";
+      } else {
+        icon.textContent = '🔒';
+        label.textContent = "Walker Access";
+        btn.className = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition border border-slate-200 bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-50 shadow-xs";
+      }
+    }
+
+    // Export to CSV for Google Sheets
+    function exportScheduleCSV() {
+      let csv = "Time Window,Dog,Breed,Owner,Phone,Address,Notes,Status\n";
+      walks.forEach(w => {
+        csv += `"${formatTime12h(w.startTime)} - ${formatTime12h(w.endTime)}","${w.dogName}","${w.breed || ''}","${w.ownerName}","${w.phone}","${w.address}","${(w.notes || '').replace(/"/g, '""')}","${w.status}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Jamal_Walk_Schedule_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      showToast('CSV Exported', 'Downloaded route sheet for Excel or Google Sheets.', '📥');
+    }
+
+    // Quick add walk modal simulation
+    function promptAddManualWalk() {
+      const dog = prompt("Dog's Name:");
+      if (!dog) return;
+      const owner = prompt("Owner's Name:");
+      const start = prompt("Start Time (e.g. 17:15):", "17:15");
+      const end = prompt("End Time (e.g. 17:50):", "17:50");
+      const addr = prompt("Address in Long Beach:", "E 4th St & Redondo Ave");
+
+      walks.push({
+        id: 'w_' + Date.now(),
+        dogName: dog,
+        breed: 'Neighborhood Dog',
+        ownerName: owner || 'Neighbor',
+        phone: '(562) 555-0100',
+        address: addr || 'Long Beach, CA',
+        startTime: start || '17:00',
+        endTime: end || '17:35',
+        notes: 'Added directly by Jamal on route.',
+        status: 'scheduled'
+      });
+
+      renderSpreadsheet();
+      renderCustomerSlots();
+      showToast('Walk Added', `${dog} added to today's schedule!`, '🐾');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[m];
+      });
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCustomerSlots();
+    });
+  </script>
+</body>
+</html>
