@@ -63,7 +63,7 @@ td a{font-weight:600}td small{display:block;color:var(--muted);font-size:13px;ma
 .app .top{display:flex;justify-content:space-between;align-items:center;gap:10px}.app .num{font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.06em;color:var(--volt)}
 .app .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--gold);padding:4px 9px;border-radius:6px}
 .app h3{font-size:24px}.app p{font-size:15px;color:var(--muted);margin:0}.app .who{font-size:14px;color:var(--ink)}
-.app .btn{align-self:flex-start;margin-top:8px}
+.app .btn{align-self:flex-start;margin-top:auto;padding-top:11px}.app{min-height:230px}
 </style></head><body>
 <a class="skip" href="#main">Skip to main content</a>
 <nav class="nav"><div class="nav-in"><a class="logo" href="../">iURBAN TEEN <i>×</i> LBCC</a><div class="nav-links"><a href="../">Home</a><a href="../briefs/">Challenges</a><a href="../tools/">AI tools</a><a href="../apps/" class=here>The apps</a></div></div></nav>
@@ -79,18 +79,18 @@ td a{font-weight:600}td small{display:block;color:var(--muted);font-size:13px;ma
 <h2>One person. One problem. One afternoon.</h2>
 <!-- ============================================================
      ONE CARD PER APP. Copy the block below, one per squad.
-     Put each squad's downloaded HTML at  apps/<slug>/index.html
-     (e.g. apps/cita-facil/index.html) and point the button at
-     "<slug>/". Add the WINNER tag only to the overall winner.
+     Each finalist's file lives at apps/track-N/index.html (lowercase).
+     To mark the overall winner on Sunday, add
+     <span class="tag">Winner</span> inside that card's .top div.
      ============================================================ -->
 <div class="apps">
 
 <div class="app">
-  <div class="top"><span class="num">TRACK 1 · HEALTH &amp; WELLNESS</span><span class="tag">Winner</span></div>
+  <div class="top"><span class="num">TRACK 1 · HEALTH &amp; WELLNESS</span></div>
   <h3>[App name]</h3>
-  <p class="who">Built for: [the person — e.g. Maria, a warehouse worker whose phone is in a locker until 2 PM]</p>
-  <p>[One sentence on what it does and what the AI does inside it.]</p>
-  <p>[Squad name] · [school(s)]</p>
+  <p class="who">Built for: [the person]</p>
+  <p>[What it does.]</p>
+  <p>[Squad] · [school(s)]</p>
   <a class="btn" href="track-1/">Open the app →</a>
 </div>
 
