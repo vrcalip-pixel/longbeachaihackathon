@@ -375,6 +375,7 @@ h2{font-size:clamp(34px,5.6vw,68px);max-width:16ch}
 .slot time{font-family:var(--mono);font-size:14px;font-weight:600;transition:color .3s ease}
 .slot h3{font-size:24px;font-stretch:105%}
 .slot p{margin:7px 0 0;color:var(--muted);font-size:15.5px;max-width:60ch}
+.speakers{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:5px}.speakers li{font-size:14px;color:var(--muted);padding-left:14px;position:relative}.speakers li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;background:var(--gold)}.speakers b{color:var(--ink)}.sec-dark .speakers li{color:#AFC8DC}.sec-dark .speakers b{color:#fff}
 .slot .who{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--volt);white-space:nowrap}
 .slot:hover{background:var(--paper-2)}
 @media(max-width:760px){
@@ -596,7 +597,7 @@ footer a{color:var(--gold)}
         <h2>Pick your fight.</h2>
       </div>
       <p class="lede">Every track opens with a real brief written with industry partners. The briefs are out. Find your track number on your badge, tap the card to see the AI angle and your room, then open your brief and the toolkit. The two faded cards are backup briefs and are not in play today.</p>
-      <p><a class="btn" href="briefs/">Open today's briefs →</a></p>
+      <p style="display:flex;gap:14px;flex-wrap:wrap"><a class="btn" href="briefs/">Open today's briefs →</a><a class="btn btn-alt" href="tools/">AI tools guide →</a></p>
     </div>
     <div class="deck" id="deck"></div>
   </div>
@@ -641,10 +642,10 @@ footer a{color:var(--gold)}
     <div class="sched">
       <div class="sched-rail" aria-hidden="true"><i id="rail-fill"></i></div>
       <div class="slot"><time>8:00</time><div><h3>Check-in</h3><p>Doors open. Badges, waivers collected, track assignments, loaner laptops. Check-in wraps at 8:30 — find a seat and meet your squad.</p></div><span class="who">Dyer Hall · QQ</span></div>
-      <div class="slot"><time>8:45</time><div><h3>Welcome &amp; opening remarks</h3><p>Welcome from iUrban Teen, Long Beach City College, and Autodesk. What the day looks like and how it's judged.</p></div><span class="who">Dyer Hall</span></div>
-      <div class="slot"><time>9:15</time><div><h3>The AI Challenge</h3><p>Challenge briefs revealed, the rubric explained in plain language, and a fast tour of the free AI toolkit you'll build with (Gemini and Canva, both free and open to ages 13+) — plus what responsible use looks like.</p></div><span class="who">Dyer Hall</span></div>
+      <div class="slot"><time>8:45</time><div><h3>Welcome &amp; opening remarks</h3><p>What the day looks like and how it's judged.</p><ul class="speakers"><li><b>VP Gita Runkle</b> — Interim Vice President, Workforce &amp; Economic Development, Long Beach City College</li><li><b>Deena Pierott</b> — Founder &amp; Executive Director, iUrban Teen</li><li><b>Dr. Vincent Calip</b> — Professor of Computer Studies &amp; AI, Long Beach City College</li></ul></div><span class="who">Dyer Hall</span></div>
+      <div class="slot"><time>9:15</time><div><h3>The AI Challenge</h3><p>Challenge briefs revealed, the rubric explained in plain language, and a fast tour of the free AI toolkit you'll build with (Gemini and Canva, both free and open to ages 13+) — plus what responsible use looks like. Bringing other tools? See <a href="tools/">the full AI tools guide</a>.</p></div><span class="who">Dyer Hall</span></div>
       <div class="slot"><time>9:30</time><div><h3>Move to team work stations</h3><p>Students head to their track rooms with their coach. Parents and guardians stay in Dyer Hall for the Parent Roundtable.</p></div><span class="who">Tracks</span></div>
-      <div class="slot"><time>9:45</time><div><h3>Build time — block one</h3><p>Two hours. Start by naming the problem, the person it hits, and the outcome you want — then prototype, draft, design. Mentors circulate between squads.</p></div><span class="who">Squads</span></div>
+      <div class="slot"><time>9:45</time><div><h3>Build time — block one</h3><p>Two hours. Start by naming the problem, the person it hits, and the outcome you want — then prototype, draft, design. Mentors circulate between squads. At 11:30 every squad gives its coach a sixty-second stand-up: the person, the problem, what you're building.</p></div><span class="who">Squads</span></div>
       <div class="slot"><time>11:45</time><div><h3>Networking lunch</h3><p>Lunch is on us. Eat with your squad and meet the coaches, mentors, and partners in the room.</p></div><span class="who">All</span></div>
       <div class="slot"><time>12:30</time><div><h3>Build time — block two</h3><p>One hour. Refine the prototype and build the three-minute pitch.</p></div><span class="who">Squads</span></div>
       <div class="slot"><time>1:30</time><div><h3>Pitch-offs in rooms</h3><p>Every squad pitches inside its track. One finalist advances per track — so everyone presents, not just the finalists.</p></div><span class="who">Tracks</span></div>
@@ -814,7 +815,7 @@ footer a{color:var(--gold)}
       <details><summary>Can I register without a team?</summary><p>Yes, and most students do. You'll be placed into a build squad in your track on the morning of the event.</p></details>
       <details><summary>What if I'm under 18?</summary><p>Register on Eventbrite with a parent or guardian email. Every student who isn't an enrolled LBCC student also needs a signed Long Beach City College waiver, and under-18s need a parent or guardian signature on it. Bring it on the day or send it ahead.</p></details>
       <details><summary>Do I need a laptop?</summary><p>No. Every track room is a computer lab, so there's a machine for everyone. Bring your own if you'd rather work on it, and a limited number of loaner laptops are available first come, first served.</p></details>
-      <details><summary>What AI tools will we use?</summary><p>Free ones that run in a browser, with no credit card and no installs: <strong>Gemini</strong> for thinking through the problem, drafting, and setting up a custom assistant, and <strong>Canva</strong> for prototypes, mockups, and your pitch slides. Both allow ages 13 and up. Set up both accounts on a personal email before Saturday — school Google accounts often block Gemini. The full toolkit, with links, is published alongside the challenge briefs at <a href="briefs/">longbeachaihackathon.org/briefs</a> on the morning of the event. If you already use other AI tools, you're welcome to bring them, as long as they're free for you and you're old enough to use them.</p></details>
+      <details><summary>What AI tools will we use?</summary><p>Free ones that run in a browser, with no credit card and no installs: <strong>Gemini</strong> for thinking through the problem, drafting, and setting up a custom assistant, and <strong>Canva</strong> for prototypes, mockups, and your pitch slides. Both allow ages 13 and up. Set up both accounts on a personal email before Saturday — school Google accounts often block Gemini. The toolkit, with links, is in the <a href="briefs/">challenge briefs</a>. If you already use other AI tools, you're welcome to bring them, as long as they're free for you and you're old enough for their terms — the <a href="tools/">AI tools guide</a> sorts them by type and by age.</p></details>
       <details><summary>What does a coach actually do?</summary><p>Keep your track on schedule, ask questions that sharpen a squad's thinking, and make sure quieter students get a say. Tool questions go to the roaming AI mentors.</p></details>
       <details><summary>Who owns what students build?</summary><p>Students own their work. LBCC and iUrban Teen may showcase projects to promote future events.</p></details>
       <details><summary>Is there a cost?</summary><p>No. Registration, meals, and materials are free for every participant.</p></details>
